@@ -1,0 +1,16 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+    !!!!!!!
+    {% for article in articles %}
+
+        <p> {{ article.title }} </p>
+        <p> {{ article.text }}</p>
+        <p> {{ article.author }} </p>
+        <p> {{ article.publish_date }} </p>
+        <hr>
+    {% endfor %}
+
+{% endblock %}
+
