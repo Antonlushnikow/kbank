@@ -11,7 +11,6 @@ class ArticlesListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
-        context['title'] = 'Статьи участников'
 
         return context
 
