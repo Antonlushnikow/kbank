@@ -24,6 +24,11 @@
                 <a class="navbar-brand" href="/">
                     <img src="{% static 'kbank/img/logo.png' %}" alt="Homepage">
                 </a>
+                <button type="button" class="btn btn-outline-light">
+                    <a href="/article/create">
+                        НОВАЯ СТАТЬЯ
+                    </a>
+                </button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -39,6 +44,10 @@
                 </div>
             </div>
         </nav>
+
+        {% block content %}
+        {% endblock %}
+
         <!-- Main Content-->
         <!-- <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -101,6 +110,5 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
     </body>
 </html>
