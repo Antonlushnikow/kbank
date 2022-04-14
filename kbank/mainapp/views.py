@@ -1,9 +1,23 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView
 
 from .models import Article
 from .forms import ArticleCreateForm, ArticleEditForm
+
+
+class ArticlesListView(ListView):
+    model = Article
+    template_name = 'mainapp/index.html'
+    context_object_name = 'articles'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ArticlesListView, self).get_context_data()
+
+        return context
+
+    def get_queryset(self):
+        return Article.objects.all()
 
 
 class ArticleCreateView(CreateView):
