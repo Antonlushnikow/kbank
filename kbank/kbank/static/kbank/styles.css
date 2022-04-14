@@ -11113,6 +11113,7 @@ blockquote {
 }
 
 footer {
+  margin-top: 3rem;
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
@@ -11246,3 +11247,9 @@ header.masthead .site-heading .h1 {
     font-size: 2.25rem;
   }
 }
+
+ul.post-meta {
+    padding-left: 0;
+    list-style: none;
+}
+
