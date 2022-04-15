@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
 
@@ -25,6 +25,12 @@ class ArticleCreateView(CreateView):
     model = Article
     template_name = 'mainapp/create-article.html'
     form_class = ArticleCreateForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/auth/login')
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticleCreateView, self).get_context_data()

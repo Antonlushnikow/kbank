@@ -1,0 +1,21 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+<!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+<!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+<!--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
+<!--&lt;!&ndash;&#45;&#45;&#45;&#45; Include the above in your HEAD tag &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+        <main class="container position-relative px-4 px-lg-7 w-25">
+    <!-- Login Form -->
+    <form action="{% url 'auth:login' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+      <input type="submit" value="Войти">
+    </form>
+    <div id="formFooter">
+      <a class="underlineHover" href="#">Забыли пароль?</a>
+    </div>
+
+        </main>
+{% endblock %}
