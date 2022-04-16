@@ -1,3 +1,17 @@
+{#{% extends 'kbank/base.html' %}#}
+{##}
+{#{% block title %}Create an account{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    <h1></h1>#}
+{##}
+{#    <form action="" method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        <input type="submit" value="Create the account">#}
+{#    </form>#}
+{#{% endblock %}#}
+
 {% extends 'kbank/base.html' %}
 {% load static %}
 
@@ -8,21 +22,11 @@
     <!--&lt;!&ndash;&#45;&#45;&#45;&#45; Include the above in your HEAD tag &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
     <main class="container position-relative px-4 px-lg-7 w-25">
         <!-- Login Form -->
-        <form action="{% url 'auth:login' %}" method="post">
+        <form action="{% url 'auth:register' %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Войти">
+            <input type="submit" value="Зарегистрироваться">
         </form>
-        <div id="formFooter">
-            <a class="underlineHover" href="#">Забыли пароль?</a>
-        </div>
-        <div>
-            <div class="position-relative px-4 w-100">
-                <a class="underlineHover" href="{% url 'auth:register' %}">Нет профиля в Kbank?</a>
-            </div>
-        </div>
     </main>
 {% endblock %}
-
-
 
