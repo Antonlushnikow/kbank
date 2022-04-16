@@ -4,7 +4,7 @@ from tinymce.models import HTMLField
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=60, verbose_name='заголовок')
+    title = models.CharField(max_length=200, verbose_name='заголовок')
     text = HTMLField(verbose_name='текст')
     publish_date = models.DateField(auto_now_add=True, verbose_name='дата публикации')
     updated_date = models.DateField(auto_now=True, verbose_name='дата изменения')
