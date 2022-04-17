@@ -8,9 +8,15 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>{{ title|title }}</title>
-    <!--link rel="icon" type="image/x-icon" href="assets/favicon.ico" /-->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'kbank/img/favicon/favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'kbank/img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'kbank/img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'kbank/img/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'kbank/img/favicon/site.webmanifest' %}">
     <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+<!--    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>-->
+    <script src="{% static 'kbank/font-awesome-all.js' %}" crossorigin="anonymous"></script>
+
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet"
           type="text/css"/>
@@ -27,13 +33,11 @@
         <a class="navbar-brand" href="/">
             <img src="{% static 'kbank/img/logo.png' %}" alt="Homepage">
         </a>
-
+        <a href="/article/create">
             <button type="button" class="btn btn-outline-light">
-                <a href="/article/create">
                     НОВАЯ СТАТЬЯ
-                </a>
             </button>
-
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             Menu
@@ -57,32 +61,13 @@
     </div>
 </nav>
 
+
+<!-- Main Content-->
+
 {% block content %}
 {% endblock %}
 
-<!-- Main Content-->
-<!-- <div class="container px-4 px-lg-5">
-    <div class="row gx-4 gx-lg-5 justify-content-center">
-        <div class="col-md-10 col-lg-8 col-xl-7">
 
-            <div class="post-preview">
-                <a href="post.html">
-                    <h2 class="post-title">Man must explore, and this is exploration at its greatest</h2>
-                    <h3 class="post-subtitle">Problems look mighty small from 150 miles up</h3>
-                </a>
-                <p class="post-meta">
-                    Автор:
-                    <a href="#!">Author</a>
-                    on September 24, 2022
-                </p>
-            </div>
-
-            <hr class="my-4" />
-
-            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Другие статьи →</a></div>
-        </div>
-    </div>
-</div> -->
 <!-- Footer-->
 <footer class="border-top mt-auto">
     <div class="container px-4 px-lg-5">
@@ -90,23 +75,23 @@
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <ul class="list-inline text-center">
                     <li class="list-inline-item">
-                        <a href="#!">
+                        <a href="https://vk.com/kbank-geekbrains">
                                     <span class="fa-stack fa-lg">
                                         <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                        <i class="fab fa-vk fa-stack-1x fa-inverse"></i>
                                     </span>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#!">
+                        <a href="https://t.me/geekbrains_ru">
                                     <span class="fa-stack fa-lg">
                                         <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                        <i class="fab fa-telegram fa-stack-1x fa-inverse"></i>
                                     </span>
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#!">
+                        <a href="https://github.com/Antonlushnikow/kbank">
                                     <span class="fa-stack fa-lg">
                                         <i class="fas fa-circle fa-stack-2x"></i>
                                         <i class="fab fa-github fa-stack-1x fa-inverse"></i>
