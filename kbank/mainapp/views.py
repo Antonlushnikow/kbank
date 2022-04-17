@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
@@ -80,3 +81,8 @@ class ArticleEditView(UpdateView):
 
     def get_success_url(self):
         return reverse('articles:article', kwargs={'pk': self.pk})
+
+    def dispatch(self, request, *args, **kwargs):
+        if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id or request.user.is_superuser:
+            return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseNotFound('Page not found')
