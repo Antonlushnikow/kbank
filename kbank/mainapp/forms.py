@@ -9,6 +9,7 @@ class ArticleCreateForm(forms.ModelForm):
         model = Article
         fields = [
             'title',
+            'category',
             'text',
         ]
 
@@ -19,5 +20,6 @@ class ArticleEditForm(forms.ModelForm):
         model = Article
         fields = [
             'title',
+            'category',
             'text',
         ]
