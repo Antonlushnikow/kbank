@@ -17,7 +17,7 @@ class ArticlesListView(ListView):
         return context
 
     def get_queryset(self):
-        return Article.objects.all()
+        return Article.objects.all().order_by('-publish_date')
 
 
 class ArticleCreateView(CreateView):
