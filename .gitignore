@@ -131,3 +131,5 @@ dmypy.json
 # Idea
 .idea
 settings_dev.py
+
+.migrations/
