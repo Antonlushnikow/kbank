@@ -1,8 +1,8 @@
-#
-# TABLE STRUCTURE FOR: Article
-#
-
-DROP TABLE IF EXISTS `Article`;
+-- #
+-- # TABLE STRUCTURE FOR: Article
+-- #
+--
+-- DROP TABLE IF EXISTS `Article`;
 
 -- CREATE TABLE `Article` (
 --   `id` int(11) NOT NULL AUTO_INCREMENT,
