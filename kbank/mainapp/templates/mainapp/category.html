@@ -1,11 +1,6 @@
 {% extends 'kbank/base.html' %}
 {% load static %}
 
-{% block head %}
-    <title>KBANK | База знаний</title>
-{% endblock %}
-
-
 {% block content %}
     {% for article in articles %}
         <div class="container px-4 px-lg-5">
@@ -18,7 +13,7 @@
                         </a>
                         <h6><a href="{{ article.category.slug }}">{{ article.category.title|title }}</a></h6>
                         <hr>
-                        <div class="post-subtitle">{{ article.text|truncatewords_html:50|safe }}</div>
+                        <div class="post-subtitle">{{ article.text|truncatewords:50|safe }}</div>
 
                         <p class="post-meta">
                             Автор:
