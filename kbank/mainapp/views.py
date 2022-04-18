@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
 
-from .models import Article
+from .models import Article, Category
 from .forms import ArticleCreateForm, ArticleEditForm
 
 
@@ -14,7 +14,6 @@ class ArticlesListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
-
         return context
 
     def get_queryset(self):
@@ -86,3 +85,20 @@ class ArticleEditView(UpdateView):
         if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id or request.user.is_superuser:
             return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
+
+
+class CategoryListView(ListView):
+    # Контроллер вывода статей по категории
+    model = Article
+    template_name = 'mainapp/category.html'
+    context_object_name = 'articles'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryListView, self).get_context_data()
+        category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        context['title'] = category.title
+        return context
+
+    def get_queryset(self):
+        category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        return Article.objects.filter(category=category).order_by('-publish_date')
