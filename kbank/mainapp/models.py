@@ -17,8 +17,8 @@ class Category(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name='заголовок')
     text = HTMLField(verbose_name='текст')
-    publish_date = models.DateField(auto_now_add=True, verbose_name='дата публикации')
-    updated_date = models.DateField(auto_now=True, verbose_name='дата изменения')
+    publish_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
+    updated_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

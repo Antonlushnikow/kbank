@@ -12,7 +12,7 @@
                             <h2 class="post-title">{{ article.title }}</h2>
                         </a>
                         <h6>{{ article.category.title }}</h6>
-                        <div class="post-subtitle">{{ article.text|truncatewords:50|safe }}</div>
+                        <div class="post-subtitle">{{ article.text|truncatewords_html:50|safe }}</div>
 
                         <p class="post-meta">
                             Автор:
