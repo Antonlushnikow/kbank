@@ -5,9 +5,10 @@ from django.views.generic import CreateView
 
 from .models import KbankUser
 from .forms import KbankUserLoginForm, KbankUserRegistrationForm
+from kbank.mixins import RedirectToPreviousMixin
 
 
-class KbankUserLoginView(LoginView):
+class KbankUserLoginView(RedirectToPreviousMixin, LoginView):
     Model = KbankUser
     form_class = KbankUserLoginForm
     template_name = 'authapp/login.html'
@@ -17,15 +18,9 @@ class KbankUserLoginView(LoginView):
         context['title'] = 'авторизация'
         return context
 
-    def get_success_url(self):
-        return reverse('index')
-
 
 class KbankUserLogoutView(LogoutView):
     Model = KbankUser
-
-    def get_next_page(self):
-        return reverse('index')
 
 
 class KbankUserRegisterView(CreateView):
