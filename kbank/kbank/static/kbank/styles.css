@@ -52,7 +52,7 @@
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
   --bs-body-color-rgb: 33, 37, 41;
-  --bs-body-bg-rgb: 255, 255, 255;
+  --bs-body-bg-rgb: 200, 200, 200;
   --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
@@ -61,7 +61,7 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
-  --bs-body-bg: #fff;
+  --bs-body-bg: #eee;
 }
 
 *,
@@ -3525,20 +3525,21 @@ textarea.form-control-lg {
   z-index: 1000;
   display: none;
   min-width: 10rem;
-  padding: 0.5rem 0;
+  padding: 0 0;
   margin: 0;
   font-size: 1rem;
-  color: #212529;
+  color: #2b7de1;
   text-align: left;
   list-style: none;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
+  background-
   background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 0px solid rgba(0, 0, 0, 0.15);
 }
 .dropdown-menu[data-bs-popper] {
   top: 100%;
   left: 0;
-  margin-top: 0.125rem;
+  margin-top: 0.6rem;
 }
 
 .dropdown-menu-start {
@@ -3736,15 +3737,16 @@ textarea.form-control-lg {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 800;
 }
 .dropdown-item:hover, .dropdown-item:focus {
-  color: #1e2125;
-  background-color: #e9ecef;
+
 }
 .dropdown-item.active, .dropdown-item:active {
-  color: #fff;
+
   text-decoration: none;
-  background-color: #0085A1;
 }
 .dropdown-item.disabled, .dropdown-item:disabled {
   color: #adb5bd;
@@ -11226,7 +11228,7 @@ header.masthead .site-heading .h1 {
 }
 .post-preview > a > .post-title {
   font-size: 1.875rem;
-  margin-top: 1.875rem;
+  margin-top: 0rem;
   margin-bottom: 0.625rem;
 }
 .post-preview > a > .post-subtitle {
@@ -11253,3 +11255,9 @@ ul.post-meta {
     list-style: none;
 }
 
+.kbank-post {
+    background-color: #fff;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+}

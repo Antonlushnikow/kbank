@@ -2,23 +2,22 @@
 {% load static %}
 
 {% block content %}
-    <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
-    <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
-    <!--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
-    <!--&lt;!&ndash;&#45;&#45;&#45;&#45; Include the above in your HEAD tag &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-    <main class="container position-relative px-4 px-lg-7 w-25">
-        <!-- Login Form -->
-        <form action="{% url 'auth:login' %}" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Войти">
-        </form>
-        <div id="formFooter">
-            <a class="underlineHover" href="#">Забыли пароль?</a>
-        </div>
-        <div>
-            <div class="position-relative px-4 w-100">
-                <a class="underlineHover" href="{% url 'auth:register' %}">Нет профиля в Kbank?</a>
+    <main class="container position-relative px-4 px-lg-7">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="kbank-post col-md-10 col-lg-8 col-xl-6">
+                <!-- Login Form -->
+                <h2>Вход</h2>
+                <form action="{% url 'auth:login' %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Войти">
+                </form>
+                <br>
+                <div id="formFooter">
+                    <a class="underlineHover" href="#">Забыли пароль?</a><br>
+                    <a class="underlineHover" href="{% url 'auth:register' %}">Нет профиля в Kbank?</a>
+                </div>
+                <br>
             </div>
         </div>
     </main>

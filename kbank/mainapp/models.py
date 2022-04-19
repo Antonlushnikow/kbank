@@ -5,6 +5,7 @@ from tinymce.models import HTMLField
 
 class Category(models.Model):
     title = models.CharField(max_length=60, verbose_name='Название категории')
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
 
     def __str__(self):
         return self.title
@@ -33,6 +34,32 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def comments_count(self):
+        return self.comments.count()
+
     class Meta:
         verbose_name = "статья"
         verbose_name_plural = "статьи"
+
+
+class Comment(models.Model):
+    body = models.TextField()
+    article = models.ForeignKey(
+        Article,
+        related_name="comments",
+        on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name='автор',
+    )
+    publish_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.author}: {self.body}'
+
+    class Meta:
+        verbose_name = "комментарий"
+        verbose_name_plural = "комментарии"
