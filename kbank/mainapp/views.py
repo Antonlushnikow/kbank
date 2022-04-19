@@ -2,9 +2,10 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
+from django.views.generic.edit import FormMixin
 
 from .models import Article, Category
-from .forms import ArticleCreateForm, ArticleEditForm
+from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
 
 
 class ArticlesListView(ListView):
@@ -47,18 +48,36 @@ class ArticleCreateView(CreateView):
         return reverse('articles:article', kwargs={'pk': self.pk})
 
 
-class ArticleReadView(DetailView):
+class ArticleReadView(FormMixin, DetailView):
     # контроллер вывода статьи по номеру
     model = Article
     template_name = 'mainapp/article.html'
+    form_class = CommentForm
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticleReadView, self).get_context_data()
         context['title'] = 'статья'
+        context['form'] = CommentForm(initial={'article': self.object, 'author': self.request.user})
         return context
 
     def get_object(self):
         return get_object_or_404(Article, pk=self.kwargs['pk'])
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('articles:article', kwargs={'pk': self.object.id})
 
 
 class ArticleEditView(UpdateView):

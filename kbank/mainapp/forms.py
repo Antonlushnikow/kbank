@@ -1,6 +1,7 @@
 from django import forms
+from django.forms.widgets import HiddenInput
 
-from .models import Article
+from .models import Article, Comment
 
 
 class ArticleCreateForm(forms.ModelForm):
@@ -25,3 +26,26 @@ class ArticleEditForm(forms.ModelForm):
             'category',
             'text',
         ]
+
+
+class CommentForm(forms.ModelForm):
+    # Форма добавления комментария
+    class Meta:
+        model = Comment
+        fields = [
+            'body',
+            'author',
+            'article',
+        ]
+        widgets = {
+            'author': HiddenInput,
+            'article': HiddenInput,
+            'body': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'addANote',
+                'placeholder': 'Ваш комментарий...',
+            })
+        }
+        labels = {
+            'body': '',
+        }
