@@ -3507,7 +3507,7 @@ textarea.form-control-lg {
   white-space: nowrap;
 }
 .dropdown-toggle::after {
-  display: inline-block;
+  display: none;
   margin-left: 0.255em;
   vertical-align: 0.255em;
   content: "";
@@ -3531,15 +3531,15 @@ textarea.form-control-lg {
   color: #2b7de1;
   text-align: left;
   list-style: none;
-  background-color: rgba(255, 255, 255, 0.7);
-  background-
+  background-color: rgba(255, 255, 255, 1);
   background-clip: padding-box;
-  border: 0px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 0 1px rgba(9, 30, 66, 0.08);
 }
 .dropdown-menu[data-bs-popper] {
   top: 100%;
   left: 0;
-  margin-top: 0.6rem;
+  margin-top: 0.8rem;
 }
 
 .dropdown-menu-start {
@@ -3721,7 +3721,7 @@ textarea.form-control-lg {
 
 .dropdown-divider {
   height: 0;
-  margin: 0.5rem 0;
+  margin: 0.1rem 0;
   overflow: hidden;
   border-top: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -3763,8 +3763,9 @@ textarea.form-control-lg {
   padding: 0.5rem 1rem;
   margin-bottom: 0;
   font-size: 0.875rem;
-  color: #6c757d;
+  color: #000;
   white-space: nowrap;
+  background-color: #ddd;
 }
 
 .dropdown-item-text {
