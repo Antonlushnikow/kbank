@@ -109,7 +109,7 @@ class ArticleEditView(UpdateView):
 class CategoryListView(ListView):
     # Контроллер вывода статей по категории
     model = Article
-    template_name = 'mainapp/category.html'
+    template_name = 'mainapp/index.html'
     context_object_name = 'articles'
 
     def get_context_data(self, *, object_list=None, **kwargs):
