@@ -1,10 +1,19 @@
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import DetailView, CreateView, UpdateView, ListView
+from django.views.generic import (
+    DetailView,
+    CreateView,
+    UpdateView,
+    ListView,
+)
 from django.views.generic.edit import FormMixin
 
-from .models import Article, Category
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+
+from .models import Article, Category, Comment
 from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
 
 
@@ -121,3 +130,44 @@ class CategoryListView(ListView):
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['slug'])
         return Article.objects.filter(category=category).order_by('-publish_date')
+
+
+class LikeAPIView(APIView):
+    """
+    Представление лайков через API
+    Абстрактный класс
+    """
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    model = None
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        user = self.request.user
+        updated = False
+        liked = False
+
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+
+        data = {
+            'updated': updated,
+            'liked': liked,
+            'like_count': obj.likes.count(),
+        }
+
+        return Response(data)
+
+
+class ArticleLikeAPIView(LikeAPIView):
+    model = Article
+
+
+class CommentLikeAPIView(LikeAPIView):
+    model = Comment
