@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    {% if user %}
+    {% if user.is_authenticated %}
         <h3>Поздравляем!</h3>
         <br>
         <h4>Пользователь {{ user.username }} подтвержден.</h4>

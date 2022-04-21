@@ -29,7 +29,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-DOMAIN_NAME = 'KBANK'
+DOMAIN_NAME = 'http://89.108.64.59'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_HOST_USER = 'kbank.kbank@mail.ru'

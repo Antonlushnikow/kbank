@@ -19,4 +19,4 @@ class KbankUser(AbstractUser):
     is_active = models.BooleanField(default=False)
 
     def is_activation_key_expired(self):
-        return now() <= self.activation_key_expires
+        return now() > self.activation_key_expires
