@@ -1,0 +1,12 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h3>{{ message }}</h3>
+
+    <br>
+    <button class="btn btn-round form-control">
+        <a href="{% url 'index' %}">на главную</a>
+    </button>
+
+{% endblock %}
