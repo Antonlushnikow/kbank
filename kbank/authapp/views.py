@@ -42,7 +42,10 @@ class KbankUserRegisterView(CreateView):
     def form_valid(self, form):
         user = form.save()
         self.send_verify_mail(user)
-        return render(self.request, 'authapp/verification_sent.html')
+        context = {}
+        context['title'] = 'Активация аккаунта'
+        context['user'] = user
+        return render(self.request, 'authapp/verification_sent.html', context=context)
         # return HttpResponseRedirect(reverse('authapp:login'))
 
     def send_verify_mail(self, user):
@@ -61,8 +64,7 @@ class KbankUserRegisterView(CreateView):
                 auth.login(self, user)
                 return render(self, 'authapp/verification.html')
             else:
-                print(f'error activation user: {user}')
                 return render(self, 'authapp/verification.html')
         except Exception as e:
-            print(f'error activation user : {e.args}')
+            print(e.with_traceback())
             return HttpResponseRedirect(reverse('index'))
