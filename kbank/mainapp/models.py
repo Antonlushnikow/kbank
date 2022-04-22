@@ -30,6 +30,11 @@ class Article(models.Model):
         on_delete=models.CASCADE,
         verbose_name='категория'
     )
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='article_likes',
+    )
 
     def __str__(self):
         return self.title
@@ -54,6 +59,11 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='автор',
+    )
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='comment_likes',
     )
     publish_date = models.DateTimeField(auto_now_add=True)
 
