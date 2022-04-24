@@ -1,0 +1,24 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+    <main class="container position-relative px-4 px-lg-7">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="kbank-post col-md-10 col-lg-8 col-xl-6">
+                <h2>Изменить профиль</h2>
+                <!-- Update Profile Form -->
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Сохранить">
+                </form>
+                <br>
+                <div class="mb-2">
+                    <a href="{% url 'auth:change-password' %}">Изменить пароль</a><br>
+                    <a href="{% url 'auth:confirm-delete-profile' %}">Удалить профиль</a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
