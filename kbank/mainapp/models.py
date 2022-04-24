@@ -23,7 +23,8 @@ class Article(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        verbose_name='автор'
+        verbose_name='автор',
+        related_name='articles',
     )
     category = models.ForeignKey(
         Category,
@@ -59,6 +60,7 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='автор',
+        related_name='comments',
     )
     likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL,

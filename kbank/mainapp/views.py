@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
 from .models import Article, Category, Comment
+from authapp.models import KbankUser
 from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
 
 
@@ -101,7 +102,7 @@ class ArticleEditView(UpdateView):
         return context
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        # form.instance.author = self.request.user
         item = form.save()
         self.pk = item.pk
         return super().form_valid(form)
@@ -110,7 +111,8 @@ class ArticleEditView(UpdateView):
         return reverse('articles:article', kwargs={'pk': self.pk})
 
     def dispatch(self, request, *args, **kwargs):
-        if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id or request.user.is_superuser:
+        if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id \
+                or request.user.is_superuser or request.user.is_moderator:
             return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
 
@@ -130,6 +132,23 @@ class CategoryListView(ListView):
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['slug'])
         return Article.objects.filter(category=category).order_by('-publish_date')
+
+
+class ArticleListAuthorView(ListView):
+    # Контроллер вывода статей по авторам
+    model = Article
+    template_name = 'mainapp/index.html'
+    context_object_name = 'articles'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ArticleListAuthorView, self).get_context_data()
+        author = get_object_or_404(KbankUser, pk=self.kwargs['pk'])
+        context['title'] = f'Статьи - {author.username}'
+        return context
+
+    def get_queryset(self):
+        author = get_object_or_404(KbankUser, pk=self.kwargs['pk'])
+        return Article.objects.filter(author=author).order_by('-publish_date')
 
 
 class LikeAPIView(APIView):
