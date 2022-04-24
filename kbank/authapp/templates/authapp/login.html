@@ -16,6 +16,8 @@
                 <div id="formFooter">
                     <a class="underlineHover" href="#">Забыли пароль?</a><br>
                     <a class="underlineHover" href="{% url 'auth:register' %}">Нет профиля в Kbank?</a>
+                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
+Вход через ВКонтакте </a>
                 </div>
                 <br>
             </div>

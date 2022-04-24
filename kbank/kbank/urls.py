@@ -14,6 +14,7 @@ urlpatterns = [
     path('<slug:slug>/', CategoryListView.as_view(), name='category'),
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile-view'),
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:
