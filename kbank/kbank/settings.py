@@ -29,6 +29,13 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DOMAIN_NAME = 'http://89.108.64.59'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST_USER = 'kbank.kbank@mail.ru'
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+
 ALLOWED_HOSTS = [
     '89.108.64.59',
 ]
@@ -114,6 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'authapp.KbankUser'
+LOGOUT_REDIRECT_URL = '/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

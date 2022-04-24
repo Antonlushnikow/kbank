@@ -7,51 +7,61 @@
 
 
 {% block content %}
-    {% for article in articles %}
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
+    {% if articles %}
+        {% for article in articles %}
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
 
-                    <div class="post-preview">
-                        <a href="{% url 'articles:article' article.id %}">
-                            <h2 class="post-title">{{ article.title }}</h2>
-                        </a>
-                      
-                        <h6><a href="{% url 'category' article.category.slug %}">{{ article.category.title|title }}</a></h6>
-                        <hr>
-                        <div class="post-subtitle">{{ article.text|truncatewords_html:50|safe }}</div>
-                        <div class="post-meta d-flex justify-content-between">
-                            <div class="d-flex flex-row align-items-center">
-                                <p>
-                                Автор:
-                                <a style="text-decoration: none;" href="author/{{ article.author.id }}">{{ article.author }}</a>
-                                {{ article.publish_date }}
-                                </p>
-                            </div>
-                            <!-- Количество комментариев -->
+                        <div class="post-preview">
+                            <a href="{% url 'articles:article' article.id %}">
+                                <h2 class="post-title">{{ article.title }}</h2>
+                            </a>
 
-                            <div class="d-flex flex-row align-items-center">
-                            {% if article.comments_count %}
-                                <i class="fa-regular fa-comment"></i>
-                                <p class="small ms-1">{{ article.comments_count }}</p>
-                            {% endif %}
-                            <!-- Likes -->
-                                <span class="like-btn ms-2" data-id="{{ article.pk }}" data-href="{% url 'articles:like-api' article.pk %}">
-                                    {% if user in article.likes.all %}
-                                        <i class="like-icon-{{ article.pk }} fa-solid fa-heart"></i>
-                                    {% else %}
-                                        <i class="like-icon-{{ article.pk }} fa-regular fa-heart"></i>
-                                    {% endif %}
-                                </span>
-                                <span id="like-count-{{ article.pk }}" class="ms-1">{{ article.likes.count }}</span>
+                            <h6><a href="{% url 'category' article.category.slug %}">{{ article.category.title|title }}</a></h6>
+                            <hr>
+                            <div class="post-subtitle">{{ article.text|truncatewords_html:50|safe }}</div>
+                            <div class="post-meta d-flex justify-content-between">
+                                <div class="d-flex flex-row align-items-center">
+                                    <p>
+                                    Автор:
+                                    <a style="text-decoration: none;" href="{% url 'profile-view' article.author.id %}">{{ article.author }}</a>
+                                    {{ article.publish_date }}
+                                    </p>
+                                </div>
+                                <!-- Количество комментариев -->
+
+                                <div class="d-flex flex-row align-items-center">
+                                {% if article.comments_count %}
+                                    <i class="fa-regular fa-comment"></i>
+                                    <p class="small ms-1">{{ article.comments_count }}</p>
+                                {% endif %}
+                                <!-- Likes -->
+                                    <span class="like-btn ms-2" data-id="{{ article.pk }}" data-href="{% url 'articles:like-api' article.pk %}">
+                                        {% if user in article.likes.all %}
+                                            <i class="like-icon-{{ article.pk }} fa-solid fa-heart"></i>
+                                        {% else %}
+                                            <i class="like-icon-{{ article.pk }} fa-regular fa-heart"></i>
+                                        {% endif %}
+                                    </span>
+                                    <span id="like-count-{{ article.pk }}" class="ms-1 small">{{ article.likes.count }}</span>
+                                </div>
                             </div>
+
                         </div>
-
                     </div>
                 </div>
             </div>
+        {% endfor %}
+    {% else %}
+        <div class="container px-4 px-lg-5">
+           <div class="row gx-4 gx-lg-5 justify-content-center">
+             <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
+                 Статей пока нет
+             </div>
+           </div>
         </div>
-    {% endfor %}
+    {% endif %}
 
 <!-- Скрипты для подключения лайков -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>

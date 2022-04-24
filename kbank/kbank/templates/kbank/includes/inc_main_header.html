@@ -54,10 +54,10 @@
                                 <div style="font-size: 0.8rem;">{{ user.email }}</div>
                             </li>
                             <li>
-                                <a class="dropdown-item px-lg-3 py-3" href="#">мои статьи</a>
+                                <a class="dropdown-item px-lg-3 py-3" href="{% url 'articles:list-author-articles' user.pk %}">мои статьи</a>
                             </li>
                             <li>
-                                <a class="dropdown-item px-lg-3 py-3" href="#">профиль</a>
+                                <a class="dropdown-item px-lg-3 py-3" href="{% url 'profile-view' user.pk %}">профиль</a>
                             </li>
                             <div class="dropdown-divider"></div>
                             <li>

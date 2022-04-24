@@ -1,0 +1,26 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="kbank-post col-md-10 col-lg-8 col-xl-6">
+            {% if user.is_authenticated %}
+
+                <h3 align="center">Поздравляем!</h3>
+                <br>
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="kbank-post col-md-10 col-lg-8 col-xl-6">
+                        Учетная запись пользователя {{ user.username }} подтверждена.
+                    </div>
+                </div>
+            {% else %}
+                <h3 align="center">Верификация не пройдена.</h3>
+            {% endif %}
+            <br>
+            <button class="btn btn-round form-control">
+                <a href="{% url 'index' %}" class="">на главную</a>
+            </button>
+
+        </div>
+    </div>
+{% endblock %}

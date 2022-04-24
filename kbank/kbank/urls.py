@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from mainapp.views import ArticlesListView, CategoryListView
+from authapp.views import ProfileView
 
 
 urlpatterns = [
@@ -12,6 +13,7 @@ urlpatterns = [
     path('article/', include(('mainapp.urls', 'mainapp'), namespace='articles')),
     path('<slug:slug>/', CategoryListView.as_view(), name='category'),
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
+    path('profile/<int:pk>', ProfileView.as_view(), name='profile-view'),
 ]
 
 if settings.DEBUG:
