@@ -21,6 +21,11 @@ class KbankUserLoginView(RedirectToPreviousMixin, LoginView):
         context['title'] = 'авторизация'
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('/')
+        return super(KbankUserLoginView, self).dispatch(request, *args, **kwargs)
+
 
 class KbankUserLogoutView(LogoutView):
     Model = KbankUser
@@ -30,6 +35,11 @@ class KbankUserRegisterView(CreateView):
     Model = KbankUser
     form_class = KbankUserRegistrationForm
     template_name = 'authapp/registration.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('/')
+        return super(KbankUserRegisterView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(KbankUserRegisterView, self).get_context_data()
