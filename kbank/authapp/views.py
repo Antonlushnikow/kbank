@@ -8,7 +8,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 
-from kbank import settings_dev
+from kbank import settings
 from .models import KbankUser
 from .forms import (
     KbankUserLoginForm,
@@ -79,8 +79,8 @@ class KbankUserRegisterView(CreateView):
         verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
         title = f'Подтверждение учетной записи {user.username} на портале KBANK'
         message = f'Для подтверждения учетной записи {user.username} на портале \
-        {settings_dev.DOMAIN_NAME} перейдите по ссылке: \n{settings_dev.DOMAIN_NAME}{verify_link}'
-        send_mail(title, message, settings_dev.EMAIL_HOST_USER, [user.email], fail_silently=False)
+        {settings.DOMAIN_NAME} перейдите по ссылке: \n{settings.DOMAIN_NAME}{verify_link}'
+        send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
     def verify(self, email, activation_key):
         try:
