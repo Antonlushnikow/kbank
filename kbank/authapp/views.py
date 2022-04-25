@@ -8,6 +8,9 @@ from django.views.generic import CreateView, DetailView, UpdateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 
+from django.dispatch import receiver
+from allauth.account.signals import user_signed_up
+
 from kbank import settings_dev
 from .models import KbankUser
 from .forms import (
@@ -18,6 +21,14 @@ from .forms import (
     KbankUserConfirmDeleteForm,
 )
 from kbank.mixins import RedirectToPreviousMixin
+
+
+@receiver(user_signed_up)
+def user_signed_up_(request, user, **kwargs):
+    print(user.first_name)
+    print(user.email)
+    user.is_active = True
+    user.save()
 
 
 class KbankUserLoginView(RedirectToPreviousMixin, LoginView):
