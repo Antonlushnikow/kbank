@@ -1,5 +1,6 @@
 {% extends 'kbank/base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block content %}
     <main class="container position-relative px-4 px-lg-7">
@@ -18,6 +19,37 @@
                     <a class="underlineHover" href="{% url 'auth:register' %}">Нет профиля в Kbank?</a>
                 </div>
                 <br>
+                <hr>
+                <h6 class="text-center mb-lg-4">Войти через соцсеть</h6>
+                <div class="list-inline text-center mb-lg-4">
+                    {#                    <div>#}
+
+                    <span class="fa-stack fa-lg">
+                                                            <a href="{% provider_login_url 'google' %}">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-google fa-stack-1x fa-inverse"></i>
+                                                                </a>
+                                    </span>
+
+                    {#                    </div>#}
+                    {#                    <div>#}
+                    <span class="fa-stack fa-lg">
+                    <a href="{% provider_login_url 'yandex' %}">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-yandex fa-stack-1x fa-inverse"></i>
+                    </a>
+                                    </span>
+
+                    {#                    </div>#}
+                    {#                    <div>#}
+                    <span class="fa-stack fa-lg">
+                    <a href="{% provider_login_url 'vk' %}">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-vk fa-stack-1x fa-inverse"></i>
+                    </a>
+                                    </span>
+                    {#                    </div>#}
+                </div>
             </div>
         </div>
     </main>

@@ -50,9 +50,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
     'mainapp',
     'authapp',
     'tinymce',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.yandex',
+    'authapp.vk',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +79,10 @@ ROOT_URLCONF = 'kbank.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['kbank/templates'],
+        'DIRS': [
+            'kbank/templates',
+            os.path.join(BASE_DIR, 'kbank', 'templates', 'allauth'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,8 +132,44 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+    'yandex': {
+        'SCOPE': [
+            "login:birthday",
+            "login:email",
+            "login:info",
+            "login:avatar",
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+    'vk': {
+        'SCOPE': [
+            "screen_name",
+            "email",
+            "first_name",
+            "last_name",
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+}
+
 AUTH_USER_MODEL = 'authapp.KbankUser'
 LOGOUT_REDIRECT_URL = '/'
+
+SITE_ID = 2
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -152,3 +200,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
