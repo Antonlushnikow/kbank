@@ -1,0 +1,16 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+{% block head %}<title>Неудача при аутентификации</title>{% endblock %}
+
+{% block content %}
+<div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-4">
+            <h1>{% trans "Social Network Login Failure" %}</h1>
+
+            <p>{% trans "An error occurred while attempting to login via your social network account." %}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

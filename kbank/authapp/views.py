@@ -25,8 +25,6 @@ from kbank.mixins import RedirectToPreviousMixin
 
 @receiver(user_signed_up)
 def user_signed_up_(request, user, **kwargs):
-    print(user.first_name)
-    print(user.email)
     user.is_active = True
     user.save()
 
@@ -99,7 +97,7 @@ class KbankUserRegisterView(CreateView):
             if user.activation_key == activation_key and not user.is_activation_key_expired():
                 user.is_active = True
                 user.save()
-                auth.login(self, user)
+                auth.login(self, user, backend='django.contrib.auth.backends.ModelBackend')
                 return render(self, 'authapp/verification.html')
             else:
                 return render(self, 'authapp/verification.html')
