@@ -20,7 +20,7 @@ class KbankUser(AbstractUser):
     )
     email = models.EmailField(blank=True, unique=True, verbose_name="Email")
     activation_key = models.CharField(max_length=128, blank=True)
-    activation_key_expires = models.DateTimeField(default=(now() + timedelta(hours=24)))
+    activation_key_expires = models.DateTimeField(default=lambda: now() + timedelta(hours=24))
     is_active = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
 
