@@ -1,6 +1,8 @@
+import django.views
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import (
     DetailView,
     CreateView,
@@ -28,7 +30,7 @@ class ArticlesListView(ListView):
         return context
 
     def get_queryset(self):
-        return Article.objects.all().order_by('-publish_date')
+        return Article.objects.filter(moderation_required=False).order_by('-publish_date')
 
 
 class ArticleCreateView(CreateView):

@@ -11,11 +11,11 @@
                 </a>
                 <ul class="dropdown-menu rounded">
                     {% for category in categories %}
-                      <li>
-                          <a class="dropdown-item px-lg-3 py-3 py-lg-4" href="{% url 'category' category.slug %}">
-                              {{ category.title }}
-                          </a>
-                      </li>
+                        <li>
+                            <a class="dropdown-item px-lg-3 py-3 py-lg-4" href="{% url 'category' category.slug %}">
+                                {{ category.title }}
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </li>
@@ -38,34 +38,44 @@
                     <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'articles:create-article' %}">НОВАЯ СТАТЬЯ</a>
                 </li>
                 {% if not user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
-                </li>
-                {% else %}
-                <!-- Profile Dropdown -->
-                <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                    <li class="nav-item dropdown d-flex">
-                        <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex" data-bs-toggle="dropdown" href="">
-                            <img src="{% if user.avatar %}/media/{{ user.avatar }}{% else %}/media/users_avatar/default.png{% endif %}" alt="avatar" class="rounded-circle row justify-content-center align-self-center" width="40" height="40">
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end rounded">
-                            <li class="dropdown-header px-lg-3 py-3">
-                                <h6>{{ user }}</h6>
-                                <div style="font-size: 0.8rem;">{{ user.email }}</div>
-                            </li>
-                            <li>
-                                <a class="dropdown-item px-lg-3 py-3" href="{% url 'articles:list-author-articles' user.pk %}">мои статьи</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item px-lg-3 py-3" href="{% url 'profile-view' user.pk %}">профиль</a>
-                            </li>
-                            <div class="dropdown-divider"></div>
-                            <li>
-                                <a class="dropdown-item px-lg-3 py-3" href="{% url 'auth:logout' %}?next={{request.path}}">ВЫЙТИ</a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
                     </li>
-                </ul>
+                {% else %}
+                    <!-- Profile Dropdown -->
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                        <li class="nav-item dropdown d-flex">
+                            <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex" data-bs-toggle="dropdown"
+                               href="">
+                                <img src="{% if user.avatar %}/media/
+                                    {{ user.avatar }}{% else %}/media/users_avatar/default.png{% endif %}" alt="avatar"
+                                     class="rounded-circle row justify-content-center align-self-center" width="40"
+                                     height="40">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end rounded">
+                                <li class="dropdown-header px-lg-3 py-3">
+                                    <h6>{{ user }}</h6>
+                                    <div style="font-size: 0.8rem;">{{ user.email }}</div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item px-lg-3 py-3"
+                                       href="{% url 'articles:list-author-articles' user.pk %}">мои статьи</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item px-lg-3 py-3" href="{% url 'profile-view' user.pk %}">профиль</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item px-lg-3 py-3"
+                                       href="{% url 'moderation:moderate-articles' %}">модерация</a>
+                                </li>
+                                <div class="dropdown-divider"></div>
+                                <li>
+                                    <a class="dropdown-item px-lg-3 py-3"
+                                       href="{% url 'auth:logout' %}?next={{ request.path }}">ВЫЙТИ</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 {% endif %}
             </ul>
         </div>

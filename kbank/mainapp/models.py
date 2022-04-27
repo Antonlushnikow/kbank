@@ -37,6 +37,8 @@ class Article(models.Model):
         related_name='article_likes',
     )
 
+    moderation_required = models.BooleanField(default=True)
+
     def __str__(self):
         return self.title
 
