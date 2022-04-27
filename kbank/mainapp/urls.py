@@ -6,6 +6,8 @@ from .views import (
     ArticleLikeAPIView,
     CommentLikeAPIView,
     ArticleListAuthorView,
+    CommentDeleteView,
+    CommentAPIView,
 )
 
 urlpatterns = [
@@ -16,4 +18,9 @@ urlpatterns = [
 
     path('api/<int:pk>/like/', ArticleLikeAPIView.as_view(), name='like-api'),
     path('api/comment/<int:pk>/like/', CommentLikeAPIView.as_view(), name='comment-like-api'),
+
+    path('api/comment/<int:pk>/', CommentAPIView.as_view(), name='comment-api'),
+    # path('api/comment/<int:pk>/read/', CommentAPIView.as_view(), name='read-comment-api'),
+
+    # path('comment/<int:pk>/delete/', CommentAPIView.delete, name='delete-comment-api'),
 ]

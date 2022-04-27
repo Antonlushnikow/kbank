@@ -6,12 +6,13 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     ListView,
+    DeleteView,
 )
 from django.views.generic.edit import FormMixin
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
+from rest_framework import authentication, permissions, status
 
 from .models import Article, Category, Comment
 from authapp.models import KbankUser
@@ -190,3 +191,35 @@ class ArticleLikeAPIView(LikeAPIView):
 
 class CommentLikeAPIView(LikeAPIView):
     model = Comment
+
+
+class CommentDeleteView(DeleteView):
+    model = Comment
+
+
+class CommentAPIView(APIView):
+    """
+    Представление комментариев через API
+    """
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    model = Comment
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        user = self.request.user
+        author = obj.author.username
+        body = obj.body
+
+        data = {
+            'author': author,
+            'body': body,
+        }
+        return Response(data)
+
+    def delete(self):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        user = self.request.user
+        if user.is_privileged:
+            obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

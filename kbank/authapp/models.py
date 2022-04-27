@@ -22,6 +22,11 @@ class KbankUser(AbstractUser):
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_expires = models.DateTimeField(default=(now() + timedelta(hours=24)))
     is_active = models.BooleanField(default=False)
+    is_blocked = models.BooleanField(default=False)
 
     def is_activation_key_expired(self):
         return now() > self.activation_key_expires
+
+    @property
+    def is_privileged(self):
+        return True if self.is_staff or self.is_moderator else False
