@@ -22,15 +22,17 @@ $(document).ready(function(){
 
         const likeURL = $(this).attr("data-href");  // API URL
         const objectId = $(this).attr("data-id");
-        let likeCount = $(`#like-count-${objectId}`);  // Total count of likes
-        let likeIcon = $(`.like-icon-${objectId}`);  // Font-awesome icon
+        let comment = $(`.comment-${objectId}`)[0];  // Comment
 
         $.ajax({
             url: likeURL,
             method: "DELETE",
             headers: {'X-CSRFToken': csrftoken},
             success: function(data){
-                $(this).textContent = 'Удалено'
+                console.log('Deleted');
+                console.log(comment);
+
+                comment.innerText = 'Удалено';
             },
             error: function(error){
                 console.log(error)

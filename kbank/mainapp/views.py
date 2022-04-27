@@ -217,9 +217,10 @@ class CommentAPIView(APIView):
         }
         return Response(data)
 
-    def delete(self):
-        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
-        user = self.request.user
-        if user.is_privileged:
-            obj.delete()
+    def delete(self, request, pk):
+        obj = get_object_or_404(self.model, pk=pk)
+        user = request.user
+        print(user)
+        print(user.is_privileged)
+        obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

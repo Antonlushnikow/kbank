@@ -78,7 +78,7 @@
             {% for comment in article.comments.all %}
                 <div class="card mb-2 rounded">
                   <div class="card-body p-4">
-                    <p class="mt-2">{{ comment.body }}</p>
+                    <p class="mt-2 comment-{{ comment.pk }}">{{ comment.body }}</p>
 
                     <div class="d-flex justify-content-between text-secondary">
                       <div class="d-flex flex-row align-items-end">
@@ -88,9 +88,12 @@
                       <div class="d-flex flex-row align-items-center">
 
                          <p class="small mb-0 ms-0">{{ comment.publish_date }}
+                             <!-- Delete Comment -->
+                             {% if user.is_privileged %}
                              <span class="delete-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-api' comment.pk %}">
                                 <i class="fa-regular fa-trash-can"></i>
                              </span>
+                             {% endif %}
                              <!-- Likes -->
                              <span class="like-btn" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-like-api' comment.pk %}">
                                 {% if user in comment.likes.all %}
