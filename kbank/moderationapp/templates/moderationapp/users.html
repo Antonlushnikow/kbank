@@ -1,0 +1,42 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>KBANK | База знаний</title>
+{% endblock %}
+
+
+
+{% block content %}
+    {% include 'moderationapp/includes/inc_moderation_menu.html' %}
+    {% if users %}
+        {% for user in users %}
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
+
+                        <div class="post-preview">
+                            <div class="post-subtitle">{{ user }}</div>
+                            <div class="post-meta d-flex justify-content-between">
+                                <div class="d-flex flex-row align-items-center">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
+                    Нет пользователей для модерации.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+

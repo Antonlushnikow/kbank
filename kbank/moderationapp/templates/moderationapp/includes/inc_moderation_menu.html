@@ -1,0 +1,13 @@
+{% load static %}
+
+<ul>
+    <li>
+        <a class="dropdown-item px-lg-3 py-3" href="{% url 'moderation:moderate-articles' %}">модерация статей</a>
+    </li>
+    <li>
+        <a class="dropdown-item px-lg-3 py-3" href="{% url 'moderation:moderate-comments' %}">модерация комментариев</a>
+    </li>
+    <li>
+        <a class="dropdown-item px-lg-3 py-3" href="{% url 'moderation:moderate-users' %}">модерация пользователей</a>
+    </li>
+</ul>

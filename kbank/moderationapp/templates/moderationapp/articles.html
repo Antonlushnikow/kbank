@@ -6,7 +6,9 @@
 {% endblock %}
 
 
+
 {% block content %}
+    {% include 'moderationapp/includes/inc_moderation_menu.html' %}
     {% if articles %}
         {% for article in articles %}
             <div class="container px-4 px-lg-5">

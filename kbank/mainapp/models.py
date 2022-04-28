@@ -70,6 +70,7 @@ class Comment(models.Model):
         related_name='comment_likes',
     )
     publish_date = models.DateTimeField(auto_now_add=True)
+    moderation_required = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.author}: {self.body}'
