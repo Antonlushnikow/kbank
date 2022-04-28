@@ -11884,3 +11884,7 @@ ul.post-meta {
 .errorlist {
     color: orangered;
 }
+
+.hidden-comment {
+    color: #ddd;
+}

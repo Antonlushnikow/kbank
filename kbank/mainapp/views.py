@@ -11,12 +11,14 @@ from django.views.generic import (
 from django.views.generic.edit import FormMixin
 
 from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
 
 from .models import Article, Category, Comment
 from authapp.models import KbankUser
 from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
+from .serializers import CommentSerializer
 
 
 class ArticlesListView(ListView):
@@ -193,8 +195,15 @@ class CommentLikeAPIView(LikeAPIView):
     model = Comment
 
 
-class CommentDeleteView(DeleteView):
+class CommentHideToggleView(DeleteView):
     model = Comment
+
+    def hide(self, pk):
+        comment = get_object_or_404(self.model, pk=pk)
+        if comment.is_visible:
+            comment.is_visible = False
+        else:
+            comment.is_visible = True
 
 
 class CommentAPIView(APIView):
@@ -224,3 +233,23 @@ class CommentAPIView(APIView):
         print(user.is_privileged)
         obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentVisibleToggleAPI(APIView):
+    model = Comment
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        user = self.request.user
+        is_visible = obj.is_visible
+
+        if user.is_privileged:
+            obj.is_visible = is_visible = False if is_visible else True
+            obj.save()
+
+        data = {
+            'is_visible': is_visible,
+        }
+
+        return Response(data)

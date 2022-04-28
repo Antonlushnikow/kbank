@@ -20,12 +20,12 @@ $(document).ready(function(){
     $('.delete-comment').click(function(e){
         e.preventDefault();
 
-        const likeURL = $(this).attr("data-href");  // API URL
+        const URL = $(this).attr("data-href");  // API URL
         const objectId = $(this).attr("data-id");
         let comment = $(`.comment-${objectId}`)[0];  // Comment
 
         $.ajax({
-            url: likeURL,
+            url: URL,
             method: "DELETE",
             headers: {'X-CSRFToken': csrftoken},
             success: function(data){
