@@ -34,3 +34,4 @@ class KbankUser(AbstractUser):
     @property
     def is_privileged(self):
         return True if self.is_staff or self.is_moderator else False
+
