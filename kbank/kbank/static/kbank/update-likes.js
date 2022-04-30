@@ -1,11 +1,11 @@
 $(document).ready(function(){
     $('.like-btn').click(function(e){
         e.preventDefault();
-
         const likeURL = $(this).attr("data-href");  // API URL
         const objectId = $(this).attr("data-id");
-        let likeCount = $(`#like-count-${objectId}`);  // Total count of likes
-        let likeIcon = $(`.like-icon-${objectId}`);  // Font-awesome icon
+        let likeCount = $(this).next("span");  // Total count of likes
+        console.log(likeCount);
+        let likeIcon = $(this).children(`.like-icon-${objectId}`);  // Font-awesome icon
 
         $.ajax({
             url: likeURL,
