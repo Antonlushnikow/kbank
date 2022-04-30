@@ -21,8 +21,4 @@ urlpatterns = [
 
     path('api/comment/<int:pk>/', CommentAPIView.as_view(), name='comment-api'),
     path('api/comment/<int:pk>/hide/', CommentVisibleToggleAPI.as_view(), name='comment-visible-toggle'),
-
-    # path('api/comment/<int:pk>/read/', CommentAPIView.as_view(), name='read-comment-api'),
-
-    # path('comment/<int:pk>/delete/', CommentAPIView.delete, name='delete-comment-api'),
 ]
