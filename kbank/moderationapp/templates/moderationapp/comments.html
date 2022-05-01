@@ -10,30 +10,31 @@
 {% block content %}
     {% include 'moderationapp/includes/inc_moderation_menu.html' %}
     {% if comments %}
-        {% for comment in comments %}
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                    <h3>Комментарии для модерации</h3>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Текст коментария</th>
+                        <th>Автор</th>
+                        <th>Дата публикации</th>
+                    </tr>
+                    {% for comment in comments %}
+                        <tr>
+                            <td align="left" width="60%">{{ comment.body }}
+                            </td>
+                            <td align="center" width="25%">
+                                {{ comment.author }}</td>
+                            <td align="right" width="15%">
+                                {{ comment.publish_date }}
+                            </td>
+                        </tr>
 
-                        <div class="post-preview">
-                            <div class="post-subtitle">{{ comment.text|truncatewords_html:50|safe }}</div>
-                            <div class="post-meta d-flex justify-content-between">
-                                <div class="d-flex flex-row align-items-center">
-                                    <p>
-                                        Автор:
-                                        <a style="text-decoration: none;"
-                                           href="{% url 'profile-view' comment.author.id %}">{{ comment.author }}</a>
-                                        {{ comment.publish_date }}
-                                    </p>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                    {% endfor %}
+                </table>
             </div>
-        {% endfor %}
+        </div>
+
     {% else %}
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">

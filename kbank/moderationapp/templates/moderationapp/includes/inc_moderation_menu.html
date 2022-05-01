@@ -1,6 +1,6 @@
 {% load static %}
 
-<ul>
+<ul style="display: flex;justify-content: space-evenly;">
     <li>
         <a class="dropdown-item px-lg-3 py-3" href="{% url 'moderation:moderate-articles' %}">модерация статей</a>
     </li>
@@ -11,3 +11,4 @@
         <a class="dropdown-item px-lg-3 py-3" href="{% url 'moderation:moderate-users' %}">модерация пользователей</a>
     </li>
 </ul>
+<hr>
