@@ -13,14 +13,19 @@ from django.views.generic.edit import FormMixin
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
+from rest_framework import authentication, permissions, status
 
 from .models import Article, Category, Comment
 from authapp.models import KbankUser
 from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
+from .serializers import CommentSerializer
+from authapp.permissions import Privileged
 
 
 class ArticlesListView(ListView):
+    """
+    Контроллер вывода списка статей
+    """
     model = Article
     template_name = 'mainapp/index.html'
     context_object_name = 'articles'
@@ -34,7 +39,9 @@ class ArticlesListView(ListView):
 
 
 class ArticleCreateView(CreateView):
-    # Контроллер создания статьи
+    """
+    Контроллер создания статьи
+    """
     model = Article
     template_name = 'mainapp/create-article.html'
     form_class = ArticleCreateForm
@@ -61,7 +68,9 @@ class ArticleCreateView(CreateView):
 
 
 class ArticleReadView(FormMixin, DetailView):
-    # контроллер вывода статьи по номеру
+    """
+    Контроллер вывода статьи по номеру
+    """
     model = Article
     template_name = 'mainapp/article.html'
     form_class = CommentForm
@@ -72,7 +81,7 @@ class ArticleReadView(FormMixin, DetailView):
         context['form'] = CommentForm(initial={'article': self.object, 'author': self.request.user})
         return context
 
-    def get_object(self):
+    def get_object(self, queryset=None):
         return get_object_or_404(Article, pk=self.kwargs['pk'])
 
     def post(self, request, *args, **kwargs):
@@ -93,7 +102,9 @@ class ArticleReadView(FormMixin, DetailView):
 
 
 class ArticleEditView(UpdateView):
-    # Контроллер редактирования статьи
+    """
+    Контроллер редактирования статьи
+    """
     model = Article
     template_name = 'mainapp/edit-article.html'
     form_class = ArticleEditForm
@@ -104,7 +115,6 @@ class ArticleEditView(UpdateView):
         return context
 
     def form_valid(self, form):
-        # form.instance.author = self.request.user
         item = form.save()
         self.pk = item.pk
         return super().form_valid(form)
@@ -120,7 +130,9 @@ class ArticleEditView(UpdateView):
 
 
 class CategoryListView(ListView):
-    # Контроллер вывода статей по категории
+    """
+    Контроллер вывода статей по категории
+    """
     model = Article
     template_name = 'mainapp/index.html'
     context_object_name = 'articles'
@@ -137,7 +149,9 @@ class CategoryListView(ListView):
 
 
 class ArticleListAuthorView(ListView):
-    # Контроллер вывода статей по авторам
+    """
+    Контроллер вывода статей по авторам
+    """
     model = Article
     template_name = 'mainapp/index.html'
     context_object_name = 'articles'
@@ -192,3 +206,60 @@ class ArticleLikeAPIView(LikeAPIView):
 
 class CommentLikeAPIView(LikeAPIView):
     model = Comment
+
+
+class CommentAPIView(APIView):
+    """
+    Представление комментариев через API
+    """
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [Privileged]
+    model = Comment
+
+    def get(self, request, pk=None):
+        # получение комментария
+
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        author = obj.author.username
+        body = obj.body
+
+        data = {
+            'author': author,
+            'body': body,
+        }
+        return Response(data)
+
+    def patch(self, request, pk):
+        # изменение комментария
+
+        obj = get_object_or_404(self.model, pk=pk)
+        serializer = CommentSerializer(obj, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="wrong parameters")
+
+    def delete(self, request, pk):
+        obj = get_object_or_404(self.model, pk=pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentVisibleToggleAPI(APIView):
+    """
+    Показ/скрытие комментариев
+    """
+    model = Comment
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        is_visible = obj.is_visible
+        obj.is_visible = is_visible = False if is_visible else True
+        obj.save()
+
+        data = {
+            'is_visible': is_visible,
+        }
+
+        return Response(data)
