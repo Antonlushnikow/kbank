@@ -1,7 +1,5 @@
-from django.http import HttpResponseRedirect, HttpResponseNotFound
-from django.shortcuts import render
+from django.http import HttpResponseNotFound
 
-# Create your views here.
 from django.views.generic import ListView
 
 from mainapp.models import Article, Comment
@@ -15,7 +13,7 @@ class ModerationRequiredArticles(ArticlesListView):
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
-        if user.is_moderator or user.is_superuser or user.is_staff:
+        if user.is_privileged:
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
 
@@ -30,7 +28,7 @@ class CommentsListView(ListView):
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
-        if user.is_moderator or user.is_superuser or user.is_staff:
+        if user.is_privileged:
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
 
@@ -53,7 +51,7 @@ class UsersListView(ListView):
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
-        if user.is_moderator or user.is_superuser or user.is_staff:
+        if user.is_privileged:
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
 
