@@ -6,7 +6,6 @@ from django.conf import settings
 from mainapp.views import ArticlesListView, CategoryListView
 from authapp.views import ProfileView
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ArticlesListView.as_view(), name='index'),
@@ -15,6 +14,7 @@ urlpatterns = [
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile-view'),
     path('accounts/', include('allauth.urls')),
+    path('moderation/', include(('moderationapp.urls', 'moderationapp'), namespace='moderation')),
 ]
 
 if settings.DEBUG:

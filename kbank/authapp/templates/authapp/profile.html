@@ -16,7 +16,7 @@
           <div class="rounded-top text-white d-flex flex-row justify-content-between" style="background-color: #005cb2; height:200px;">
             <div class="d-flex flex-row">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-              <img src="/media/{{ profile.avatar }}" alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
+              <img src="/media/{{profile.avatar}}" alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; min-height: 150px; z-index: 1">
               {% if user == profile %}
               <a href="{% url 'auth:update-profile' profile.pk %}"  style="z-index: 1;">
                 <button type="button" class="btn btn-outline-primary rounded" data-mdb-ripple-color="dark">

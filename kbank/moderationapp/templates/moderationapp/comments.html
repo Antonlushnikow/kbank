@@ -1,0 +1,49 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>KBANK | База знаний</title>
+{% endblock %}
+
+
+
+{% block content %}
+    {% include 'moderationapp/includes/inc_moderation_menu.html' %}
+    {% if comments %}
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                    <h3>Комментарии для модерации</h3>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Текст коментария</th>
+                        <th>Автор</th>
+                        <th>Дата публикации</th>
+                    </tr>
+                    {% for comment in comments %}
+                        <tr>
+                            <td align="left" width="60%">{{ comment.body }}
+                            </td>
+                            <td align="center" width="25%">
+                                {{ comment.author }}</td>
+                            <td align="right" width="15%">
+                                {{ comment.publish_date }}
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
+                    Нет коментариев для модерации.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+

@@ -37,6 +37,8 @@ class Article(models.Model):
         related_name='article_likes',
     )
 
+    moderation_required = models.BooleanField(default=True)
+
     def __str__(self):
         return self.title
 
@@ -68,6 +70,7 @@ class Comment(models.Model):
         related_name='comment_likes',
     )
     publish_date = models.DateTimeField(auto_now_add=True)
+    moderation_required = models.BooleanField(default=True)
 
     is_visible = models.BooleanField(default=True)
 
