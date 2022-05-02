@@ -19,7 +19,7 @@ class KbankUser(AbstractUser):
         crop=['middle', 'center'],
         upload_to='users_avatar/',
         blank=True,
-        default='/users_avatar/default.png',
+        default='users_avatar/default.png',
         verbose_name='аватар',
     )
     email = models.EmailField(blank=True, unique=True, verbose_name="Email")
