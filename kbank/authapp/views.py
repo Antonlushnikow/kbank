@@ -6,12 +6,14 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
+from django.conf import settings
 
 from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
 
 from kbank import settings_dev
+
 from .models import KbankUser
 from .forms import (
     KbankUserLoginForm,
@@ -19,6 +21,7 @@ from .forms import (
     KbankUserUpdateForm,
     KbankUserPasswordChangeForm,
     KbankUserConfirmDeleteForm,
+    KbankUserPasswordResetForm,
 )
 from kbank.mixins import RedirectToPreviousMixin
 
@@ -162,3 +165,11 @@ class KbankUserConfirmDeleteView(LoginRequiredMixin, FormView):
             self.success_url = reverse_lazy('auth:logout')
             self.request.user.save()
         return super(KbankUserConfirmDeleteView, self).form_valid(form)
+
+
+class KbankUserPasswordResetView(PasswordResetView):
+    form_class = KbankUserPasswordResetForm
+    template_name = 'authapp/forgot-password.html'
+    email_template_name = 'authapp/password_reset_email.html'
+    subject_template_name = 'authapp/password_reset_subject.txt'
+    from_email = settings.EMAIL_HOST_USER
