@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -26,7 +26,7 @@ class KbankUser(AbstractUser):
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_expires = models.DateTimeField(default=default_key_expires)
     is_active = models.BooleanField(default=False)
-    is_blocked = models.BooleanField(default=False)
+    block_expires = models.DateTimeField(unique=False, default=datetime(1970, 1, 1))
     moderation_required = models.BooleanField(default=True)
 
     def is_activation_key_expired(self):
@@ -34,5 +34,11 @@ class KbankUser(AbstractUser):
 
     @property
     def is_privileged(self):
-        return True if self.is_staff or self.is_moderator or self.is_superuser else False
+        return self.is_staff or self.is_moderator or self.is_superuser
 
+    @property
+    def is_blocked(self):
+        return now() < self.block_expires
+
+    def block(self, hours):
+        self.block_expires = now() + timedelta(hours=hours)
