@@ -15,7 +15,7 @@ class KbankUserLoginForm(AuthenticationForm):
         super(KbankUserLoginForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control mb-2'
             field.help_text = ''
 
 
@@ -28,9 +28,9 @@ class KbankUserRegistrationForm(UserCreationForm):
         super(KbankUserRegistrationForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control mb-2'
             field.help_text = ''
-            
+
     def save(self, commit=True):
         user = super(KbankUserRegistrationForm, self).save()
         user.is_active = False
