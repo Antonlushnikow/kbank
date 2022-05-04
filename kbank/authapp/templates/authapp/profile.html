@@ -32,8 +32,8 @@
             </div>
 
             <div class="me-4" style="margin-top: 150px;">
-              {% if request.user.is_moderator %}
-              <a href="#">
+              {% if request.user.is_privileged %}
+              <a href="{% url 'authapp:block-user' profile.pk %}">
                 <button type="button" class="btn btn-danger rounded py-1 px-3" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Заблокировать
                 </button>
@@ -60,6 +60,9 @@
           </div>
           <div class="card-body p-4 text-black">
             <div class="mb-5">
+              {% if profile.is_blocked %}
+              <p class="text-danger">Заблокирован до {{ profile.block_expires }}</p>
+              {% endif %}
               <p class="lead fw-normal mb-1">О себе</p>
               <div class="p-4" style="background-color: #f8f9fa;">
                 <p class="font-italic mb-1">

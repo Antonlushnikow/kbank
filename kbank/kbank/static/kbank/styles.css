@@ -11897,6 +11897,7 @@ ul.post-meta {
 }
 
 
+
 .profile-top {
     height: 200px;
 }
@@ -11991,4 +11992,9 @@ body.offcanvas-active{
 
 .comment-info {
     display: flex;
+
+.required::after{
+    color: red;
+    content: "*";
+
 }

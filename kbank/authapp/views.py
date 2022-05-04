@@ -49,10 +49,10 @@ class KbankUserLoginView(RedirectToPreviousMixin, LoginView):
 
     def form_valid(self, form):
         user = get_object_or_404(KbankUser, username=form['username'].value())
-        # print('dsfsdf' + form['username'].value())
-        print(user.is_deleted)
         if user.is_deleted:
             return HttpResponseNotFound('Пользователь удален')
+        if user.is_blocked:
+            return HttpResponseNotFound(f'Пользователь заблокирован до {user.block_expires}')
         return super(KbankUserLoginView, self).form_valid(form)
 
 
@@ -173,3 +173,13 @@ class KbankUserPasswordResetView(PasswordResetView):
     email_template_name = 'authapp/password_reset_email.html'
     subject_template_name = 'authapp/password_reset_subject.txt'
     from_email = settings.EMAIL_HOST_USER
+
+
+def block_user(request, pk):
+    if request.user.is_privileged:
+        user = get_object_or_404(KbankUser, pk=pk)
+        user.block(24)
+        user.save()
+        return HttpResponseRedirect(reverse('profile-view', kwargs={'pk': pk}))
+    return HttpResponseRedirect('/')
+

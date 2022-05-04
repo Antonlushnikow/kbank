@@ -50,6 +50,9 @@ class ArticleCreateView(CreateView):
         if not request.user.is_authenticated:
             return HttpResponseRedirect('/auth/login')
 
+        if request.user.is_blocked:
+            return HttpResponseNotFound(f'Пользователь заблокирован до {request.user.block_expires}')
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -85,6 +88,8 @@ class ArticleReadView(FormMixin, DetailView):
         return get_object_or_404(Article, pk=self.kwargs['pk'])
 
     def post(self, request, *args, **kwargs):
+        if request.user.is_blocked:
+            return HttpResponseNotFound(f'Пользователь заблокирован до {request.user.block_expires}')
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
