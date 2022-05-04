@@ -165,7 +165,9 @@ class KbankUserConfirmDeleteView(LoginRequiredMixin, FormView):
 
 
 def block_user(request, pk):
-    user = get_object_or_404(KbankUser, pk=pk)
-    user.block(24)
-    user.save()
-    return HttpResponseRedirect(reverse('profile-view', kwargs={'pk': pk}))
+    if request.user.is_privileged:
+        user = get_object_or_404(KbankUser, pk=pk)
+        user.block(24)
+        user.save()
+        return HttpResponseRedirect(reverse('profile-view', kwargs={'pk': pk}))
+    return HttpResponseRedirect('/')
