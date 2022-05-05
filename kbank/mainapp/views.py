@@ -20,6 +20,7 @@ from authapp.models import KbankUser
 from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
 from .serializers import CommentSerializer
 from authapp.permissions import Privileged
+from .utils import create_notification
 
 
 class ArticlesListView(ListView):
@@ -64,6 +65,8 @@ class ArticleCreateView(CreateView):
         form.instance.author = self.request.user
         item = form.save()
         self.pk = item.pk
+        body = f"{self.request.user} created an article named {self.request.POST['title']}"
+        create_notification(self.request, body, scope="moderators")
         return super().form_valid(form)
 
     def get_success_url(self):

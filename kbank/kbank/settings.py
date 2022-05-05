@@ -54,15 +54,15 @@ INSTALLED_APPS = [
 
     'mainapp',
     'authapp',
-    'tinymce',
+    'moderationapp',
 
+    'tinymce',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
     'authapp.vk',
-    'moderationapp',
 ]
 
 MIDDLEWARE = [
@@ -92,6 +92,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'kbank.context_processors.add_categories',
+                'kbank.context_processors.add_notifications',
             ],
         },
     },
