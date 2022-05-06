@@ -1,35 +1,63 @@
-from django.http import HttpResponseNotFound, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views import View
-
-from django.views.generic import ListView
-from rest_framework.views import APIView
-
-from authapp.permissions import Privileged
-from mainapp.models import Article, Comment
+import django_filters
 from authapp.models import KbankUser
+from authapp.permissions import Privileged
+from django import forms
+from django.db import models
+from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.views.generic import ListView
+from django_filters import FilterSet
+from django_filters.views import FilterView
+from mainapp.models import Article, Comment
 
-from mainapp.views import ArticlesListView
-from moderationapp.forms import ArticlesFilterForm
+
+class ArticleFilter(FilterSet):
+
+    class Meta:
+        model = Article
+        fields = {
+            'title',
+            'is_visible',
+            'moderation_required',
+        }
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+            models.BooleanField: {
+                'filter_class': django_filters.BooleanFilter,
+                'extra': lambda f: {
+                    'widget': forms.CheckboxInput,
+                },
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleFilter, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.form.fields.items():
+            field.widget.attrs['class'] = 'm-0'
+            field.help_text = ''
 
 
-class ModerationRequiredArticles(ArticlesListView):
+class ModerationRequiredArticles(FilterView):
+    """
+    Контроллер вывода списка статей для модерации
+    """
+    model = Article
     template_name = 'moderationapp/articles.html'
-    form_class = ArticlesFilterForm
-
-    def get(self, request, *args, **kwargs):
-        is_visible = request.GET['is_visible']
-        moderation_required = request.GET['moderation_required']
-        return render(request, self.template_name, context={})
+    context_object_name = 'articles'
+    filterset_class = ArticleFilter
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
         if user.is_privileged:
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
-
-    def get_queryset(self):
-        return Article.objects.filter(moderation_required=True).order_by('-publish_date')
 
 
 class CommentsListView(ListView):

@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.yandex',
     'authapp.vk',
     'moderationapp',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

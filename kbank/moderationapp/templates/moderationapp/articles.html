@@ -9,21 +9,17 @@
 
 {% block content %}
     {% include 'moderationapp/includes/inc_moderation_menu.html' %}
-    {% if articles %}
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h3>Filter Journals</h3>
+                <form action="" method="get">
+                    {{ filter.form.as_p }}
+                    <input type="submit" align="right"/>
+                </form>
+            </div>
+        </div>
 
-        <h3>Filter Journals</h3>
-        <form action="{% url 'moderation:moderate-articles' %}" method="get">
-            <div>
-                <label for="is_visible">видимый</label>
-                <input type="checkbox" name="is_visible"/>
-            </div>
-            <div>
-                <label for="moderation_required">нужна модерация</label>
-                <input type="checkbox" name="moderation_required"/>
-            </div>
-            <button class="btn btn-primary" type="submit">Показать</button>
-            <br>
-        </form>
+    {% if articles %}
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <h3>Статьи для модерации</h3>
@@ -33,7 +29,7 @@
                         <th>Автор</th>
                         <th>Дата публикации</th>
                     </tr>
-                    {% for article in articles %}
+                    {% for article in filter.qs %}
                         <tr>
                             <td align="left" width="60%"><a
                                     href="{% url 'articles:article' article.id %}"> {{ article.title }}</a>
