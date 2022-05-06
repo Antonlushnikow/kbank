@@ -1,15 +1,26 @@
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
 
 from django.views.generic import ListView
+from rest_framework.views import APIView
 
+from authapp.permissions import Privileged
 from mainapp.models import Article, Comment
 from authapp.models import KbankUser
 
 from mainapp.views import ArticlesListView
+from moderationapp.forms import ArticlesFilterForm
 
 
 class ModerationRequiredArticles(ArticlesListView):
     template_name = 'moderationapp/articles.html'
+    form_class = ArticlesFilterForm
+
+    def get(self, request, *args, **kwargs):
+        is_visible = request.GET['is_visible']
+        moderation_required = request.GET['moderation_required']
+        return render(request, self.template_name, context={})
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
@@ -57,3 +68,18 @@ class UsersListView(ListView):
 
     def get_queryset(self):
         return KbankUser.objects.filter(moderation_required=True)
+
+
+class ArticleVisibleToggle(View):
+    """
+    Показ/скрытие статьи
+    """
+    model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.is_visible = not obj.is_visible
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

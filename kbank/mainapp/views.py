@@ -35,7 +35,7 @@ class ArticlesListView(ListView):
         return context
 
     def get_queryset(self):
-        return Article.objects.filter(moderation_required=False).order_by('-publish_date')
+        return Article.objects.filter(is_visible=True).order_by('-publish_date')
 
 
 class ArticleCreateView(CreateView):

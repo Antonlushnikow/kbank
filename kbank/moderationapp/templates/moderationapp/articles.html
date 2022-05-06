@@ -10,9 +10,23 @@
 {% block content %}
     {% include 'moderationapp/includes/inc_moderation_menu.html' %}
     {% if articles %}
+
+        <h3>Filter Journals</h3>
+        <form action="{% url 'moderation:moderate-articles' %}" method="get">
+            <div>
+                <label for="is_visible">видимый</label>
+                <input type="checkbox" name="is_visible"/>
+            </div>
+            <div>
+                <label for="moderation_required">нужна модерация</label>
+                <input type="checkbox" name="moderation_required"/>
+            </div>
+            <button class="btn btn-primary" type="submit">Показать</button>
+            <br>
+        </form>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
-<h3>Статьи для модерации</h3>
+                <h3>Статьи для модерации</h3>
                 <table class="table table-hover">
                     <tr>
                         <th>Название статьи</th>
@@ -28,6 +42,12 @@
                                     href="{% url 'articles:article' article.id %}"> {{ article.author }}</a></td>
                             <td align="right" width="15%"><a
                                     href="{% url 'articles:article' article.id %}"> {{ article.publish_date }}</a>
+                            </td>
+                            <td align="right" width="15%">
+                                <a href="{% url 'articles:edit-article' article.pk %}"><i
+                                        class="fa-solid fa-pencil"></i></a>
+                                <a href="{% url 'moderation:article-visible-toggle' article.pk %}"><i
+                                        class="fa-regular fa-eye"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

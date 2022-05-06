@@ -5,10 +5,11 @@ from django.conf import settings
 
 from mainapp.views import ArticlesListView, CategoryListView
 from authapp.views import ProfileView
-from moderationapp.views import ModerationRequiredArticles, CommentsListView, UsersListView
+from moderationapp.views import ModerationRequiredArticles, CommentsListView, UsersListView, ArticleVisibleToggle
 
 urlpatterns = [
     path('articles/', ModerationRequiredArticles.as_view(), name='moderate-articles'),
     path('comments/', CommentsListView.as_view(), name='moderate-comments'),
     path('users/', UsersListView.as_view(), name='moderate-users'),
+    path('article/<int:pk>/hide/', ArticleVisibleToggle.as_view(), name='article-visible-toggle'),
 ]
