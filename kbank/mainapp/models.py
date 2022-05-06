@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone, timedelta
 
 from django.db import models
 from django.conf import settings
@@ -84,6 +84,9 @@ class Comment(models.Model):
         verbose_name_plural = "комментарии"
 
 
+JUST_NOW = timedelta(minutes=2)
+
+
 class Notification(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -94,3 +97,20 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def time_ago(self):
+        now = datetime.now(timezone.utc)
+        diff = now - self.created_date
+
+        minutes = int(diff / timedelta(minutes=1))
+        hours = int(diff / timedelta(hours=1))
+
+        if diff < JUST_NOW:
+            time_ = "Только что"
+        elif diff < timedelta(hours=1):
+            time_ = f"{minutes} минут назад"
+        elif diff < timedelta(days=1):
+            time_ = f"{hours} часа(ов) назад"
+        else:
+            time_ = f"{diff.days} дня(ей) назад"
+        return time_

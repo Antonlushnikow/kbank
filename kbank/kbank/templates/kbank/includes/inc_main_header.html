@@ -42,18 +42,38 @@
                         <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
                     </li>
                 {% else %}
-                <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <!-- Notifications -->
+                <ul class="navbar-nav ms-auto py-4 py-lg-0" style="max-width:300px;">
                         <li class="nav-item dropdown d-flex">
-                            <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex align-items-center" data-bs-toggle="dropdown"
+                            <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex align-items-center  position-relative" data-bs-toggle="dropdown"
                                href="">
+                                <div class="position-relative">
                                 <i class="far fa-bell" style="font-size: 1.5rem;"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ user.unread_notifications_count }}
+                                <span class="visually-hidden">unread messages</span>
+                              </span>
+                                    </div>
+
                             </a>
+
                             <ul class="dropdown-menu dropdown-menu-end rounded">
                                 {% for item in notifications %}
-                                <li class="dropdown-header px-lg-3 py-3">
-                                    <div style="font-size: 0.8rem;">{{ item.body }}</div>
-                                </li>
+<!--                                <li class="dropdown-header px-lg-3 py-3 {% if not item.is_read %}dt bg-primary bg-gradient{% else %} text-secondary{% endif %}">-->
+<!--                                    <a href="#"><div style="font-size: 0.8rem;">{{ item.body }}</div></a>-->
+<!--                                </li>-->
+                                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="toast-header">
+                                      <strong class="me-auto">Bootstrap</strong>
+                                      <small class="text-muted">{{ item.time_ago }}</small>
+                                      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                    <div class="toast-body">
+                                        {{ item.body }}
+                                    </div>
+                                </div>
                                 {% endfor %}
+
                             </ul>
                         </li>
                     </ul>
