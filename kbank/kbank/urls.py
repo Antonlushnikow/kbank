@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 
-from mainapp.views import ArticlesListView, CategoryListView
+from mainapp.views import ArticlesListView, CategoryListView, NotificationsListView
 from authapp.views import ProfileView, KbankUserPasswordResetView
 
 urlpatterns = [
@@ -33,6 +33,7 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(template_name='authapp/reset-password-complete.html'),
          name='password_reset_complete'
          ),
+    path('notifications', NotificationsListView.as_view(), name='notifications-view'),
 ]
 
 if settings.DEBUG:

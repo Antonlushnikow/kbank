@@ -45,4 +45,4 @@ class KbankUser(AbstractUser):
 
     @property
     def unread_notifications_count(self):
-        return self.notifications.count()
+        return self.notifications.filter(is_read=False).count()
