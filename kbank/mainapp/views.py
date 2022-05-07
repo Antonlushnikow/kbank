@@ -1,7 +1,8 @@
 import django.views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import (
     DetailView,
@@ -299,7 +300,7 @@ class CommentVisibleToggleAPI(APIView):
         return Response(data)
 
 
-class NotificationsListView(ListView):
+class NotificationsListView(LoginRequiredMixin, ListView):
     """
     Контроллер вывода списка уведомлений
     """
@@ -307,6 +308,7 @@ class NotificationsListView(ListView):
     template_name = 'mainapp/notifications.html'
     context_object_name = 'notifications'
     paginate_by = 10
+    login_url = reverse_lazy('auth:login')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NotificationsListView, self).get_context_data()
