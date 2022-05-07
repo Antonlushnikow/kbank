@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseNotFound
 
 from django.views.generic import ListView
