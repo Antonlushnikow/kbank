@@ -9,10 +9,25 @@
 
 {% block content %}
     {% include 'moderationapp/includes/inc_moderation_menu.html' %}
-    {% if comments %}
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                     <h3>Комментарии для модерации</h3>
+                    <hr>
+                    <p>
+                        <a class="btn btn-primary nav-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Фильтр
+                        </a>
+                    </p>
+
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                                    <form action="" method="get">
+                                    {{ filter.form.as_p }}
+                                    <input type="submit"/>
+                                </form>
+                        </div>
+                    </div>
+            {% if comments %}
                 <table class="table table-hover">
                     <tr>
                         <th>Текст коментария</th>
@@ -21,13 +36,45 @@
                     </tr>
                     {% for comment in comments %}
                         <tr>
-                            <td align="left" width="60%">{{ comment.body }}
+                            <td align="left" width="60%">
+
+                                <p class="mt-2 comment-{{ comment.pk }}">
+
+                                {{ comment.body }}
+                                </p>
+                                                    <div class="edit-input-comment-{{ comment.pk }}" hidden>
+                        <textarea type="text"  class="form-control" rows="5">{{ comment.body }}</textarea><br>
+                        <button class="btn btn-primary py-2">Сохранить</button>
+                        <button class="btn btn-danger py-2">Отмена</button>
+                    </div>
+
                             </td>
                             <td align="center" width="25%">
                                 {{ comment.author }}</td>
                             <td align="right" width="15%">
                                 {{ comment.publish_date }}
                             </td>
+                            <td>
+                            <!-- Edit Comment -->
+                                <span class="edit-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-api' comment.pk %}">
+                                <i class="fa-regular fa-edit"></i>
+                             </span>
+                             <!-- Hide/Show Comment -->
+                            {% if comment.is_visible %}
+                                <a href="{% url 'moderation:comment-visible-toggle' comment.pk %}">
+                                    <i class="fa-regular fa-eye"></i></a>
+                                {% else %}
+                                    <a href="{% url 'moderation:comment-visible-toggle' comment.pk %}">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                    </a>
+                            {% endif %}
+
+                             <!-- Delete Comment -->
+                             <span class="delete-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-api' comment.pk %}">
+                                <i class="fa-regular fa-trash-can"></i>
+                             </span>
+
+                        </td>
                         </tr>
 
                     {% endfor %}
@@ -44,6 +91,9 @@
             </div>
         </div>
     {% endif %}
-
+<!-- Скрипты для подключения лайков, работы с комментариями -->
+<script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'kbank/update-likes.js' %}" type="text/javascript"></script>
+<script src="{% static 'kbank/comments.js' %}" type="text/javascript"></script>
 {% endblock %}
 

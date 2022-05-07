@@ -13,7 +13,6 @@ from mainapp.models import Article, Comment
 
 
 class ArticleFilter(FilterSet):
-
     class Meta:
         model = Article
         fields = {
@@ -28,12 +27,6 @@ class ArticleFilter(FilterSet):
                     'lookup_expr': 'icontains',
                 },
             },
-            models.BooleanField: {
-                'filter_class': django_filters.BooleanFilter,
-                'extra': lambda f: {
-                    'widget': forms.CheckboxInput,
-                },
-            },
         }
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +34,7 @@ class ArticleFilter(FilterSet):
 
         for field_name, field in self.form.fields.items():
             field.widget.attrs['class'] = 'm-0'
+            field.widget.attrs['style'] = 'margin=0px'
             field.help_text = ''
 
 
@@ -60,10 +54,37 @@ class ModerationRequiredArticles(FilterView):
         return HttpResponseNotFound('Page not found')
 
 
-class CommentsListView(ListView):
+class CommentFilter(FilterSet):
+    class Meta:
+        model = Comment
+        fields = {
+            'body',
+            'is_visible',
+            'moderation_required',
+        }
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CommentFilter, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.form.fields.items():
+            field.widget.attrs['class'] = 'm-0'
+            field.widget.attrs['style'] = 'margin=0px'
+            field.help_text = ''
+
+
+class CommentsListView(FilterView):
     model = Comment
     template_name = 'moderationapp/comments.html'
     context_object_name = 'comments'
+    filterset_class = CommentFilter
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
@@ -71,31 +92,45 @@ class CommentsListView(ListView):
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CommentsListView, self).get_context_data()
-        return context
 
-    def get_queryset(self):
-        return Comment.objects.filter(moderation_required=True).order_by('-publish_date')
+class UserFilter(FilterSet):
+    class Meta:
+        model = KbankUser
+        fields = {
+            'username',
+            'first_name',
+            'last_name',
+            'moderation_required',
+        }
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UserFilter, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.form.fields.items():
+            field.widget.attrs['class'] = 'm-0'
+            field.widget.attrs['style'] = 'margin=0px'
+            field.help_text = ''
 
 
-class UsersListView(ListView):
+class UsersListView(FilterView):
     model = KbankUser
     template_name = 'moderationapp/users.html'
     context_object_name = 'users'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(UsersListView, self).get_context_data()
-        return context
+    filterset_class = UserFilter
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
         if user.is_privileged:
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
-
-    def get_queryset(self):
-        return KbankUser.objects.filter(moderation_required=True)
 
 
 class ArticleVisibleToggle(View):
@@ -103,6 +138,21 @@ class ArticleVisibleToggle(View):
     Показ/скрытие статьи
     """
     model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.is_visible = not obj.is_visible
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class CommentVisibleToggle(View):
+    """
+    Показ/скрытие комментария
+    """
+    model = Comment
     permission_classes = [Privileged]
 
     def get(self, request, pk=None):

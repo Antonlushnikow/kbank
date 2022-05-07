@@ -37,8 +37,8 @@ class Article(models.Model):
         related_name='article_likes',
     )
 
-    moderation_required = models.BooleanField(default=True)
-    is_visible = models.BooleanField(default=False)
+    moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
+    is_visible = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     def __str__(self):
         return self.title
