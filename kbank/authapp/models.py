@@ -42,3 +42,7 @@ class KbankUser(AbstractUser):
 
     def block(self, hours):
         self.block_expires = now() + timedelta(hours=hours)
+
+    @property
+    def unread_notifications_count(self):
+        return self.notifications.filter(is_read=False).count()

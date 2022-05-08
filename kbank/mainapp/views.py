@@ -1,7 +1,8 @@
 import django.views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import (
     DetailView,
@@ -15,11 +16,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
 
-from .models import Article, Category, Comment
+from .models import Article, Category, Comment, Notification
 from authapp.models import KbankUser
 from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
 from .serializers import CommentSerializer
 from authapp.permissions import Privileged
+from .utils import PersonalNotification
 
 
 class ArticlesListView(ListView):
@@ -64,6 +66,18 @@ class ArticleCreateView(CreateView):
         form.instance.author = self.request.user
         item = form.save()
         self.pk = item.pk
+
+        body = f"Необходима проверка статьи {self.request.POST['title']} пользователя {self.request.user}"
+        url = reverse('articles:article', kwargs={'pk': self.pk})
+        notification = PersonalNotification(
+            body=body,
+            title="модерация",
+            request=self.request,
+            url=url,
+            scope="moderators",
+        )
+        notification.create()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -88,9 +102,25 @@ class ArticleReadView(FormMixin, DetailView):
         return get_object_or_404(Article, pk=self.kwargs['pk'])
 
     def post(self, request, *args, **kwargs):
+        # создание комментария
+
         if request.user.is_blocked:
             return HttpResponseNotFound(f'Пользователь заблокирован до {request.user.block_expires}')
         self.object = self.get_object()
+
+        if '@moderator' in request.POST['body']:
+            article = get_object_or_404(Article, pk=kwargs['pk'])
+            body = f"{request.user} пожаловался на {article.title}"
+            url = request.path
+            notification = PersonalNotification(
+                body=body,
+                title="жалоба",
+                request=request,
+                url=url,
+                scope="moderators",
+            )
+            notification.create()
+
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -271,6 +301,47 @@ class CommentVisibleToggleAPI(APIView):
 
         data = {
             'is_visible': is_visible,
+        }
+
+        return Response(data)
+
+
+class NotificationsListView(LoginRequiredMixin, ListView):
+    """
+    Контроллер вывода списка уведомлений
+    """
+    model = Notification
+    template_name = 'mainapp/notifications.html'
+    context_object_name = 'notifications'
+    paginate_by = 10
+    login_url = reverse_lazy('auth:login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(NotificationsListView, self).get_context_data()
+        user = get_object_or_404(KbankUser, pk=self.request.user.pk)
+        context['title'] = f'Уведомления - {user.username}'
+        return context
+
+    def get_queryset(self):
+        user = get_object_or_404(KbankUser, pk=self.request.user.pk)
+        return Notification.objects.filter(user=user).order_by('-created_date')
+
+
+class NotificationReadToggleAPI(APIView):
+    """
+    Показ/скрытие комментариев
+    """
+    model = Notification
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        is_read = obj.is_read
+        obj.is_read = is_read = False if is_read else True
+        obj.save()
+
+        data = {
+            'is_read': is_read,
         }
 
         return Response(data)

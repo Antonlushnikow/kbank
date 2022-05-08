@@ -1,6 +1,9 @@
+from datetime import datetime, timezone, timedelta
+
 from django.db import models
 from django.conf import settings
 from tinymce.models import HTMLField
+from .utils import plural_time
 
 
 class Category(models.Model):
@@ -80,3 +83,37 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "комментарий"
         verbose_name_plural = "комментарии"
+
+
+JUST_NOW = timedelta(minutes=2)  # 2 минуты
+
+
+class Notification(models.Model):
+    title = models.CharField(null=True, max_length=100)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="notifications",
+        on_delete=models.CASCADE,
+    )
+    body = models.TextField()
+    url = models.CharField(default='/', max_length=100)
+    is_read = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def time_ago(self):
+        now = datetime.now(timezone.utc)
+        diff = now - self.created_date
+
+        minutes = int(diff / timedelta(minutes=1))
+        hours = int(diff / timedelta(hours=1))
+
+        if diff < JUST_NOW:
+            time_ = 'Только что'
+        elif diff < timedelta(hours=1):
+            time_ = f"{plural_time(minutes, type_='minutes')} назад"
+        elif diff < timedelta(days=1):
+            time_ = f"{plural_time(hours, type_='hours')} назад"
+        else:
+            time_ = f"{plural_time(diff.days, type_='days')} назад"
+        return time_
