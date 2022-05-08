@@ -212,6 +212,12 @@ class ArticleLikeAPIView(LikeAPIView):
 class CommentLikeAPIView(LikeAPIView):
     model = Comment
 
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        if not obj.is_visible:
+            return HttpResponseNotFound('Page not found')
+        return super().get(request, pk)
+
 
 class CommentAPIView(APIView):
     """
