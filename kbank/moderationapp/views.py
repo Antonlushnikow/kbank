@@ -1,42 +1,51 @@
-from django.http import HttpResponseNotFound
-
-from django.views.generic import ListView
-
-from mainapp.models import Article, Comment
+import django_filters
 from authapp.models import KbankUser
+from authapp.permissions import Privileged
+from django import forms
+from django.db import models
+from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.views.generic import ListView
+from django_filters import FilterSet
+from django_filters.views import FilterView
+from mainapp.models import Article, Comment
 
-from mainapp.views import ArticlesListView
-from authapp.permissions import PrivilegedPermissionMixin
+
+class ArticleFilter(FilterSet):
+    class Meta:
+        model = Article
+        fields = {
+            'title',
+            'is_visible',
+            'moderation_required',
+        }
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleFilter, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.form.fields.items():
+            field.widget.attrs['class'] = 'm-0'
+            field.widget.attrs['style'] = 'margin=0px'
+            field.help_text = ''
 
 
-class ModerationRequiredArticles(PrivilegedPermissionMixin, ArticlesListView):
+class ModerationRequiredArticles(FilterView):
+    """
+    Контроллер вывода списка статей для модерации
+    """
+    model = Article
     template_name = 'moderationapp/articles.html'
-
-    def get_queryset(self):
-        return Article.objects.filter(moderation_required=True).order_by('-publish_date')
-
-
-class CommentsListView(PrivilegedPermissionMixin, ListView):
-    model = Comment
-    template_name = 'moderationapp/comments.html'
-    context_object_name = 'comments'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CommentsListView, self).get_context_data()
-        return context
-
-    def get_queryset(self):
-        return Comment.objects.filter(moderation_required=True).order_by('-publish_date')
-
-
-class UsersListView(PrivilegedPermissionMixin, ListView):
-    model = KbankUser
-    template_name = 'moderationapp/users.html'
-    context_object_name = 'users'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(UsersListView, self).get_context_data()
-        return context
+    context_object_name = 'articles'
+    filterset_class = ArticleFilter
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
@@ -45,4 +54,146 @@ class UsersListView(PrivilegedPermissionMixin, ListView):
         return HttpResponseNotFound('Page not found')
 
     def get_queryset(self):
-        return KbankUser.objects.filter(moderation_required=True)
+        qs = super().get_queryset()
+        return qs.order_by('-publish_date')
+
+
+class CommentFilter(FilterSet):
+    class Meta:
+        model = Comment
+        fields = {
+            'body',
+            'is_visible',
+            'moderation_required',
+        }
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CommentFilter, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.form.fields.items():
+            field.widget.attrs['class'] = 'm-0'
+            field.widget.attrs['style'] = 'margin=0px'
+            field.help_text = ''
+
+
+class CommentsListView(FilterView):
+    model = Comment
+    template_name = 'moderationapp/comments.html'
+    context_object_name = 'comments'
+    filterset_class = CommentFilter
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_privileged:
+            return super().dispatch(request, *args, **kwargs)
+        return HttpResponseNotFound('Page not found')
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by('-publish_date')
+
+
+class UserFilter(FilterSet):
+    class Meta:
+        model = KbankUser
+        fields = {
+            'username',
+            'first_name',
+            'last_name',
+            'moderation_required',
+        }
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UserFilter, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.form.fields.items():
+            field.widget.attrs['class'] = 'm-0'
+            field.widget.attrs['style'] = 'margin=0px'
+            field.help_text = ''
+
+
+class UsersListView(FilterView):
+    model = KbankUser
+    template_name = 'moderationapp/users.html'
+    context_object_name = 'users'
+    filterset_class = UserFilter
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_privileged:
+            return super().dispatch(request, *args, **kwargs)
+        return HttpResponseNotFound('Page not found')
+
+
+class ArticleVisibleToggle(View):
+    """
+    Показ/скрытие статьи
+    """
+    model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.is_visible = not obj.is_visible
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class CommentVisibleToggle(View):
+    """
+    Показ/скрытие комментария
+    """
+    model = Comment
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.is_visible = not obj.is_visible
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class UserModerationChecked(View):
+    """
+    Пользователь прошел модерацию
+    """
+    model = KbankUser
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class CommentModerationChecked(View):
+    """
+    Комментарий прошел модерацию
+    """
+    model = Comment
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

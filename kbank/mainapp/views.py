@@ -37,7 +37,7 @@ class ArticlesListView(ListView):
         return context
 
     def get_queryset(self):
-        return Article.objects.filter(moderation_required=False).order_by('-publish_date')
+        return Article.objects.filter(is_visible=True).order_by('-publish_date')
 
 
 class ArticleCreateView(CreateView):
@@ -272,18 +272,24 @@ class CommentAPIView(APIView):
 
     def patch(self, request, pk):
         # изменение комментария
-
-        obj = get_object_or_404(self.model, pk=pk)
-        serializer = CommentSerializer(obj, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED, data=serializer.data)
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="wrong parameters")
+        try:
+            obj = get_object_or_404(self.model, pk=pk)
+            serializer = CommentSerializer(obj, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+        except Exception as e:
+            print('Cannot edit comment.', e.args)
+            return Response(status=status.HTTP_400_BAD_REQUEST, data="wrong parameters")
 
     def delete(self, request, pk):
-        obj = get_object_or_404(self.model, pk=pk)
-        obj.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        try:
+            obj = get_object_or_404(self.model, pk=pk)
+            obj.delete()
+        except Exception as e:
+            print('Cannot delete comment', e.args)
+        finally:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CommentVisibleToggleAPI(APIView):
@@ -294,16 +300,23 @@ class CommentVisibleToggleAPI(APIView):
     permission_classes = [Privileged]
 
     def get(self, request, pk=None):
-        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
-        is_visible = obj.is_visible
-        obj.is_visible = is_visible = False if is_visible else True
-        obj.save()
+        try:
+            obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+            is_visible = obj.is_visible
+            obj.is_visible = is_visible = False if is_visible else True
+            obj.save()
+            data = {
+                'is_visible': is_visible,
+            }
+        except Exception as e:
+            print('Cannot hide comment.', e.args)
+            data = {
+                'is_visible': False,
+            }
+        finally:
+            return Response(data)
 
-        data = {
-            'is_visible': is_visible,
-        }
 
-        return Response(data)
 
 
 class NotificationsListView(LoginRequiredMixin, ListView):

@@ -27,7 +27,7 @@ class KbankUser(AbstractUser):
     activation_key_expires = models.DateTimeField(default=default_key_expires)
     is_active = models.BooleanField(default=False)
     block_expires = models.DateTimeField(unique=False, default=datetime(1970, 1, 1))
-    moderation_required = models.BooleanField(default=True)
+    moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
 
     def is_activation_key_expired(self):
         return now() > self.activation_key_expires

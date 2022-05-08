@@ -40,7 +40,8 @@ class Article(models.Model):
         related_name='article_likes',
     )
 
-    moderation_required = models.BooleanField(default=True)
+    moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
+    is_visible = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     def __str__(self):
         return self.title
@@ -55,7 +56,7 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    body = models.TextField()
+    body = models.TextField(verbose_name='Текст комментария',)
     article = models.ForeignKey(
         Article,
         related_name="comments",
@@ -73,9 +74,9 @@ class Comment(models.Model):
         related_name='comment_likes',
     )
     publish_date = models.DateTimeField(auto_now_add=True)
-    moderation_required = models.BooleanField(default=True)
+    moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
 
-    is_visible = models.BooleanField(default=True)
+    is_visible = models.BooleanField(default=True, verbose_name='Опубликовано')
 
     def __str__(self):
         return f'{self.author}: {self.body}'

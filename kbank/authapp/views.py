@@ -12,8 +12,6 @@ from django.conf import settings
 from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
 
-from kbank import settings_dev
-
 from .models import KbankUser
 from .forms import (
     KbankUserLoginForm,
@@ -91,8 +89,8 @@ class KbankUserRegisterView(CreateView):
         verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
         title = f'Подтверждение учетной записи {user.username} на портале KBANK'
         message = f'Для подтверждения учетной записи {user.username} на портале \
-        {settings_dev.DOMAIN_NAME} перейдите по ссылке: \n{settings_dev.DOMAIN_NAME}{verify_link}'
-        send_mail(title, message, settings_dev.EMAIL_HOST_USER, [user.email], fail_silently=False)
+        {settings.DOMAIN_NAME} перейдите по ссылке: \n{settings.DOMAIN_NAME}{verify_link}'
+        send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
     def verify(self, email, activation_key):
         try:
@@ -180,6 +178,6 @@ def block_user(request, pk):
         user = get_object_or_404(KbankUser, pk=pk)
         user.block(24)
         user.save()
-        return HttpResponseRedirect(reverse('profile-view', kwargs={'pk': pk}))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     return HttpResponseRedirect('/')
 

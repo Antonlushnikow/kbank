@@ -25,6 +25,9 @@
                             <li>
                                 <a href="{% url 'articles:edit-article' article.pk %}">Изменить</a>
                             </li>
+                            <li>
+                                <a href="{% url 'moderation:article-visible-toggle' article.pk %} ">Скрыть/Показать</a>
+                            </li>
                         {% endif %}
                     </ul>
                 </span>
