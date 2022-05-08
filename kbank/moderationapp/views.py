@@ -53,6 +53,10 @@ class ModerationRequiredArticles(FilterView):
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by('-publish_date')
+
 
 class CommentFilter(FilterSet):
     class Meta:
@@ -91,6 +95,10 @@ class CommentsListView(FilterView):
         if user.is_privileged:
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseNotFound('Page not found')
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by('-publish_date')
 
 
 class UserFilter(FilterSet):
@@ -158,6 +166,34 @@ class CommentVisibleToggle(View):
     def get(self, request, pk=None):
         obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
         obj.is_visible = not obj.is_visible
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class UserModerationChecked(View):
+    """
+    Пользователь прошел модерацию
+    """
+    model = KbankUser
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class CommentModerationChecked(View):
+    """
+    Комментарий прошел модерацию
+    """
+    model = Comment
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
         obj.moderation_required = False
         obj.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

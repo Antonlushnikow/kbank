@@ -75,6 +75,14 @@
                              </span>
 
                         </td>
+                            <!-- Set moderation passed -->
+                        <td>
+                            {% if comment.moderation_required %}
+                            <a href="{% url 'moderation:comment-checked' comment.pk %}">
+                            <i class="fa-solid fa-check"></i>
+                            </a>
+                            {% endif %}
+                        </td>
                         </tr>
 
                     {% endfor %}

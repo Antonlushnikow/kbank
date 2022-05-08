@@ -11,6 +11,8 @@ from moderationapp.views import (
     UsersListView,
     ArticleVisibleToggle,
     CommentVisibleToggle,
+    UserModerationChecked,
+    CommentModerationChecked,
     )
 
 urlpatterns = [
@@ -19,4 +21,6 @@ urlpatterns = [
     path('users/', UsersListView.as_view(), name='moderate-users'),
     path('article/<int:pk>/hide/', ArticleVisibleToggle.as_view(), name='article-visible-toggle'),
     path('comment/<int:pk>/hide/', CommentVisibleToggle.as_view(), name='comment-visible-toggle'),
+    path('user/<int:pk>/checked/', UserModerationChecked.as_view(), name='user-checked'),
+    path('comment/<int:pk>/checked/', CommentModerationChecked.as_view(), name='comment-checked'),
 ]
