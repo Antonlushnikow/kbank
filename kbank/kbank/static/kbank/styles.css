@@ -5677,7 +5677,7 @@ textarea.form-control-lg {
     pointer-events: auto;
     background-color: rgba(255, 255, 255, 0.85);
     background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+  /*  border: 1px solid rgba(0, 0, 0, 0.1); */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
@@ -5706,7 +5706,7 @@ textarea.form-control-lg {
     align-items: center;
     padding: 0.5rem 0.75rem;
     color: #6c757d;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(220, 220, 220, 0.85);
     background-clip: padding-box;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -11891,6 +11891,21 @@ ul.post-meta {
 .errorlist {
     color: orangered;
 }
+
+.kbank-notification {
+    background-color: #fff;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.read-notification:hover {
+    cursor: pointer;
+}
+
+
+
+/*_____________________________________*/
 
 .hidden-comment {
     color: #ddd;

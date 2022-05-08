@@ -22,7 +22,7 @@ class KbankUser(AbstractUser):
         default='users_avatar/default.png',
         verbose_name='аватар',
     )
-    email = models.EmailField(blank=True, unique=True, verbose_name="Email")
+    email = models.EmailField(unique=True, verbose_name="Email")
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_expires = models.DateTimeField(default=default_key_expires)
     is_active = models.BooleanField(default=False)
@@ -42,3 +42,7 @@ class KbankUser(AbstractUser):
 
     def block(self, hours):
         self.block_expires = now() + timedelta(hours=hours)
+
+    @property
+    def unread_notifications_count(self):
+        return self.notifications.filter(is_read=False).count()
