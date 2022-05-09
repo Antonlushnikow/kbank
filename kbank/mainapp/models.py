@@ -77,6 +77,13 @@ class Comment(models.Model):
     moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
 
     is_visible = models.BooleanField(default=True, verbose_name='Опубликовано')
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='childs',
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
         return f'{self.author}: {self.body}'

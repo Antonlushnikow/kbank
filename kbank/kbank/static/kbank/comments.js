@@ -1,10 +1,11 @@
 $(document).ready(function(){
-    
+
     class CommentContext {
         constructor(obj) {
+            this.element = obj[0];
             this.URL = obj.attr("data-href");  // API URL
             this.objectId = obj.attr("data-id");
-            this.comment = $(`.comment-${this.objectId}`)[0];  // Comment
+            this.comment = $(`.comment-${this.objectId}`)[1];  // Comment Text
         }   
 
     }
@@ -110,6 +111,22 @@ $(document).ready(function(){
             divNewComment.hidden = true;
         }
 
+    });
+
+    // Reply to Comment
+    $('.reply-comment').click(function(e){
+        e.preventDefault();
+        context = new CommentContext($(this));
+        if (context.element.classList.contains("clicked")==false) {
+            context.element.classList.add("clicked");
+            let once = true;
+            let divComment = $(`.comment-${context.objectId}`)[0];  // Edit Comment Div
+            let div = document.createElement("div");
+            let form = document.getElementsByTagName("form")[0];
+            div.className = 'form-outline mb-4';
+            div.innerHTML = '<form method="POST">' + form.innerHTML + '<input type=hidden name="parent" value="' + context.objectId + '" id="id_parent"></form>';
+            divComment.after(div);
+        }
     });
 
 
