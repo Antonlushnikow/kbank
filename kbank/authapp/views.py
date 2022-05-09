@@ -34,16 +34,12 @@ class KbankUserLoginView(RedirectToPreviousMixin, LoginView):
     Model = KbankUser
     form_class = KbankUserLoginForm
     template_name = 'authapp/login.html'
+    redirect_authenticated_user = True
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(KbankUserLoginView, self).get_context_data()
         context['title'] = 'авторизация'
         return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('/')
-        return super(KbankUserLoginView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = get_object_or_404(KbankUser, username=form['username'].value())
@@ -173,10 +169,13 @@ class KbankUserPasswordResetView(PasswordResetView):
     from_email = settings.EMAIL_HOST_USER
 
 
+BLOCK_DURATION_HOURS = 24
+
+
 def block_user(request, pk):
     if request.user.is_privileged:
         user = get_object_or_404(KbankUser, pk=pk)
-        user.block(24)
+        user.block(BLOCK_DURATION_HOURS)
         user.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     return HttpResponseRedirect('/')

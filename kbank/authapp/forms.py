@@ -35,6 +35,8 @@ class KbankUserRegistrationForm(UserCreationForm):
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control mb-2'
+            if field.required:
+                field.label_suffix = ' (обязательное)'
             field.help_text = ''
 
     def save(self, commit=True):

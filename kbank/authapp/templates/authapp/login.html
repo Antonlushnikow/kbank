@@ -10,10 +10,7 @@
                 <h2>Вход</h2>
                 <form action="{% url 'auth:login' %}" method="post">
                     {% csrf_token %}
-                    {% for field in form %}
-                        <label class="{% if field.field.required %}required{% endif %}">{{ field.label }}</label>
-                    {{ field }}
-                    {% endfor %}
+                    {{ form.as_p }}
                     <input type="submit" value="Войти">
                 </form>
                 <br>
