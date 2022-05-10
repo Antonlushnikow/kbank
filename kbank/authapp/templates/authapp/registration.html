@@ -9,10 +9,7 @@
                 <!-- Login Form -->
                 <form action="{% url 'auth:register' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {% for field in form %}
-                    <label class="{% if field.field.required %}required{% endif %}">{{ field.label }}</label>
-                    {{ field }}
-                    {% endfor %}
+                    {{ form.as_p }}
 
                     <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
                 </form>
