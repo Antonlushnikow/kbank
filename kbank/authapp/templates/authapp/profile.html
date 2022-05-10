@@ -13,33 +13,33 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-lg-9 col-xl-7">
         <div class="card">
-          <div class="rounded-top text-white d-flex flex-row justify-content-between" style="background-color: #005cb2; height:200px;">
+          <div class="profile-top rounded-top text-white d-flex flex-row justify-content-between" style="background-color: #005cb2;">
             <div class="d-flex flex-row">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-              <img src="/media/{{ profile.avatar }}" alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
+              <img src="/media/{{profile.avatar}}" alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; min-height: 150px; z-index: 1">
               {% if user == profile %}
               <a href="{% url 'auth:update-profile' profile.pk %}"  style="z-index: 1;">
-                <button type="button" class="btn btn-outline-primary rounded" data-mdb-ripple-color="dark">
+                <button type="button" class="btn btn-outline-primary rounded" data-mdb-ripple-color="dark" style="background-color: white;">
                     Изменить
                 </button>
               </a>
               {% endif %}
             </div>
-            <div class="ms-3" style="margin-top: 130px;">
+            <div class="ms-3 profile-name" style="margin-top: 130px;">
               <h5>{{ profile.first_name }} {{ profile.last_name }}</h5>
               <p class="mt-0">{{ profile.username }}</p>
             </div>
             </div>
 
             <div class="me-4" style="margin-top: 150px;">
-              {% if request.user.is_moderator %}
-              <a href="#">
+              {% if request.user.is_privileged %}
+              <a href="{% url 'authapp:block-user' profile.pk %}">
                 <button type="button" class="btn btn-danger rounded py-1 px-3" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Заблокировать
                 </button>
               </a>
               {% endif %}
-              <a href="{% url 'articles:list-author-articles' profile.pk %}">
+              <a class="profile-articles" href="{% url 'articles:list-author-articles' profile.pk %}">
                 <button type="button" class="btn btn-primary rounded py-1 px-3" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Статьи
                 </button>
@@ -60,6 +60,9 @@
           </div>
           <div class="card-body p-4 text-black">
             <div class="mb-5">
+              {% if profile.is_blocked %}
+              <p class="text-danger">Заблокирован до {{ profile.block_expires }}</p>
+              {% endif %}
               <p class="lead fw-normal mb-1">О себе</p>
               <div class="p-4" style="background-color: #f8f9fa;">
                 <p class="font-italic mb-1">

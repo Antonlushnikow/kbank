@@ -6,9 +6,12 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
+from django.conf import settings
 
-from kbank import settings
+from django.dispatch import receiver
+from allauth.account.signals import user_signed_up
+
 from .models import KbankUser
 from .forms import (
     KbankUserLoginForm,
@@ -16,31 +19,34 @@ from .forms import (
     KbankUserUpdateForm,
     KbankUserPasswordChangeForm,
     KbankUserConfirmDeleteForm,
+    KbankUserPasswordResetForm,
 )
 from kbank.mixins import RedirectToPreviousMixin
+
+
+@receiver(user_signed_up)
+def user_signed_up_(request, user, **kwargs):
+    user.is_active = True
+    user.save()
 
 
 class KbankUserLoginView(RedirectToPreviousMixin, LoginView):
     Model = KbankUser
     form_class = KbankUserLoginForm
     template_name = 'authapp/login.html'
+    redirect_authenticated_user = True
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(KbankUserLoginView, self).get_context_data()
         context['title'] = 'авторизация'
         return context
 
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('/')
-        return super(KbankUserLoginView, self).dispatch(request, *args, **kwargs)
-
     def form_valid(self, form):
         user = get_object_or_404(KbankUser, username=form['username'].value())
-        # print('dsfsdf' + form['username'].value())
-        print(user.is_deleted)
         if user.is_deleted:
             return HttpResponseNotFound('Пользователь удален')
+        if user.is_blocked:
+            return HttpResponseNotFound(f'Пользователь заблокирован до {user.block_expires}')
         return super(KbankUserLoginView, self).form_valid(form)
 
 
@@ -88,7 +94,7 @@ class KbankUserRegisterView(CreateView):
             if user.activation_key == activation_key and not user.is_activation_key_expired():
                 user.is_active = True
                 user.save()
-                auth.login(self, user)
+                auth.login(self, user, backend='django.contrib.auth.backends.ModelBackend')
                 return render(self, 'authapp/verification.html')
             else:
                 return render(self, 'authapp/verification.html')
@@ -153,3 +159,24 @@ class KbankUserConfirmDeleteView(LoginRequiredMixin, FormView):
             self.success_url = reverse_lazy('auth:logout')
             self.request.user.save()
         return super(KbankUserConfirmDeleteView, self).form_valid(form)
+
+
+class KbankUserPasswordResetView(PasswordResetView):
+    form_class = KbankUserPasswordResetForm
+    template_name = 'authapp/forgot-password.html'
+    email_template_name = 'authapp/password_reset_email.html'
+    subject_template_name = 'authapp/password_reset_subject.txt'
+    from_email = settings.EMAIL_HOST_USER
+
+
+BLOCK_DURATION_HOURS = 24
+
+
+def block_user(request, pk):
+    if request.user.is_privileged:
+        user = get_object_or_404(KbankUser, pk=pk)
+        user.block(BLOCK_DURATION_HOURS)
+        user.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect('/')
+

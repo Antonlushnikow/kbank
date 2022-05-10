@@ -41,7 +41,7 @@
     --bs-danger: #dc3545;
     --bs-light: #f8f9fa;
     --bs-dark: #212529;
-    --bs-primary-rgb: 0, 133, 161;
+    --bs-primary-rgb: 43, 125, 225;
     --bs-secondary-rgb: 108, 117, 125;
     --bs-success-rgb: 25, 135, 84;
     --bs-info-rgb: 13, 202, 240;
@@ -85,6 +85,7 @@ body {
     color: var(--bs-body-color);
     text-align: var(--bs-body-text-align);
     background-color: var(--bs-body-bg);
+    padding-top: 100px;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -654,8 +655,8 @@ progress {
 .container-md,
 .container-sm {
     width: 100%;
-    padding-right: var(--bs-gutter-x, 0.75rem);
-    padding-left: var(--bs-gutter-x, 0.75rem);
+    padding-right: var(--bs-gutter-x, 0.1rem);
+    padding-left: var(--bs-gutter-x, 0.1rem);
     margin-right: auto;
     margin-left: auto;
 }
@@ -5676,7 +5677,7 @@ textarea.form-control-lg {
     pointer-events: auto;
     background-color: rgba(255, 255, 255, 0.85);
     background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+  /*  border: 1px solid rgba(0, 0, 0, 0.1); */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
@@ -5705,7 +5706,7 @@ textarea.form-control-lg {
     align-items: center;
     padding: 0.5rem 0.75rem;
     color: #6c757d;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(220, 220, 220, 0.85);
     background-clip: padding-box;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -7693,7 +7694,7 @@ textarea.form-control-lg {
 }
 
 .ms-auto {
-    margin-left: auto !important;
+    /* margin-left: auto !important; */
 }
 
 .p-0 {
@@ -10021,6 +10022,10 @@ textarea.form-control-lg {
         margin-left: auto !important;
     }
 
+    .ms-auto {
+        margin-left: auto !important;   
+    }
+
     .p-lg-0 {
         padding: 0 !important;
     }
@@ -11626,8 +11631,9 @@ blockquote {
     left: 0;
     right: 0;
     z-index: 1030;
+    margin-bottom: 1rem;
     border-bottom: 1px solid #dee2e6;
-    background-color: #fff;
+    background-color: #2b7de1;
     font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -11647,13 +11653,14 @@ blockquote {
     font-weight: 800;
     letter-spacing: 0.0625em;
     text-transform: uppercase;
+    color: #fff;
 }
 
 @media (min-width: 992px) {
     #mainNav {
         border-bottom: 1px solid transparent;
         background-color: #2b7de1;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
     }
 
     #mainNav .navbar-brand {
@@ -11883,4 +11890,121 @@ ul.post-meta {
 
 .errorlist {
     color: orangered;
+}
+
+.kbank-notification {
+    background-color: #fff;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.read-notification:hover {
+    cursor: pointer;
+}
+
+
+
+/*_____________________________________*/
+
+.hidden-comment {
+    color: #ddd;
+}
+
+
+
+.profile-top {
+    height: 200px;
+}
+
+body.offcanvas-active{
+	overflow:hidden;
+}
+
+.offcanvas-header{ display:none; }
+
+.screen-darken{
+	height: 100%; width:0%;
+	z-index: 30;
+	position: fixed; top: 0; right: 0; 
+	opacity:0; visibility:hidden;
+	background-color: rgba(34, 34, 34, 0.6);
+	transition:opacity .2s linear, visibility 0.2s, width 2s ease-in;
+}
+
+.screen-darken.active{
+	z-index:10; 
+	transition:opacity .3s ease, width 0s;
+	opacity:1;
+	width:100%;
+	visibility:visible;
+}
+
+/* ============ mobile view ============ */
+@media all and (max-width: 992px) {
+	
+	.offcanvas-header{ display:block; }
+
+	.mobile-offcanvas{
+		visibility: hidden;
+		transform:translateX(-100%);
+		border-radius:0; 
+		display:block;
+		position: fixed;  top: 0; left:0;
+		height: 100%; width:70%;
+		z-index: 1200; 
+		overflow-y: scroll;
+		overflow-x: hidden;
+		transition: visibility .3s ease-in-out, transform .3s ease-in-out;
+	}
+
+	.mobile-offcanvas.show{
+		visibility: visible;
+        display: block;	
+        transform: translateX(0);
+	}
+	.mobile-offcanvas .container, .mobile-offcanvas .container-fluid{
+		display: block;
+	}
+
+    .dropdown-toggle {
+        display: none;
+    }
+
+    .profile-articles {
+        display: none;
+    }
+
+    .profile-name {
+        font-size: 0.8rem;
+        word-wrap:normal;
+    }
+
+    .profile-top {
+        min-height: 200px !important;
+        height: auto;
+        padding-bottom: 1rem;
+    }
+
+
+}
+
+@media all and (max-width: 859px) {
+    .comment-info {
+        display: block !important;
+    }
+
+    .comment-info > p {
+        margin-top: 0;
+    }
+}
+
+.mobile-offcanvas{
+    visibility: hidden;
+    display: none;
+}
+
+
+.comment-info {
+    display: flex;
 }

@@ -6,6 +6,9 @@ from .views import (
     ArticleLikeAPIView,
     CommentLikeAPIView,
     ArticleListAuthorView,
+    CommentVisibleToggleAPI,
+    CommentAPIView,
+    NotificationReadToggleAPI,
 )
 
 urlpatterns = [
@@ -16,4 +19,8 @@ urlpatterns = [
 
     path('api/<int:pk>/like/', ArticleLikeAPIView.as_view(), name='like-api'),
     path('api/comment/<int:pk>/like/', CommentLikeAPIView.as_view(), name='comment-like-api'),
+
+    path('api/comment/<int:pk>/', CommentAPIView.as_view(), name='comment-api'),
+    path('api/comment/<int:pk>/hide/', CommentVisibleToggleAPI.as_view(), name='comment-visible-toggle'),
+    path('api/notification/<int:pk>/read/', NotificationReadToggleAPI.as_view(), name='notification-read-toggle'),
 ]

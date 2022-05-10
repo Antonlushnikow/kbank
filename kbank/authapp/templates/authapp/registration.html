@@ -10,7 +10,8 @@
                 <form action="{% url 'auth:register' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <input type="submit" value="Зарегистрироваться">
+
+                    <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
                 </form>
                 <br>
             </div>

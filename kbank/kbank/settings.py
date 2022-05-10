@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 DOMAIN_NAME = 'http://89.108.64.59'
 EMAIL_USE_TLS = True
@@ -50,9 +50,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
     'mainapp',
     'authapp',
+    'moderationapp',
+
     'tinymce',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.yandex',
+    'authapp.vk',
+ 
+    'django_filters',
+
 ]
 
 MIDDLEWARE = [
@@ -70,7 +83,10 @@ ROOT_URLCONF = 'kbank.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['kbank/templates'],
+        'DIRS': [
+            'kbank/templates',
+            os.path.join(BASE_DIR, 'kbank', 'templates', 'allauth'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,6 +95,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'kbank.context_processors.add_categories',
+                'kbank.context_processors.add_notifications',
             ],
         },
     },
@@ -120,8 +137,49 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'kbank.backends.CustomModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+    'yandex': {
+        'SCOPE': [
+            "login:birthday",
+            "login:email",
+            "login:info",
+            "login:avatar",
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+    'vk': {
+        'SCOPE': [
+            "screen_name",
+            "email",
+            "first_name",
+            "last_name",
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+}
+
 AUTH_USER_MODEL = 'authapp.KbankUser'
 LOGOUT_REDIRECT_URL = '/'
+
+SITE_ID = 2
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -152,3 +210,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'

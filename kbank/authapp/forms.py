@@ -1,7 +1,13 @@
 from django import forms
 import hashlib
 from random import random
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    UserCreationForm,
+    UserChangeForm,
+    PasswordChangeForm,
+    PasswordResetForm,
+)
 
 from .models import KbankUser
 
@@ -15,7 +21,7 @@ class KbankUserLoginForm(AuthenticationForm):
         super(KbankUserLoginForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control mb-2'
             field.help_text = ''
 
 
@@ -28,9 +34,11 @@ class KbankUserRegistrationForm(UserCreationForm):
         super(KbankUserRegistrationForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control mb-2'
+            if field.required:
+                field.label_suffix = ' (обязательное)'
             field.help_text = ''
-            
+
     def save(self, commit=True):
         user = super(KbankUserRegistrationForm, self).save()
         user.is_active = False
@@ -73,3 +81,12 @@ class KbankUserPasswordChangeForm(PasswordChangeForm):
 
 class KbankUserConfirmDeleteForm(forms.Form):
     password = forms.CharField(label='Введите пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+class KbankUserPasswordResetForm(PasswordResetForm):
+
+    def __init__(self, *args, **kwargs):
+        super(KbankUserPasswordResetForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''

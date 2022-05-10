@@ -25,6 +25,9 @@
                             <li>
                                 <a href="{% url 'articles:edit-article' article.pk %}">Изменить</a>
                             </li>
+                            <li>
+                                <a href="{% url 'moderation:article-visible-toggle' article.pk %} ">Скрыть/Показать</a>
+                            </li>
                         {% endif %}
                     </ul>
                 </span>
@@ -58,7 +61,7 @@
 
 <!-- Комментарии -->
 <div class="row d-flex justify-content-center">
-  <div class="col-md-8 col-lg-6">
+  <div class="col-md-8 col-lg-8">
     <div class="card shadow-0 border" style="background-color: #f0f2f5;">
       <div class="card-body p-6">
         <h3>Комментарии</h3>
@@ -76,31 +79,12 @@
             Никто не оставил комментариев...
         {% else %}
             {% for comment in article.comments.all %}
-                <div class="card mb-2 rounded">
-                  <div class="card-body p-4">
-                    <p class="mt-2">{{ comment.body }}</p>
+                {% if not comment.parent %}
+                    {% with child=True marginleft=10 %}
+                     {% include 'mainapp/includes/inc_comment.html' %}
+                    {% endwith %}
 
-                    <div class="d-flex justify-content-between text-secondary">
-                      <div class="d-flex flex-row align-items-end">
-                        <img src="/media/{{ comment.author.avatar }}" alt="avatar" width="25" height="25" class="rounded-circle"/>
-                        <div class="small mb-0 ms-2"><a href="{% url 'profile-view' comment.author.pk %}">{{ comment.author }}</a></div>
-                      </div>
-                      <div class="d-flex flex-row align-items-center">
-                         <p class="small mb-0 ms-0">{{ comment.publish_date }}
-                             <!-- Likes -->
-                             <span class="like-btn" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-like-api' comment.pk %}">
-                                {% if user in comment.likes.all %}
-                                    <i class="like-icon-{{ comment.pk }} fa-solid fa-heart"></i>
-                                {% else %}
-                                    <i class="like-icon-{{ comment.pk }} fa-regular fa-heart"></i>
-                                {% endif %}
-                            </span>
-                            <span id="like-count-{{ comment.pk }}" class="ml-auto ms-1">{{ comment.likes.count }}</span>
-                         </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            {% endif %}
             {% endfor %}
         {% endif %}
 
@@ -109,10 +93,10 @@
   </div>
 </div>
 
-<!-- Скрипты для подключения лайков -->
+<!-- Скрипты для подключения лайков, работы с комментариями -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'kbank/update-likes.js' %}" type="text/javascript"></script>
-
+<script src="{% static 'kbank/comments.js' %}" type="text/javascript"></script>
 
 {% endblock %}
 
