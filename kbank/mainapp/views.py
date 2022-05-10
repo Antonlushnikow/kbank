@@ -39,7 +39,7 @@ class ArticlesListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
         top_articles = [
-                           item for item in Article.objects.annotate(count=Count('likes')).order_by('-count') if item.is_last_month
+                           item for item in Article.objects.filter(is_visible=True).annotate(count=Count('likes')).order_by('-count') if item.is_last_month
                        ][:TOP_ARTICLE_COUNT]
         context['top_articles'] = top_articles
         return context
