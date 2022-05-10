@@ -129,6 +129,9 @@ class ArticleReadView(FormMixin, DetailView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        if 'parent' in self.request.POST:
+            comment = get_object_or_404(Comment, pk=self.request.POST['parent'])
+            form.instance.parent = comment
         form.save()
         return super().form_valid(form)
 
@@ -315,8 +318,6 @@ class CommentVisibleToggleAPI(APIView):
             }
         finally:
             return Response(data)
-
-
 
 
 class NotificationsListView(LoginRequiredMixin, ListView):

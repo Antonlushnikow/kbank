@@ -79,58 +79,12 @@
             Никто не оставил комментариев...
         {% else %}
             {% for comment in article.comments.all %}
+                {% if not comment.parent %}
+                    {% with child=True marginleft=10 %}
+                     {% include 'mainapp/includes/inc_comment.html' %}
+                    {% endwith %}
 
-                <div class="card mb-2 rounded">
-                  <div class="card-body p-4">
-                    <p class="mt-2 comment-{{ comment.pk }}{% if not comment.is_visible %} hidden-comment{% endif %}">
-                        {% if comment.is_visible or user.is_privileged %}
-                            {{ comment.body }}
-                        {% else %}
-                            Комментарий скрыт
-                        {% endif %}
-                    </p>
-                    <div class="edit-input-comment-{{ comment.pk }}" hidden>
-                        <textarea type="text"  class="form-control" rows="5">{{ comment.body }}</textarea><br>
-                        <button class="btn btn-primary py-2">Сохранить</button>
-                        <button class="btn btn-danger py-2">Отмена</button>
-                    </div>
-                    <div class="comment-info justify-content-between text-secondary">
-                      <div class="d-flex flex-row align-items-end">
-                        <img src="/media/{{comment.author.avatar}}" alt="avatar" width="25" height="25" class="rounded-circle"/>
-                        <div class="small mb-0 ms-2"><a href="{% url 'profile-view' comment.author.pk %}">{{ comment.author }}</a></div>
-                      </div>
-                      <div class="d-flex flex-row align-items-center">
-
-                         <p class="small mt-0 mb-0 ms-0">{{ comment.publish_date }}
-                             {% if user.is_privileged %}
-                             <!-- Edit Comment -->
-                              <span class="edit-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-api' comment.pk %}">
-                                <i class="fa-regular fa-edit"></i>
-                             </span>
-                             <!-- Hide/Show Comment -->
-                              <span class="show-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-visible-toggle' comment.pk %}">
-                                <i class="fa-regular fa-eye-slash"></i>
-                             </span>
-                             <!-- Delete Comment -->
-
-                             <span class="delete-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-api' comment.pk %}">
-                                <i class="fa-regular fa-trash-can"></i>
-                             </span>
-                             {% endif %}
-                             <!-- Likes -->
-                             <span class="like-btn" data-id="{{ comment.pk }}" data-href="{% url 'articles:comment-like-api' comment.pk %}">
-                                {% if user in comment.likes.all %}
-                                    <i class="like-icon-{{ comment.pk }} fa-solid fa-heart"></i>
-                                {% else %}
-                                    <i class="like-icon-{{ comment.pk }} fa-regular fa-heart"></i>
-                                {% endif %}
-                            </span>
-                            <span id="like-count-{{ comment.pk }}" class="ml-auto ms-1">{{ comment.likes.count }}</span>
-                         </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            {% endif %}
             {% endfor %}
         {% endif %}
 
