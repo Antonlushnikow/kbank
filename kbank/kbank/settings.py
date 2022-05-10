@@ -137,6 +137,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'kbank.backends.CustomModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [

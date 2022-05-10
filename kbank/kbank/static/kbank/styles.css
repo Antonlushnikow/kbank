@@ -12007,9 +12007,4 @@ body.offcanvas-active{
 
 .comment-info {
     display: flex;
-
-.required::after{
-    color: red;
-    content: "*";
-
 }
