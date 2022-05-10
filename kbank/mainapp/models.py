@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from tinymce.models import HTMLField
 from .utils import plural_time
+from django.utils.timezone import now
 
 
 class Category(models.Model):
@@ -16,6 +17,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
+
+
+TOP_ARTICLE_DURATION_DAYS = 30
 
 
 class Article(models.Model):
@@ -49,6 +53,10 @@ class Article(models.Model):
     @property
     def comments_count(self):
         return self.comments.count()
+
+    @property
+    def is_last_month(self):
+        return now() < self.publish_date + timedelta(days=TOP_ARTICLE_DURATION_DAYS)
 
     class Meta:
         verbose_name = "статья"

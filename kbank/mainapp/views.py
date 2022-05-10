@@ -23,10 +23,14 @@ from .serializers import CommentSerializer
 from authapp.permissions import Privileged
 from .utils import PersonalNotification
 
+from django.db.models import Count
+
+TOP_ARTICLE_COUNT = 5
+
 
 class ArticlesListView(ListView):
     """
-    Контроллер вывода списка статей
+    Контроллер вывода списка статей на главной странице
     """
     model = Article
     template_name = 'mainapp/index.html'
@@ -34,6 +38,10 @@ class ArticlesListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
+        top_articles = [
+                           item for item in Article.objects.annotate(count=Count('likes')).order_by('-count') if item.is_last_month
+                       ][:TOP_ARTICLE_COUNT]
+        context['top_articles'] = top_articles
         return context
 
     def get_queryset(self):
@@ -161,10 +169,11 @@ class ArticleEditView(UpdateView):
         return reverse('articles:article', kwargs={'pk': self.pk})
 
     def dispatch(self, request, *args, **kwargs):
-        if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id \
-                or request.user.is_superuser or request.user.is_moderator:
-            return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
+        if request.user.is_authenticated:
+            if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id \
+                    or request.user.is_superuser or request.user.is_moderator:
+                return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseRedirect('/')
 
 
 class CategoryListView(ListView):
@@ -172,7 +181,7 @@ class CategoryListView(ListView):
     Контроллер вывода статей по категории
     """
     model = Article
-    template_name = 'mainapp/index.html'
+    template_name = 'mainapp/list-articles.html'
     context_object_name = 'articles'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -191,7 +200,7 @@ class ArticleListAuthorView(ListView):
     Контроллер вывода статей по авторам
     """
     model = Article
-    template_name = 'mainapp/index.html'
+    template_name = 'mainapp/list-articles.html'
     context_object_name = 'articles'
 
     def get_context_data(self, *, object_list=None, **kwargs):
