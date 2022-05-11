@@ -197,3 +197,31 @@ class CommentModerationChecked(View):
         obj.moderation_required = False
         obj.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class ArticleModerationRequired(View):
+    """
+    Set moderation required for Article
+    """
+    model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = True
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class ArticleModerationPassed(View):
+    """
+    Set moderation passed for Article
+    """
+    model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = False
+        obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
