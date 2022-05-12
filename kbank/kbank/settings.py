@@ -177,9 +177,10 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 AUTH_USER_MODEL = 'authapp.KbankUser'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-SITE_ID = 2
+SITE_ID = 4
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
