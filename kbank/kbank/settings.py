@@ -29,7 +29,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-DOMAIN_NAME = 'http://89.108.64.59'
+DOMAIN_NAME = 'http://кванк.рф'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_HOST_USER = 'kbank.kbank@mail.ru'
@@ -38,6 +38,7 @@ EMAIL_PORT = 587
 
 ALLOWED_HOSTS = [
     '89.108.64.59',
+    'xn--80adxco.xn--p1ai'
 ]
 
 
@@ -177,9 +178,10 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 AUTH_USER_MODEL = 'authapp.KbankUser'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-SITE_ID = 2
+SITE_ID = 4
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
