@@ -1,6 +1,6 @@
 import django_filters
 from authapp.models import KbankUser
-from authapp.permissions import Privileged
+from authapp.permissions import Privileged, PrivilegedPermissionMixin
 from django import forms
 from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseRedirect
@@ -38,7 +38,7 @@ class ArticleFilter(FilterSet):
             field.help_text = ''
 
 
-class ModerationRequiredArticles(FilterView):
+class ModerationRequiredArticles(PrivilegedPermissionMixin, FilterView):
     """
     Контроллер вывода списка статей для модерации
     """
@@ -46,12 +46,6 @@ class ModerationRequiredArticles(FilterView):
     template_name = 'moderationapp/articles.html'
     context_object_name = 'articles'
     filterset_class = ArticleFilter
-
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_privileged:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -84,17 +78,11 @@ class CommentFilter(FilterSet):
             field.help_text = ''
 
 
-class CommentsListView(FilterView):
+class CommentsListView(PrivilegedPermissionMixin, FilterView):
     model = Comment
     template_name = 'moderationapp/comments.html'
     context_object_name = 'comments'
     filterset_class = CommentFilter
-
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_privileged:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -128,17 +116,11 @@ class UserFilter(FilterSet):
             field.help_text = ''
 
 
-class UsersListView(FilterView):
+class UsersListView(PrivilegedPermissionMixin, FilterView):
     model = KbankUser
     template_name = 'moderationapp/users.html'
     context_object_name = 'users'
     filterset_class = UserFilter
-
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_privileged:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
 
 
 class ArticleVisibleToggle(View):
