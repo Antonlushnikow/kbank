@@ -129,5 +129,29 @@ $(document).ready(function(){
         }
     });
 
+    // Report Comment for moderation
+    $('.report-comment').click(function(e){
+        e.preventDefault();
+        context = new CommentContext($(this));
+
+        $.ajax({
+            url: context.URL,
+            method: "GET",
+            data: {},
+            success: function(data){
+                if (data.result) {
+                    $(`.comment-${context.objectId} .report-comment`)[0].style.display='none';
+                }
+                else {
+                    alert('Fail!!!')
+                }
+            },
+            error: function(error){
+                console.log(error)
+            }
+        });
+    });
+
+
 
 });

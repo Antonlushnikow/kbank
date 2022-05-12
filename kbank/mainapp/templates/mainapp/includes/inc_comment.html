@@ -20,11 +20,18 @@
         <div class="d-flex flex-row align-items-center">
 
            <p class="small mt-0 mb-0 ms-0">{{ comment.publish_date }}
+               <br>
                {% if user.is_authenticated %}
                <!-- Reply Comment -->
                 <span class="reply-comment" data-id="{{ comment.pk }}">
                   <i class="fas fa-reply"></i>
                </span>
+               <!-- Report Comment for moderation -->
+                   {% if not comment.moderation_required %}
+                       <span class="report-comment" data-id="{{ comment.pk }}" data-href="{% url 'articles:report-comment' comment.pk %}">
+                          <i class="fa-solid fa-bullhorn"></i>
+                       </span>
+                   {% endif %}
                {% endif %}
                {% if user.is_privileged %}
                <!-- Edit Comment -->
