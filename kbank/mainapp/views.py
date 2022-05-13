@@ -334,7 +334,7 @@ class ReportCommentAPI(APIView):
     Reporting comment for moderation
     """
     model = Comment
-    permission_classes = [Privileged]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk=None):
         try:
