@@ -9,6 +9,7 @@ from .views import (
     CommentVisibleToggleAPI,
     CommentAPIView,
     NotificationReadToggleAPI,
+    ReportCommentAPI,
 )
 
 urlpatterns = [
@@ -22,5 +23,6 @@ urlpatterns = [
 
     path('api/comment/<int:pk>/', CommentAPIView.as_view(), name='comment-api'),
     path('api/comment/<int:pk>/hide/', CommentVisibleToggleAPI.as_view(), name='comment-visible-toggle'),
+    path('api/comment/<int:pk>/report/', ReportCommentAPI.as_view(), name='report-comment'),
     path('api/notification/<int:pk>/read/', NotificationReadToggleAPI.as_view(), name='notification-read-toggle'),
 ]

@@ -329,6 +329,31 @@ class CommentVisibleToggleAPI(APIView):
             return Response(data)
 
 
+class ReportCommentAPI(APIView):
+    """
+    Reporting comment for moderation
+    """
+    model = Comment
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk=None):
+        try:
+            obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+            obj.moderation_required = True
+            obj.save()
+            data = {
+                'result': True,
+            }
+        except Exception as e:
+            print('Cannot report comment.', e.args)
+            data = {
+                'result': False,
+            }
+        finally:
+            return Response(data)
+
+
+
 class NotificationsListView(LoginRequiredMixin, ListView):
     """
     Контроллер вывода списка уведомлений
