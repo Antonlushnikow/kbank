@@ -86,6 +86,14 @@ class ArticleCreateView(CreateView):
         )
         notification.create()
 
+        # notification for user
+        PersonalNotification(
+            body='Ваша статья отправлена на модерацию. После того, как статья пройдет проверку и будет опубликована, Вы получите уведомление.',
+            title="модерация",
+            request=self.request,
+            url=url,
+        ).create()
+
         return super().form_valid(form)
 
     def get_success_url(self):

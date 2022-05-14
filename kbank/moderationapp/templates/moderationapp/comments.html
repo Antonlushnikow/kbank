@@ -9,6 +9,7 @@
 
 {% block content %}
     {% include 'moderationapp/includes/inc_moderation_menu.html' %}
+    {% include 'mainapp/includes/inc_popup.html' %}
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                     <h3>Комментарии для модерации</h3>
@@ -102,6 +103,7 @@
 <!-- Скрипты для подключения лайков, работы с комментариями -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'kbank/update-likes.js' %}" type="text/javascript"></script>
+<script src="{% static 'kbank/popup.js' %}" type="text/javascript"></script>
 <script src="{% static 'kbank/comments.js' %}" type="text/javascript"></script>
 {% endblock %}
 

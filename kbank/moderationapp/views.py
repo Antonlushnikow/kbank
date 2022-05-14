@@ -10,6 +10,7 @@ from django.views.generic import ListView
 from django_filters import FilterSet
 from django_filters.views import FilterView
 from mainapp.models import Article, Comment
+from mainapp.utils import PersonalNotification
 
 
 class ArticleFilter(FilterSet):
@@ -192,6 +193,8 @@ class ArticleModerationRequired(View):
         obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
         obj.moderation_required = True
         obj.save()
+        PersonalNotification(request=request, body="Ваша статья отправлена на модерацию",
+                             title='модерация', url=f'/article/{pk}/', users_group=[obj.author]).create()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -206,4 +209,7 @@ class ArticleModerationPassed(View):
         obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
         obj.moderation_required = False
         obj.save()
+        PersonalNotification(request=request, body="Ваша статья прошла модерацию и опубликована!",
+                             title='модерация', url=f'/article/{pk}/',
+                             users_group=[obj.author]).create()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
