@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Popup -->
+{% include 'mainapp/includes/inc_popup.html' %}
+
 <div class="container position-relative px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
@@ -105,6 +109,7 @@
 
 <!-- Скрипты для подключения лайков, работы с комментариями -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'kbank/popup.js' %}" type="text/javascript"></script>
 <script src="{% static 'kbank/update-likes.js' %}" type="text/javascript"></script>
 <script src="{% static 'kbank/comments.js' %}" type="text/javascript"></script>
 

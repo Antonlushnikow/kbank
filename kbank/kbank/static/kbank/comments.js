@@ -40,6 +40,7 @@ $(document).ready(function(){
             headers: {'X-CSRFToken': csrftoken},
             success: function(data){
                 context.comment.innerText = 'Комментарий удален';
+                showPopup('Комментарий успешно удален!');
             },
             error: function(error){
                 console.log(error)
@@ -59,9 +60,11 @@ $(document).ready(function(){
             success: function(data){
                 if (data.is_visible) {
                     context.comment.classList.remove('hidden-comment');
+                    showPopup('Комментарий Опубликован!');
                 }
                 else {
                     context.comment.classList.add('hidden-comment');
+                    showPopup('Комментарий Скрыт!');
                 }
             },
             error: function(error){
@@ -141,6 +144,7 @@ $(document).ready(function(){
             success: function(data){
                 if (data.result) {
                     $(`.comment-${context.objectId} .report-comment`)[0].style.display='none';
+                    showPopup('Жалоба на комментарий принята!');
                 }
                 else {
                     alert('Fail!!!')
