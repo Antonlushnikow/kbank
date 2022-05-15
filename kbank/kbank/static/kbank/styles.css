@@ -11903,6 +11903,9 @@ ul.post-meta {
     cursor: pointer;
 }
 
+.kbank-post img {
+    max-width: 100%;
+}
 
 
 /*_____________________________________*/
@@ -12014,21 +12017,21 @@ body.offcanvas-active{
 
 /* The actual popup (appears on top) */
 .popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  z-index: 100;
-position:fixed;
-top:50%;
-left:50%;
-width:500px;  /* adjust as per your needs */
-height:100px;   /* adjust as per your needs */
-margin-left:-250px;   /* negative half of width above */
-margin-top:-50px;   /* negative half of height above */
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 100;
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:500px;  /* adjust as per your needs */
+    height:100px;   /* adjust as per your needs */
+    margin-left:-250px;   /* negative half of width above */
+    margin-top:-50px;   /* negative half of height above */
 }
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
@@ -12048,4 +12051,99 @@ margin-top:-50px;   /* negative half of height above */
   from {opacity: 0;}
   to {opacity:1 ;}
 }
-/*111*/
+
+/* Chips */
+
+.chip {
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  line-height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background-color: rgba(var(--bs-primary-rgb));
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+.chip:focus {
+  outline: none;
+  background-color: #26a69a;
+  color: #fff;
+}
+
+.chip > img {
+  float: left;
+  margin: 0 8px 0 -12px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
+
+.chip .close {
+  cursor: pointer;
+  float: right;
+  font-size: 16px;
+  line-height: 32px;
+  padding-left: 8px;
+}
+
+.chips {
+  border: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  margin: 0 0 8px 0;
+  min-height: 45px;
+  outline: none;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+
+.chips.focus {
+  border-bottom: 1px solid #26a69a;
+  -webkit-box-shadow: 0 1px 0 0 #26a69a;
+          box-shadow: 0 1px 0 0 #26a69a;
+}
+
+.chips:hover {
+  cursor: text;
+}
+
+.chips .input {
+  background: none;
+  border: 0;
+  color: rgba(0, 0, 0, 0.6);
+  display: inline-block;
+  font-size: 16px;
+  height: 3rem;
+  line-height: 32px;
+  outline: 0;
+  margin: 0;
+  padding: 0 !important;
+  width: 120px !important;
+}
+
+.chips .input:focus {
+  border: 0 !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+.chips .autocomplete-content {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.prefix ~ .chips {
+  margin-left: 3rem;
+  width: 92%;
+  width: calc(100% - 3rem);
+}
+
+.chips:empty ~ label {
+  font-size: 0.8rem;
+  -webkit-transform: translateY(-140%);
+          transform: translateY(-140%);
+}

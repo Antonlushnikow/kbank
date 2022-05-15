@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 
-from mainapp.views import ArticlesListView, CategoryListView, NotificationsListView
+from mainapp.views import ArticlesListView, CategoryListView, NotificationsListView, TagListView
 from authapp.views import ProfileView, KbankUserPasswordResetView
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path('', ArticlesListView.as_view(), name='index'),
     path('article/', include(('mainapp.urls', 'mainapp'), namespace='articles')),
     path('c/<slug:slug>/', CategoryListView.as_view(), name='category'),
+    path('tag/<slug:slug>/', TagListView.as_view(), name='tag-list'),
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile-view'),
     path('accounts/', include('allauth.urls')),
