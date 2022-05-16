@@ -201,7 +201,7 @@ class CategoryListView(ListView):
 
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['slug'])
-        return Article.objects.filter(category=category).order_by('-publish_date')
+        return Article.objects.filter(category=category, is_visible=True).order_by('-publish_date')
 
 
 class ArticleListAuthorView(ListView):
@@ -220,7 +220,7 @@ class ArticleListAuthorView(ListView):
 
     def get_queryset(self):
         author = get_object_or_404(KbankUser, pk=self.kwargs['pk'])
-        return Article.objects.filter(author=author).order_by('-publish_date')
+        return Article.objects.filter(author=author, is_visible=True).order_by('-publish_date')
 
 
 class LikeAPIView(APIView):
@@ -413,4 +413,4 @@ class TagListView(ListView):
 
     def get_queryset(self):
         slug = self.kwargs['slug']
-        return Article.objects.filter(tags__slug=slug).order_by('-publish_date')
+        return Article.objects.filter(tags__slug=slug, is_visible=True).order_by('-publish_date')
