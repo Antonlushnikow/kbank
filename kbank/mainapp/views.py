@@ -116,7 +116,10 @@ class ArticleReadView(FormMixin, DetailView):
         return context
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Article, pk=self.kwargs['pk'])
+        obj = get_object_or_404(Article, pk=self.kwargs['pk'])
+        obj.views += 1
+        obj.save()
+        return obj
 
     def post(self, request, *args, **kwargs):
         # создание комментария

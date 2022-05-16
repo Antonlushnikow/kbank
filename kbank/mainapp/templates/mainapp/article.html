@@ -58,6 +58,9 @@
 
                 <!-- Likes -->
                 <div class="float-end mb-2">
+                    <!-- Количество просмотров -->
+                    <i class="fa-regular fa-eye"></i>
+                    <span class="ml-auto ms-0">{{ article.views }}</span>
                     <span class="like-btn" data-id="{{ article.pk }}" data-href="{% url 'articles:like-api' article.pk %}">
                     {% if user in article.likes.all %}
                         <i class="like-icon-{{ article.pk }} fa-solid fa-heart"></i>
@@ -65,7 +68,7 @@
                         <i class="like-icon-{{ article.pk }} fa-regular fa-heart"></i>
                     {% endif %}
                     </span>
-                    <span id="like-count-{{ article.pk }}" class=" ml-auto ms-1">{{ article.likes.count }}</span>
+                    <span id="like-count-{{ article.pk }}" class="ml-auto ms-1">{{ article.likes.count }}</span>
                 </div>
             </div>
             <!-- Теги -->

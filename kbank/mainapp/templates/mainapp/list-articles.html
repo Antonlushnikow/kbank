@@ -29,9 +29,12 @@
                                     {{ article.publish_date }}
                                     </p>
                                 </div>
-                                <!-- Количество комментариев -->
 
                                 <div class="d-flex flex-row align-items-center">
+                                <!-- Количество просмотров -->
+                                <i class="fa-regular fa-eye"></i>
+                                <p class="small ms-1">{{ article.views }}</p>
+                                <!-- Количество комментариев -->
                                 {% if article.comments_count %}
                                     <i class="fa-regular fa-comment"></i>
                                     <p class="small ms-1">{{ article.comments_count }}</p>
