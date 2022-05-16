@@ -12,6 +12,10 @@
         <title>{{ title|title }}</title>
     {% endblock %}
 
+    {% block additional-styles %}
+
+    {% endblock %}
+
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'kbank/img/favicon/favicon.ico' %}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'kbank/img/favicon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'kbank/img/favicon/favicon-32x32.png' %}">
@@ -27,6 +31,7 @@
           rel="stylesheet" type="text/css"/>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'kbank/styles.css' %}" rel="stylesheet"/>
+
 </head>
 <body class="d-flex flex-column min-vh-100">
 

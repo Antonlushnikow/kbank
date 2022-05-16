@@ -24,6 +24,7 @@ from authapp.permissions import Privileged
 from .utils import PersonalNotification
 
 from django.db.models import Count
+from django.utils.text import slugify
 
 TOP_ARTICLE_COUNT = 5
 
@@ -361,7 +362,6 @@ class ReportCommentAPI(APIView):
             return Response(data)
 
 
-
 class NotificationsListView(LoginRequiredMixin, ListView):
     """
     Контроллер вывода списка уведомлений
@@ -401,3 +401,16 @@ class NotificationReadToggleAPI(APIView):
         }
 
         return Response(data)
+
+
+class TagListView(ListView):
+    """
+    Контроллер вывода статей по тегам
+    """
+    model = Article
+    template_name = 'mainapp/list-articles.html'
+    context_object_name = 'articles'
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        return Article.objects.filter(tags__slug=slug).order_by('-publish_date')

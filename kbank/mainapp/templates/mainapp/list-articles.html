@@ -47,7 +47,16 @@
                                     <span id="like-count-{{ article.pk }}" class="ms-1 small">{{ article.likes.count }}</span>
                                 </div>
                             </div>
-
+                        </div>
+                        <!-- Теги -->
+                        <div class="chips col-md-10 col-lg-8 col-xl-7">
+                            {% for tag in article.tags.all %}
+                            <a href="{% url 'tag-list' tag.slug %}">
+                             <div class="chip">
+                                 {{ tag }}
+                              </div>
+                            </a>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
