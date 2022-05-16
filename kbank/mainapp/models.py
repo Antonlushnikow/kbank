@@ -50,6 +50,9 @@ class Article(models.Model):
         force_lowercase=True,
         verbose_name='теги (через запятую)',
     )
+    views = models.IntegerField(
+        default=0,
+    )
 
     moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
     is_visible = models.BooleanField(default=False, verbose_name='Опубликовано')
