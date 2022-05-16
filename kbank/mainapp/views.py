@@ -86,6 +86,14 @@ class ArticleCreateView(CreateView):
         )
         notification.create()
 
+        # notification for user
+        PersonalNotification(
+            body='Ваша статья отправлена на модерацию. После того, как статья пройдет проверку и будет опубликована, Вы получите уведомление.',
+            title="модерация",
+            request=self.request,
+            url=url,
+        ).create()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -327,6 +335,31 @@ class CommentVisibleToggleAPI(APIView):
             }
         finally:
             return Response(data)
+
+
+class ReportCommentAPI(APIView):
+    """
+    Reporting comment for moderation
+    """
+    model = Comment
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk=None):
+        try:
+            obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+            obj.moderation_required = True
+            obj.save()
+            data = {
+                'result': True,
+            }
+        except Exception as e:
+            print('Cannot report comment.', e.args)
+            data = {
+                'result': False,
+            }
+        finally:
+            return Response(data)
+
 
 
 class NotificationsListView(LoginRequiredMixin, ListView):

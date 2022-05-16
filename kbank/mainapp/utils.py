@@ -2,12 +2,13 @@ from authapp.models import KbankUser
 
 
 class PersonalNotification:
-    def __init__(self, request, body, title, url, scope=None):
+    def __init__(self, request, body, title, url, scope=None, users_group=None):
         self.request = request
         self.body = body
         self.title = title
         self.url = url
         self.scope = scope
+        self.users_group = users_group
 
     def create(self):
         from mainapp.models import Notification
@@ -16,7 +17,7 @@ class PersonalNotification:
         elif self.scope == "moderators":
             users = [user for user in KbankUser.objects.all() if user.is_privileged]
         else:
-            users = [self.request.user]
+            users = self.users_group if self.users_group else [self.request.user]
         for user in users:
             obj = Notification.objects.create(user=user, body=self.body, title=self.title, url=self.url)
             obj.save()

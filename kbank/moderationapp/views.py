@@ -1,6 +1,6 @@
 import django_filters
 from authapp.models import KbankUser
-from authapp.permissions import Privileged
+from authapp.permissions import Privileged, PrivilegedPermissionMixin
 from django import forms
 from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseRedirect
@@ -10,6 +10,7 @@ from django.views.generic import ListView
 from django_filters import FilterSet
 from django_filters.views import FilterView
 from mainapp.models import Article, Comment
+from mainapp.utils import PersonalNotification
 
 
 class ArticleFilter(FilterSet):
@@ -38,7 +39,7 @@ class ArticleFilter(FilterSet):
             field.help_text = ''
 
 
-class ModerationRequiredArticles(FilterView):
+class ModerationRequiredArticles(PrivilegedPermissionMixin, FilterView):
     """
     Контроллер вывода списка статей для модерации
     """
@@ -46,12 +47,6 @@ class ModerationRequiredArticles(FilterView):
     template_name = 'moderationapp/articles.html'
     context_object_name = 'articles'
     filterset_class = ArticleFilter
-
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_privileged:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -84,17 +79,11 @@ class CommentFilter(FilterSet):
             field.help_text = ''
 
 
-class CommentsListView(FilterView):
+class CommentsListView(PrivilegedPermissionMixin, FilterView):
     model = Comment
     template_name = 'moderationapp/comments.html'
     context_object_name = 'comments'
     filterset_class = CommentFilter
-
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_privileged:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -128,17 +117,11 @@ class UserFilter(FilterSet):
             field.help_text = ''
 
 
-class UsersListView(FilterView):
+class UsersListView(PrivilegedPermissionMixin, FilterView):
     model = KbankUser
     template_name = 'moderationapp/users.html'
     context_object_name = 'users'
     filterset_class = UserFilter
-
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_privileged:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponseNotFound('Page not found')
 
 
 class ArticleVisibleToggle(View):
@@ -196,4 +179,37 @@ class CommentModerationChecked(View):
         obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
         obj.moderation_required = False
         obj.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class ArticleModerationRequired(View):
+    """
+    Set moderation required for Article
+    """
+    model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = True
+        obj.save()
+        PersonalNotification(request=request, body="Ваша статья отправлена на модерацию",
+                             title='модерация', url=f'/article/{pk}/', users_group=[obj.author]).create()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class ArticleModerationPassed(View):
+    """
+    Set moderation passed for Article
+    """
+    model = Article
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        obj.moderation_required = False
+        obj.save()
+        PersonalNotification(request=request, body="Ваша статья прошла модерацию и опубликована!",
+                             title='модерация', url=f'/article/{pk}/',
+                             users_group=[obj.author]).create()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
