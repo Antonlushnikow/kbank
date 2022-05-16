@@ -6,6 +6,8 @@ from tinymce.models import HTMLField
 from .utils import plural_time
 from django.utils.timezone import now
 
+from tagulous.models import TagField
+
 
 class Category(models.Model):
     title = models.CharField(max_length=60, verbose_name='Название категории')
@@ -42,6 +44,11 @@ class Article(models.Model):
         settings.AUTH_USER_MODEL,
         blank=True,
         related_name='article_likes',
+    )
+    tags = TagField(
+        blank=True,
+        force_lowercase=True,
+        verbose_name='теги (через запятую)',
     )
 
     moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')

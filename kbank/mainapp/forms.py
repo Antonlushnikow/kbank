@@ -14,6 +14,7 @@ class ArticleCreateForm(forms.ModelForm):
             'title',
             'category',
             'text',
+            'tags',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -32,6 +33,7 @@ class ArticleEditForm(forms.ModelForm):
             'title',
             'category',
             'text',
+            'tags',
         ]
 
     def __init__(self, *args, **kwargs):
