@@ -1,4 +1,4 @@
-<div class="card mb-2 rounded comment-{{ comment.pk }}" style="margin-left:{{ marginleft }}px">
+<div class="card mb-2 rounded comment-{{ comment.pk }}" id ="comment-{{ comment.pk }}" style="margin-left:{{ marginleft }}px">
     <div class="card-body p-4">
       <p class="mt-2 comment-{{ comment.pk }}{% if not comment.is_visible %} hidden-comment{% endif %}">
           {% if comment.is_visible or user.is_privileged %}

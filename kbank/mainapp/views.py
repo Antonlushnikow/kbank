@@ -356,6 +356,20 @@ class ReportCommentAPI(APIView):
             data = {
                 'result': True,
             }
+            # Уведомление для модераторов о поступлении новой жалобы на комментарий
+            PersonalNotification(request=request,
+                                 body='Поступил новый комментарий для модерации',
+                                 scope='moderators', title='модерация',
+                                 url=f'/article/{obj.article.pk}#comment-{pk}'
+                                 ).create()
+
+            # Уведомление для автора комментария о поступлении жалобы на его комментарий
+            PersonalNotification(request=request,
+                                 body='На ваш комментарий поступила жалоба! Обратите внимание!',
+                                 users_group=[obj.author], title='жалоба',
+                                 url=f'/article/{obj.article.pk}#comment-{pk}'
+                                 ).create()
+
         except Exception as e:
             print('Cannot report comment.', e.args)
             data = {
