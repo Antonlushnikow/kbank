@@ -32,10 +32,10 @@
                         <img src="/media/{{ article.pic }}" alt="Превью статьи" style="max-width:100%">
                         {% endif %}
                         {% if article.preview_text %}
-                        {{ article.preview_text|safe }}
+                            {{ article.preview_text|safe }}
                         {% else %}
-                        {{ article.text|truncatewords_html:50|safe }}
-                        <a href="{% url 'articles:article' article.id %}" style="font-weight:600">Читать далее...</a>
+                            {{ article.text|truncatewords_html:50|safe }}
+                            <a href="{% url 'articles:article' article.id %}" style="font-weight:600">Читать далее...</a>
                         {% endif %}
                     </div>
                     <div class="post-meta d-flex justify-content-between">
