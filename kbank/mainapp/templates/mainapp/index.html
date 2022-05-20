@@ -27,7 +27,17 @@
 
                     <h6><a href="{% url 'category' article.category.slug %}">{{ article.category.title|title }}</a></h6>
                     <hr>
-                    <div class="post-subtitle">{{ article.text|truncatewords_html:50|safe }}</div>
+                    <div class="post-subtitle">
+                        {% if article.pic %}
+                        <img src="/media/{{ article.pic }}" alt="Превью статьи" style="max-width:100%">
+                        {% endif %}
+                        {% if article.preview_text %}
+                        {{ article.preview_text|safe }}
+                        {% else %}
+                        {{ article.text|truncatewords_html:50|safe }}
+                        <a href="{% url 'articles:article' article.id %}" style="font-weight:600">Читать далее...</a>
+                        {% endif %}
+                    </div>
                     <div class="post-meta d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                             <p>

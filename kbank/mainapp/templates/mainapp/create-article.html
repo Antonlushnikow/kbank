@@ -5,7 +5,7 @@
   <span class="popuptext" id="myPopup"></span>
 </div>
 <div class="container position-relative px-4 px-lg-5">
-    <form id="create-article" action="" method="POST">
+    <form id="create-article" action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
 
