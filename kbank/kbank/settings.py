@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     'django_filters',
     'tagulous',
     'slugify',
-
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
