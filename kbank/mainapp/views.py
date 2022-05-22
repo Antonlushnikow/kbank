@@ -27,6 +27,11 @@ from django.db.models import Count
 from django.utils.text import slugify
 
 TOP_ARTICLE_COUNT = 5
+SORTING_METHODS = {
+    'old': 'publish_date',
+    'new': '-publish_date',
+    'likes': 'likes',
+}
 
 
 class ArticlesListView(ListView):
@@ -120,6 +125,15 @@ class ArticleReadView(FormMixin, DetailView):
         obj.views += 1
         obj.save()
         return obj
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context['sorting_method'] = 'publish_date'
+        if 'sort' in request.GET:
+            if request.GET['sort'] in SORTING_METHODS:
+                context['sorting_method'] = SORTING_METHODS[request.GET['sort']]
+        return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         # создание комментария

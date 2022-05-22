@@ -100,6 +100,9 @@ TEMPLATES = [
                 'kbank.context_processors.add_categories',
                 'kbank.context_processors.add_notifications',
             ],
+            'libraries': {
+                'templatetags': 'kbank.templatetags.templatetags'
+            }
         },
     },
 ]
