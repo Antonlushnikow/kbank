@@ -1,0 +1,19 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+    <main class="container position-relative px-4 px-lg-7">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="kbank-post col-md-10 col-lg-8 col-xl-6">
+                <!-- Delete Profile Form -->
+                <h2>Удалить статью</h2>
+                <form method="post">{% csrf_token %}
+                    <p>Вы уверены, что хотите удалить "{{ object }}"?</p>
+                    {{ form }}
+                    <input class="btn btn-primary" type="submit" value="Удалить">
+                </form>
+                <br>
+            </div>
+        </div>
+    </main>
+{% endblock %}
