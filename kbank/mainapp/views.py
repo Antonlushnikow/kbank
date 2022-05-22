@@ -1,5 +1,7 @@
 import django.views
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery, SearchHeadline, TrigramWordDistance, \
+    TrigramDistance
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -23,7 +25,7 @@ from .serializers import CommentSerializer
 from authapp.permissions import Privileged
 from .utils import PersonalNotification
 
-from django.db.models import Count
+from django.db.models import Count, Value
 from django.utils.text import slugify
 
 TOP_ARTICLE_COUNT = 5
@@ -40,7 +42,9 @@ class ArticlesListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
         top_articles = [
-                           item for item in Article.objects.filter(is_visible=True).annotate(count=Count('likes')).order_by('-count') if item.is_last_month
+                           item for item in
+                           Article.objects.filter(is_visible=True).annotate(count=Count('likes')).order_by('-count') if
+                           item.is_last_month
                        ][:TOP_ARTICLE_COUNT]
         context['top_articles'] = top_articles
         return context
@@ -418,6 +422,32 @@ class NotificationReadToggleAPI(APIView):
         }
 
         return Response(data)
+
+
+class SearchResultsView(ListView):
+    model = Article
+    template_name = 'mainapp/search-results.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+        vector = SearchVector('text', config='russian')
+
+        query = SearchQuery(self.request.GET.get('search_query'), config='russian', search_type='phrase')
+
+        search_headline = SearchHeadline(
+            'text',
+            query,
+            start_sel='<b>',
+            stop_sel='</b>',
+        )
+
+        qs = self.model.objects.annotate(
+            rank=SearchRank(vector, query,
+                            )).annotate(
+            headline=search_headline).filter(
+            rank__gte=0.001).order_by('-rank')
+
+        return qs
 
 
 class TagListView(ListView):
