@@ -33,6 +33,11 @@
                                 <a href="{% url 'moderation:article-visible-toggle' article.pk %} ">{% if article.is_visible %}Скрыть{% else %}Опубликовать{% endif %}</a>
                             </li>
                         {% endif %}
+                        {% if request.user.is_privileged %}
+                            <li>
+                                <a href="{% url 'articles:delete-article' article.pk %} ">Удалить</a>
+                            </li>
+                        {% endif %}
                         {% if request.user.is_authenticated and not article.moderation_required%}
                             <li>
                                 <a href="{% url 'moderation:set-moderation-required' article.pk %} ">Пожаловаться на статью</a>

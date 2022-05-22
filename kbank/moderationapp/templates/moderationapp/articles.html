@@ -63,6 +63,8 @@
                                     <i class="fa-solid fa-eye-slash"></i>
                                     </a>
                                 {% endif %}
+                                <a href="{% url 'articles:delete-article' article.pk %}"><i
+                                        class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

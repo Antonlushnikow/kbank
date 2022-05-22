@@ -10,7 +10,7 @@ from django.views.generic import (
     UpdateView,
     ListView,
 )
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, DeleteView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -185,6 +185,22 @@ class ArticleEditView(UpdateView):
             if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id \
                     or request.user.is_superuser or request.user.is_moderator:
                 return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseRedirect('/')
+
+
+class ArticleDeleteView(DeleteView):
+    """
+    Контроллер удаления статьи
+    """
+    model = Article
+    template_name = 'mainapp/article_confirm_delete.html'
+    success_url = reverse_lazy('index')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id \
+                    or request.user.is_superuser or request.user.is_moderator:
+                return super(ArticleDeleteView, self).dispatch(request, *args, **kwargs)
         return HttpResponseRedirect('/')
 
 
