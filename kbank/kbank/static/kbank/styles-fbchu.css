@@ -12169,4 +12169,12 @@ body.offcanvas-active{
     border-radius: 0;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
+.search-icon:active{
+    color:#fff;
+}
+.search-icon:hover{
+    color:#fff;
+}
+.search-icon{
+    color:#fff;
+}
