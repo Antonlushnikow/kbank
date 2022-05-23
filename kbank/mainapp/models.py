@@ -27,6 +27,9 @@ TOP_ARTICLE_DURATION_DAYS = 30
 class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name='заголовок')
     text = HTMLField(verbose_name='текст')
+    preview_text = models.TextField(blank=True, verbose_name='превью')
+    source_text = models.CharField(blank=True, max_length=250, verbose_name='текст источника')
+    source_url = models.CharField(blank=True, max_length=250, verbose_name='ссылка на источник')
     publish_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
     updated_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
     author = models.ForeignKey(
@@ -50,9 +53,18 @@ class Article(models.Model):
         force_lowercase=True,
         verbose_name='теги (через запятую)',
     )
+    views = models.IntegerField(
+        default=0,
+    )
 
     moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
     is_visible = models.BooleanField(default=False, verbose_name='Опубликовано')
+
+    pic = models.ImageField(
+        upload_to='article_pics/',
+        blank=True,
+        verbose_name='обложка статьи',
+    )
 
     def __str__(self):
         return self.title
@@ -89,7 +101,7 @@ class Comment(models.Model):
         related_name='comment_likes',
     )
     publish_date = models.DateTimeField(auto_now_add=True)
-    moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
+    moderation_required = models.BooleanField(default=False, verbose_name='Требуется модерация')
 
     is_visible = models.BooleanField(default=True, verbose_name='Опубликовано')
     parent = models.ForeignKey(

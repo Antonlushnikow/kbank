@@ -1,5 +1,7 @@
 import django.views
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery, SearchHeadline, TrigramWordDistance, \
+    TrigramDistance
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -10,7 +12,7 @@ from django.views.generic import (
     UpdateView,
     ListView,
 )
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, DeleteView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,10 +25,15 @@ from .serializers import CommentSerializer
 from authapp.permissions import Privileged
 from .utils import PersonalNotification
 
-from django.db.models import Count
+from django.db.models import Count, Value
 from django.utils.text import slugify
 
 TOP_ARTICLE_COUNT = 5
+SORTING_METHODS = {
+    'old': 'publish_date',
+    'new': '-publish_date',
+    'likes': 'likes',
+}
 
 
 class ArticlesListView(ListView):
@@ -40,7 +47,9 @@ class ArticlesListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
         top_articles = [
-                           item for item in Article.objects.filter(is_visible=True).annotate(count=Count('likes')).order_by('-count') if item.is_last_month
+                           item for item in
+                           Article.objects.filter(is_visible=True).annotate(count=Count('likes')).order_by('-count') if
+                           item.is_last_month
                        ][:TOP_ARTICLE_COUNT]
         context['top_articles'] = top_articles
         return context
@@ -116,7 +125,19 @@ class ArticleReadView(FormMixin, DetailView):
         return context
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Article, pk=self.kwargs['pk'])
+        obj = get_object_or_404(Article, pk=self.kwargs['pk'])
+        obj.views += 1
+        obj.save()
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context['sorting_method'] = 'publish_date'
+        if 'sort' in request.GET:
+            if request.GET['sort'] in SORTING_METHODS:
+                context['sorting_method'] = SORTING_METHODS[request.GET['sort']]
+        return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         # создание комментария
@@ -185,6 +206,22 @@ class ArticleEditView(UpdateView):
         return HttpResponseRedirect('/')
 
 
+class ArticleDeleteView(DeleteView):
+    """
+    Контроллер удаления статьи
+    """
+    model = Article
+    template_name = 'mainapp/article_confirm_delete.html'
+    success_url = reverse_lazy('index')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Article.objects.get(pk=kwargs['pk']).author.id == request.user.id \
+                    or request.user.is_superuser or request.user.is_moderator:
+                return super(ArticleDeleteView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseRedirect('/')
+
+
 class CategoryListView(ListView):
     """
     Контроллер вывода статей по категории
@@ -201,7 +238,7 @@ class CategoryListView(ListView):
 
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['slug'])
-        return Article.objects.filter(category=category).order_by('-publish_date')
+        return Article.objects.filter(category=category, is_visible=True).order_by('-publish_date')
 
 
 class ArticleListAuthorView(ListView):
@@ -220,7 +257,7 @@ class ArticleListAuthorView(ListView):
 
     def get_queryset(self):
         author = get_object_or_404(KbankUser, pk=self.kwargs['pk'])
-        return Article.objects.filter(author=author).order_by('-publish_date')
+        return Article.objects.filter(author=author, is_visible=True).order_by('-publish_date')
 
 
 class LikeAPIView(APIView):
@@ -353,6 +390,20 @@ class ReportCommentAPI(APIView):
             data = {
                 'result': True,
             }
+            # Уведомление для модераторов о поступлении новой жалобы на комментарий
+            PersonalNotification(request=request,
+                                 body='Поступил новый комментарий для модерации',
+                                 scope='moderators', title='модерация',
+                                 url=f'/article/{obj.article.pk}#comment-{pk}'
+                                 ).create()
+
+            # Уведомление для автора комментария о поступлении жалобы на его комментарий
+            PersonalNotification(request=request,
+                                 body='На ваш комментарий поступила жалоба! Обратите внимание!',
+                                 users_group=[obj.author], title='жалоба',
+                                 url=f'/article/{obj.article.pk}#comment-{pk}'
+                                 ).create()
+
         except Exception as e:
             print('Cannot report comment.', e.args)
             data = {
@@ -403,6 +454,32 @@ class NotificationReadToggleAPI(APIView):
         return Response(data)
 
 
+class SearchResultsView(ListView):
+    model = Article
+    template_name = 'mainapp/search-results.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+        vector = SearchVector('text', config='russian')
+
+        query = SearchQuery(self.request.GET.get('search_query'), config='russian', search_type='phrase')
+
+        search_headline = SearchHeadline(
+            'text',
+            query,
+            start_sel='<b>',
+            stop_sel='</b>',
+        )
+
+        qs = self.model.objects.annotate(
+            rank=SearchRank(vector, query,
+                            )).annotate(
+            headline=search_headline).filter(
+            rank__gte=0.001).order_by('-rank')
+
+        return qs
+
+
 class TagListView(ListView):
     """
     Контроллер вывода статей по тегам
@@ -413,4 +490,4 @@ class TagListView(ListView):
 
     def get_queryset(self):
         slug = self.kwargs['slug']
-        return Article.objects.filter(tags__slug=slug).order_by('-publish_date')
+        return Article.objects.filter(tags__slug=slug, is_visible=True).order_by('-publish_date')

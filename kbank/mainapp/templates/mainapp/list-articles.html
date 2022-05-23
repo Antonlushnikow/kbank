@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-    <title>KBANK | База знаний</title>
+    <title>Фёдор, Бонд и Чук</title>
 {% endblock %}
 
 
@@ -20,7 +20,17 @@
 
                             <h6><a href="{% url 'category' article.category.slug %}">{{ article.category.title|title }}</a></h6>
                             <hr>
-                            <div class="post-subtitle">{{ article.text|truncatewords_html:50|safe }}</div>
+                            <div class="post-subtitle">
+                                {% if article.pic %}
+                                <img src="/media/{{ article.pic }}" alt="Превью статьи" style="max-width:100%">
+                                {% endif %}
+                                {% if article.preview_text %}
+                                    {{ article.preview_text|safe }}
+                                {% else %}
+                                    {{ article.text|truncatewords_html:50|safe }}
+                                    <a href="{% url 'articles:article' article.id %}" style="font-weight:600">Читать далее...</a>
+                                {% endif %}
+                            </div>
                             <div class="post-meta d-flex justify-content-between">
                                 <div class="d-flex flex-row align-items-center">
                                     <p>
@@ -29,11 +39,14 @@
                                     {{ article.publish_date }}
                                     </p>
                                 </div>
-                                <!-- Количество комментариев -->
 
                                 <div class="d-flex flex-row align-items-center">
+                                <!-- Количество просмотров -->
+                                <i class="fa-regular fa-eye"></i>
+                                <p class="small ms-1">{{ article.views }}</p>
+                                <!-- Количество комментариев -->
                                 {% if article.comments_count %}
-                                    <i class="fa-regular fa-comment"></i>
+                                    <i class="fa-regular fa-comment ms-2"></i>
                                     <p class="small ms-1">{{ article.comments_count }}</p>
                                 {% endif %}
                                 <!-- Likes -->

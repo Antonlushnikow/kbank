@@ -3,6 +3,7 @@ from .views import (
     ArticleReadView,
     ArticleEditView,
     ArticleCreateView,
+    ArticleDeleteView,
     ArticleLikeAPIView,
     CommentLikeAPIView,
     ArticleListAuthorView,
@@ -10,12 +11,14 @@ from .views import (
     CommentAPIView,
     NotificationReadToggleAPI,
     ReportCommentAPI,
+    SearchResultsView,
 )
 
 urlpatterns = [
     path('<int:pk>/', ArticleReadView.as_view(), name='article'),
     path('create/', ArticleCreateView.as_view(), name='create-article'),
     path('<int:pk>/edit/', ArticleEditView.as_view(), name='edit-article'),
+    path('<int:pk>/delete/', ArticleDeleteView.as_view(), name='delete-article'),
     path('author/<int:pk>/', ArticleListAuthorView.as_view(), name='list-author-articles'),
 
     path('api/<int:pk>/like/', ArticleLikeAPIView.as_view(), name='like-api'),
@@ -25,4 +28,5 @@ urlpatterns = [
     path('api/comment/<int:pk>/hide/', CommentVisibleToggleAPI.as_view(), name='comment-visible-toggle'),
     path('api/comment/<int:pk>/report/', ReportCommentAPI.as_view(), name='report-comment'),
     path('api/notification/<int:pk>/read/', NotificationReadToggleAPI.as_view(), name='notification-read-toggle'),
+    path('search-results/', SearchResultsView.as_view(), name='search'),
 ]

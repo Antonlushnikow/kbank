@@ -1,4 +1,4 @@
-<div class="card mb-2 rounded comment-{{ comment.pk }}" style="margin-left:{{ marginleft }}px">
+<div class="card mb-2 rounded comment-{{ comment.pk }}" id ="comment-{{ comment.pk }}" style="margin-left:{{ marginleft }}px">
     <div class="card-body p-4">
       <p class="mt-2 comment-{{ comment.pk }}{% if not comment.is_visible %} hidden-comment{% endif %}">
           {% if comment.is_visible or user.is_privileged %}
@@ -12,7 +12,7 @@
           <button class="btn btn-primary py-2">Сохранить</button>
           <button class="btn btn-danger py-2">Отмена</button>
       </div>
-      <div class="comment-info justify-content-between text-secondary">
+      <div class="comment-info justify-content-between text-primary">
         <div class="d-flex flex-row align-items-end">
           <img src="/media/{{comment.author.avatar}}" alt="avatar" width="25" height="25" class="rounded-circle"/>
           <div class="small mb-0 ms-2"><a href="{% url 'profile-view' comment.author.pk %}">{{ comment.author }}</a></div>
