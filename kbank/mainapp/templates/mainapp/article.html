@@ -109,7 +109,7 @@
           <h3>Комментарии</h3>
           {% if user.is_authenticated %}
               <div class="form-outline mb-4">
-                  <form method="POST">
+                  <form method="POST" id="form-comment">
                       {% csrf_token %}
                       {{ form.as_p }}
                   </form>
