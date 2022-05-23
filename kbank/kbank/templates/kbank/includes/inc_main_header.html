@@ -29,8 +29,17 @@
 
         <!-- Logo -->
         <a class="navbar-brand" href="/">
-            <img src="{% static 'kbank/img/logo.png' %}" alt="Homepage">
+            <img src="{% static 'kbank/img/logo2.png' %}" alt="Homepage">
         </a>
+        <div style="position: relative;bottom: -0.5rem;"><img src="{% static 'kbank/img/fbchu.png' %}"></div>
+
+        <!-- Search -->
+
+        <div style="max-height:20px">
+          <button class="nav-link px-lg-3 py-lg-2 d-flex align-items-center position-relative" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
         <!-- Main Menu -->
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto py-4 py-lg-0">
@@ -118,7 +127,18 @@
         </div>
     </div>
 </nav>
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3 border  border-2 border-primary bg-light collapse search-box" id="collapseExample">
 
+                        <div class="form-outline">
+                            <form action="{% url 'mainapp:search' %}"  class="search-form" method="GET">
+                                <input name = "search_query" type="search" id="form1" class="search-box-input" placeholder="Введите поисковый запрос" aria-label="Search" />
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
 
 
 <nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg navbar-dark bg-primary px-3">

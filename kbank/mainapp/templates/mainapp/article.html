@@ -1,5 +1,6 @@
 {% extends 'kbank/base.html' %}
 {% load static %}
+{% load templatetags %}
 
 {% block head %}
     <title>{{ article.title }}</title>
@@ -31,6 +32,11 @@
                             </li>
                             <li>
                                 <a href="{% url 'moderation:article-visible-toggle' article.pk %} ">{% if article.is_visible %}Скрыть{% else %}Опубликовать{% endif %}</a>
+                            </li>
+                        {% endif %}
+                        {% if request.user.is_privileged %}
+                            <li>
+                                <a href="{% url 'articles:delete-article' article.pk %} ">Удалить</a>
                             </li>
                         {% endif %}
                         {% if request.user.is_authenticated and not article.moderation_required%}
@@ -96,38 +102,42 @@
 
 <!-- Комментарии -->
 <div class="container position-relative px-2 px-lg-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-8">
-        <div class="card shadow-0 border" style="background-color: #f0f2f5;">
-          <div class="card-body p-6">
-            <h3>Комментарии</h3>
-            {% if user.is_authenticated %}
-                <div class="form-outline mb-4">
-                    <form method="POST">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                    </form>
-                </div>
-            {% else %}
-                <p><a href="{% url 'auth:login' %}">Авторизуйтесь</a>, чтобы оставить комментарий</p>
-            {% endif %}
-            {% if not article.comments.all %}
-                Никто не оставил комментариев...
-            {% else %}
-                {% for comment in article.comments.all %}
-                    {% if not comment.parent %}
-                        {% with child=True marginleft=10 %}
-                         {% include 'mainapp/includes/inc_comment.html' %}
-                        {% endwith %}
-
-                {% endif %}
-                {% endfor %}
-            {% endif %}
-
-          </div>
+  <div class="row d-flex justify-content-center" id="comments">
+    <div class="col-md-8 col-lg-8">
+      <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+        <div class="card-body p-6">
+          <h3>Комментарии</h3>
+          {% if user.is_authenticated %}
+              <div class="form-outline mb-4">
+                  <form method="POST">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                  </form>
+              </div>
+          {% else %}
+              <p><a href="{% url 'auth:login' %}">Авторизуйтесь</a>, чтобы оставить комментарий</p>
+          {% endif %}
+          {% if not article.comments.all %}
+              Никто не оставил комментариев...
+          {% else %}
+            <div class="me-2 mb-2 d-flex justify-content-end text-primary small">
+                Сначала:
+                <a href="?sort=old#comments" style="border-bottom: 1px dotted;" class="ms-2">старые</a>
+                <a href="?sort=new#comments" style="border-bottom: 1px dotted;" class="ms-2">новые</a>
+                <a href="?sort=likes#comments" style="border-bottom: 1px dotted;" class="ms-2">лучшие</a>
+            </div>
+            {% for comment in article.comments.all|sort_by:sorting_method %}
+              {% if not comment.parent %}
+                  {% with child=True marginleft=10 %}
+                   {% include 'mainapp/includes/inc_comment.html' %}
+                  {% endwith %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
         </div>
       </div>
     </div>
+  </div>
 </div>
 <br>
 

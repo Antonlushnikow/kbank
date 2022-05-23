@@ -101,7 +101,7 @@ class Comment(models.Model):
         related_name='comment_likes',
     )
     publish_date = models.DateTimeField(auto_now_add=True)
-    moderation_required = models.BooleanField(default=True, verbose_name='Требуется модерация')
+    moderation_required = models.BooleanField(default=False, verbose_name='Требуется модерация')
 
     is_visible = models.BooleanField(default=True, verbose_name='Опубликовано')
     parent = models.ForeignKey(

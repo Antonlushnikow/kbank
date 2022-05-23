@@ -29,16 +29,17 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-DOMAIN_NAME = 'http://кванк.рф'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_HOST_USER = 'kbank.kbank@mail.ru'
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
+DOMAIN_NAME = 'https://fbchu.ru'
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 25
 
 ALLOWED_HOSTS = [
     '89.108.64.59',
-    'xn--80adxco.xn--p1ai'
+    'xn--80adxco.xn--p1ai',
+    'fbchu.ru',
 ]
 
 
@@ -68,7 +69,7 @@ INSTALLED_APPS = [
     'django_filters',
     'tagulous',
     'slugify',
-
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -100,6 +101,9 @@ TEMPLATES = [
                 'kbank.context_processors.add_categories',
                 'kbank.context_processors.add_notifications',
             ],
+            'libraries': {
+                'templatetags': 'kbank.templatetags.templatetags'
+            }
         },
     },
 ]

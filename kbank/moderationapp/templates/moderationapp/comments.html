@@ -39,15 +39,16 @@
                         <tr>
                             <td align="left" width="60%">
 
+                            <div class="card mb-2 rounded comment-{{ comment.pk }}" id ="comment-{{ comment.pk }}" style="margin-left:{{ marginleft }}px">
                                 <p class="mt-2 comment-{{ comment.pk }}">
-
                                 {{ comment.body }}
                                 </p>
-                                                    <div class="edit-input-comment-{{ comment.pk }}" hidden>
-                        <textarea type="text"  class="form-control" rows="5">{{ comment.body }}</textarea><br>
-                        <button class="btn btn-primary py-2">Сохранить</button>
-                        <button class="btn btn-danger py-2">Отмена</button>
-                    </div>
+                            </div>
+                            <div class="edit-input-comment-{{ comment.pk }}" hidden>
+                                <textarea type="text"  class="form-control" rows="5">{{ comment.body }}</textarea><br>
+                                <button class="btn btn-primary py-2">Сохранить</button>
+                                <button class="btn btn-danger py-2">Отмена</button>
+                            </div>
 
                             </td>
                             <td align="center" width="25%">
