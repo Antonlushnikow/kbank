@@ -13,7 +13,11 @@ class ArticleCreateForm(forms.ModelForm):
         fields = [
             'title',
             'category',
+            'preview_text',
             'text',
+            'pic',
+            'source_text',
+            'source_url',
             'tags',
         ]
 
@@ -32,7 +36,11 @@ class ArticleEditForm(forms.ModelForm):
         fields = [
             'title',
             'category',
+            'preview_text',
             'text',
+            'pic',
+            'source_text',
+            'source_url',
             'tags',
         ]
 

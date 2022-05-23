@@ -60,8 +60,16 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
+                {% if article.preview_text %}
+                {{ article.preview_text|safe }}
+                {% endif %}
+                {% if article.pic %}
+                <img src="/media/{{ article.pic }}" alt="Превью статьи" style="max-width:100%">
+                {% endif %}
                 {{ article.text|safe }}
-
+                {% if article.source_text %}
+                <i>Источник: </i><a href="{{ article.source_url }}">{{ article.source_text }}</a>
+                {% endif %}
                 <!-- Likes -->
                 <div class="float-end mb-2">
                     <!-- Количество просмотров -->
@@ -93,24 +101,25 @@
 
 
 <!-- Комментарии -->
-<div class="row d-flex justify-content-center" id="comments">
-  <div class="col-md-8 col-lg-8">
-    <div class="card shadow-0 border" style="background-color: #f0f2f5;">
-      <div class="card-body p-6">
-        <h3>Комментарии</h3>
-        {% if user.is_authenticated %}
-            <div class="form-outline mb-4">
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                </form>
-            </div>
-        {% else %}
-            <p><a href="{% url 'auth:login' %}">Авторизуйтесь</a>, чтобы оставить комментарий</p>
-        {% endif %}
-        {% if not article.comments.all %}
-            Никто не оставил комментариев...
-        {% else %}
+<div class="container position-relative px-2 px-lg-5">
+  <div class="row d-flex justify-content-center" id="comments">
+    <div class="col-md-8 col-lg-8">
+      <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+        <div class="card-body p-6">
+          <h3>Комментарии</h3>
+          {% if user.is_authenticated %}
+              <div class="form-outline mb-4">
+                  <form method="POST">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                  </form>
+              </div>
+          {% else %}
+              <p><a href="{% url 'auth:login' %}">Авторизуйтесь</a>, чтобы оставить комментарий</p>
+          {% endif %}
+          {% if not article.comments.all %}
+              Никто не оставил комментариев...
+          {% else %}
             <div class="me-2 mb-2 d-flex justify-content-end text-primary small">
                 Сначала:
                 <a href="?sort=old#comments" style="border-bottom: 1px dotted;" class="ms-2">старые</a>
@@ -118,19 +127,19 @@
                 <a href="?sort=likes#comments" style="border-bottom: 1px dotted;" class="ms-2">лучшие</a>
             </div>
             {% for comment in article.comments.all|sort_by:sorting_method %}
-                {% if not comment.parent %}
-                    {% with child=True marginleft=10 %}
-                     {% include 'mainapp/includes/inc_comment.html' %}
-                    {% endwith %}
-
-            {% endif %}
+              {% if not comment.parent %}
+                  {% with child=True marginleft=10 %}
+                   {% include 'mainapp/includes/inc_comment.html' %}
+                  {% endwith %}
+              {% endif %}
             {% endfor %}
-        {% endif %}
-
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
 </div>
+<br>
 
 <!-- Скрипты для подключения лайков, работы с комментариями -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
