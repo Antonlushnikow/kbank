@@ -3,9 +3,16 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
+from django.contrib.sitemaps.views import sitemap
 
 from mainapp.views import ArticlesListView, CategoryListView, NotificationsListView, TagListView
 from authapp.views import ProfileView, KbankUserPasswordResetView
+
+from kbank.sitemaps import KbankSitemap
+
+sitemaps = {
+    'aricles': KbankSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +42,9 @@ urlpatterns = [
          name='password_reset_complete'
          ),
     path('notifications', NotificationsListView.as_view(), name='notifications-view'),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+    path('robots.txt', include('robots.urls')),
 ]
 
 if settings.DEBUG:

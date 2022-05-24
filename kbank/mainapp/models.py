@@ -2,6 +2,7 @@ from datetime import datetime, timezone, timedelta
 
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 from tinymce.models import HTMLField
 from .utils import plural_time
 from django.utils.timezone import now
@@ -76,6 +77,9 @@ class Article(models.Model):
     @property
     def is_last_month(self):
         return now() < self.publish_date + timedelta(days=TOP_ARTICLE_DURATION_DAYS)
+
+    def get_absolute_url(self):
+        return reverse('articles:article', args=[str(self.id)])
 
     class Meta:
         verbose_name = "статья"
