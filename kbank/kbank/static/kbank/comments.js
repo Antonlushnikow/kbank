@@ -125,7 +125,7 @@ $(document).ready(function(){
             let once = true;
             let divComment = $(`.comment-${context.objectId}`)[0];  // Edit Comment Div
             let div = document.createElement("div");
-            let form = document.getElementsByTagName("form")[0];
+            let form = document.getElementById("form-comment");
             div.className = 'form-outline mb-4';
             div.innerHTML = '<form method="POST">' + form.innerHTML + '<input type=hidden name="parent" value="' + context.objectId + '" id="id_parent"></form>';
             divComment.after(div);
