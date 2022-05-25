@@ -8,11 +8,10 @@
 
 {% block content %}
     {% if articles %}
-        {% for article in articles %}
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
-
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center infinite-container">
+                {% for article in articles %}
+                    <div class="kbank-post col-md-10 col-lg-8 col-xl-7 infinite-item">
                         <div class="post-preview">
                             <a href="{% url 'articles:article' article.id %}">
                                 <h2 class="post-title">{{ article.title }}</h2>
@@ -65,16 +64,16 @@
                         <div class="chips col-md-10 col-lg-8 col-xl-7">
                             {% for tag in article.tags.all %}
                             <a href="{% url 'tag-list' tag.slug %}">
-                             <div class="chip">
-                                 {{ tag }}
-                              </div>
+                                <div class="chip">
+                                  {{ tag }}
+                                </div>
                             </a>
                             {% endfor %}
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     {% else %}
         <div class="container px-4 px-lg-5">
            <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -84,10 +83,21 @@
            </div>
         </div>
     {% endif %}
+    {% if page_obj.has_next %}
+        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More</a>
+    {% endif %}
 
 <!-- Скрипты для подключения лайков -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'kbank/update-likes.js' %}" type="text/javascript"></script>
+
+<script src="{% static 'kbank/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'kbank/infinite.min.js' %}"></script>
+<script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+    })
+</script>
 
 {% endblock %}
 
