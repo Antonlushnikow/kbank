@@ -2,158 +2,168 @@
 <span class="screen-darken"></span>
 <!-- Navigation-->
 <div class="d-flex flex-column">
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
 
-    <div class="container px-4 px-lg-5">
-        <!-- Categories Menu -->
-        <ul class="navbar-nav ms-auto py-lg-0">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle px-lg-3 py-3" data-bs-toggle="dropdown" href="" >
-                    <i class="fa-solid fa-bars fs-3"></i>
-                </a>                
-                <a data-trigger="navbar_main" class="nav-link  px-lg-3 py-3 d-lg-none btn" type="button">
-                    <i class="fa-solid fa-bars fs-3"></i>
-                </a>
+        <div class="container px-4 px-lg-5">
+            <div class="col-auto me-auto d-flex">
+                <!-- Categories Menu -->
+                <ul class="navbar-nav ms-auto py-1">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle px-lg-3 py-3" data-bs-toggle="dropdown" href="">
+                            <i class="fa-solid fa-bars fs-3"></i>
+                        </a>
+                        <a data-trigger="navbar_main" class="nav-link  px-lg-3 py-3 d-lg-none btn" type="button">
+                            <i class="fa-solid fa-bars fs-3"></i>
+                        </a>
 
-                <ul class="dropdown-menu rounded">
-                    {% for category in categories %}
-                        <li>
-                            <a class="dropdown-item px-lg-3 py-3 py-lg-4" href="{% url 'category' category.slug %}">
-                                {{ category.title }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </li>
-        </ul>
-
-
-
-        <!-- Logo -->
-        <a class="navbar-brand" href="/">
-            <img src="{% static 'kbank/img/logo2.png' %}" alt="Homepage">
-        </a>
-        <div style="position: relative;bottom: -0.5rem;"><img src="{% static 'kbank/img/fbchu.png' %}"></div>
-
-        <!-- Search -->
-
-        <div style="max-height:20px">
-          <a class="position-relative search-icon" style="left:50%; text-decoration: none;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <i class="fa-solid fa-magnifying-glass fs-1"></i>
-          </a>
-        </div>
-        <!-- Main Menu -->
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'articles:create-article' %}">НОВАЯ СТАТЬЯ</a>
-                </li>
-                {% if not user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
+                        <ul class="dropdown-menu rounded">
+                            {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item px-lg-3 py-3 py-lg-4" href="{% url 'category' category.slug %}">
+                                    {{ category.title }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </li>
-                {% else %}
-                <!-- Notifications -->
-                <ul class="navbar-nav ms-auto py-4 py-lg-0" style="max-width:300px;">
-                        <li class="nav-item dropdown d-flex">
-                            <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex align-items-center position-relative" data-bs-toggle="dropdown"
-                               href="">
-                                <div class="position-relative">
-                                    <i class="far fa-bell" style="font-size: 1.5rem;"></i>
-                                    {% if user.unread_notifications_count %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                </ul>
+
+
+                <!-- Logo -->
+                <a class="m-auto ms-5" href="/">
+                    <img src="{% static 'kbank/img/logo2.png' %}" alt="Homepage">
+                </a>
+                <div class="m-auto ms-5" style="position: relative;bottom: -0.5rem;"><img src="{% static 'kbank/img/fbchu.png' %}"></div>
+            </div>
+            <div class="col-auto d-flex">
+                <!-- Search -->
+                <div class="py-3">
+                    <a class="search-icon" style="text-decoration: none;"
+                       data-bs-toggle="collapse" href="#searchForm" role="button" aria-expanded="false"
+                       aria-controls="collapseExample">
+                        <i class="fa-solid fa-magnifying-glass fs-2"></i>
+                    </a>
+                </div>
+
+                <!-- Main Menu -->
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'articles:create-article' %}">НОВАЯ
+                                СТАТЬЯ</a>
+                        </li>
+                        {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
+                        </li>
+                        {% else %}
+                        <!-- Notifications -->
+                        <ul class="navbar-nav ms-auto py-4 py-lg-0" style="max-width:300px;">
+                            <li class="nav-item dropdown d-flex">
+                                <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex align-items-center position-relative"
+                                   data-bs-toggle="dropdown"
+                                   href="">
+                                    <div class="position-relative">
+                                        <i class="far fa-bell" style="font-size: 1.5rem;"></i>
+                                        {% if user.unread_notifications_count %}
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ user.unread_notifications_count }}
                                     </span>
-                                    {% endif %}
-                                </div>
-                            </a>
+                                        {% endif %}
+                                    </div>
+                                </a>
 
-                            <ul class="dropdown-menu dropdown-menu-end rounded">
-                                {% for item in dropdown_notifications %}
-                                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                                    <div class="toast-header">
-                                      <strong class="me-auto">{{ item.title|title }}</strong>
-                                      <small class="text-muted">{{ item.time_ago }}</small>
-                                      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                <ul class="dropdown-menu dropdown-menu-end rounded">
+                                    {% for item in dropdown_notifications %}
+                                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="toast-header">
+                                            <strong class="me-auto">{{ item.title|title }}</strong>
+                                            <small class="text-muted">{{ item.time_ago }}</small>
+                                            <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="toast-body">
+                                            <a href="{{ item.url }}">{{ item.body }}</a>
+                                        </div>
                                     </div>
-                                    <div class="toast-body">
-                                        <a href="{{ item.url }}">{{ item.body }}</a>
+                                    {% endfor %}
+                                    <div class="toast bg-secondary show" role="alert" aria-live="assertive"
+                                         aria-atomic="true">
+                                        <div class="toast-header">
+                                            <a href="{% url 'notifications-view' %}"><strong class="me-auto">Все
+                                                уведомления</strong></a>
+                                        </div>
                                     </div>
-                                </div>
-                                {% endfor %}
-                                <div class="toast bg-secondary show" role="alert" aria-live="assertive" aria-atomic="true">
-                                    <div class="toast-header">
-                                      <a href="{% url 'notifications-view' %}"><strong class="me-auto">Все уведомления</strong></a>
-                                    </div>
-                                </div>
-                            </ul>
-                        </li>
-                    </ul>
-                    <!-- Profile Dropdown -->
-                    <ul class="navbar-nav ms-auto py-4 py-lg-0" id="navbarResponsive">
-                        <li class="nav-item dropdown d-flex">
-                            <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex" data-bs-toggle="dropdown"
-                               href="">
-                                <img src="{% if user.avatar %}/media/{{user.avatar}}{% else %}/media/users_avatar/default.png{% endif %}" alt="avatar"
-                                     class="rounded-circle row justify-content-center align-self-center" width="40"
-                                     height="40">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end rounded">
-                                <li class="dropdown-header px-lg-3 py-3">
-                                    <h6>{{ user }}</h6>
-                                    <div style="font-size: 0.8rem;">{{ user.email }}</div>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item px-lg-3 py-3"
-                                       href="{% url 'articles:list-author-articles' user.pk %}">мои статьи</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item px-lg-3 py-3" href="{% url 'profile-view' user.pk %}">профиль</a>
-                                </li>
-                                {% if user.is_moderator or user.is_superuser or user.is_staff%}
+                                </ul>
+                            </li>
+                        </ul>
+                        <!-- Profile Dropdown -->
+                        <ul class="navbar-nav ms-auto py-4 py-lg-0" id="navbarResponsive">
+                            <li class="nav-item dropdown d-flex">
+                                <a class="nav-link dropdown-toggle px-lg-3 py-lg-2 d-flex" data-bs-toggle="dropdown"
+                                   href="">
+                                    <img src="{% if user.avatar %}/media/{{user.avatar}}{% else %}/media/users_avatar/default.png{% endif %}"
+                                         alt="avatar"
+                                         class="rounded-circle row justify-content-center align-self-center" width="40"
+                                         height="40">
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end rounded">
+                                    <li class="dropdown-header px-lg-3 py-3">
+                                        <h6>{{ user }}</h6>
+                                        <div style="font-size: 0.8rem;">{{ user.email }}</div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item px-lg-3 py-3"
+                                           href="{% url 'articles:list-author-articles' user.pk %}">мои статьи</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item px-lg-3 py-3" href="{% url 'profile-view' user.pk %}">профиль</a>
+                                    </li>
+                                    {% if user.is_moderator or user.is_superuser or user.is_staff%}
                                     <li>
                                         <a class="dropdown-item px-lg-3 py-3"
                                            href="{% url 'moderation:moderate-articles' %}">модерация</a>
                                     </li>
-                                {% endif %}
-                                <div class="dropdown-divider"></div>
-                                <li>
-                                    <a class="dropdown-item px-lg-3 py-3"
-                                       href="{% url 'auth:logout' %}?next={{ request.path }}">ВЫЙТИ</a>
-                                </li>
-                            </ul>
-                        </li>
+                                    {% endif %}
+                                    <div class="dropdown-divider"></div>
+                                    <li>
+                                        <a class="dropdown-item px-lg-3 py-3"
+                                           href="{% url 'auth:logout' %}?next={{ request.path }}">ВЫЙТИ</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        {% endif %}
                     </ul>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-
-
-</nav>
-        <div class="search-input-form offset-2 col-8 container px-4 px-lg-5" style="position:fixed">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3 border  border-2 border-primary bg-light collapse search-box" id="collapseExample">
-                        <div class="form-outline">
-                            <form action="{% url 'mainapp:search' %}"  class="search-form" method="GET">
-                                <input name = "search_query" type="search" id="form1" class="search-box-input" placeholder="Введите поисковый запрос" aria-label="Search" />
-                            </form>
-                        </div>
                 </div>
             </div>
         </div>
+    </nav>
+    <div class="search-input-form offset-2 col-8 container px-4 px-lg-5" style="position:fixed">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3 border  border-2 border-primary bg-light collapse search-box"
+                 id="searchForm">
+                <div class="form-outline">
+                    <form action="{% url 'mainapp:search' %}" class="search-form" method="GET">
+                        <input name="search_query" type="search" id="form1" class="search-box-input"
+                               placeholder="Введите поисковый запрос" aria-label="Search"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg navbar-dark bg-primary px-3">
     <div class="container-fluid">
-       <div class="offcanvas-header">  
-          <button class="btn-close float-end"></button>
-       </div>
-       <ul class="navbar-nav">
-          <!-- <li class="nav-item active"> <a class="nav-link" href="#">Home </a> </li>
-          <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
-          <li class="nav-item"><a class="nav-link" href="#"> Services </a></li> -->
+        <div class="offcanvas-header">
+            <button class="btn-close float-end"></button>
+        </div>
+        <ul class="navbar-nav">
+            <!-- <li class="nav-item active"> <a class="nav-link" href="#">Home </a> </li>
+            <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
+            <li class="nav-item"><a class="nav-link" href="#"> Services </a></li> -->
             {% for category in categories %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'category' category.slug %}">
@@ -177,16 +187,16 @@
                 <a class="nav-link" href="{% url 'profile-view' user.pk %}">ПРОФИЛЬ</a>
             </li>
             {% if user.is_moderator or user.is_superuser or user.is_staff%}
-                <li class="nav-item py-3">
-                    <a class="nav-link" href="{% url 'moderation:moderate-articles' %}">МОДЕРАЦИЯ</a>
-                </li>
+            <li class="nav-item py-3">
+                <a class="nav-link" href="{% url 'moderation:moderate-articles' %}">МОДЕРАЦИЯ</a>
+            </li>
             {% endif %}
             <div class="dropdown-divider"></div>
             <li class="nav-item py-3">
                 <a class="nav-link" href="{% url 'auth:logout' %}?next={{ request.path }}">ВЫЙТИ</a>
             </li>
             {% endif %}
-       </ul>
+        </ul>
     </div>
 </nav>
 
