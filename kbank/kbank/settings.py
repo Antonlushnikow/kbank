@@ -53,23 +53,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.postgres',
+    'django.contrib.sitemaps',
 
     'mainapp',
     'authapp',
     'moderationapp',
 
-    'tinymce',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
     'authapp.vk',
- 
+
+    'tinymce',
     'django_filters',
     'tagulous',
     'slugify',
-    'django.contrib.postgres',
+    'robots',
 ]
 
 MIDDLEWARE = [

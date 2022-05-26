@@ -34,6 +34,7 @@ SORTING_METHODS = {
     'new': '-publish_date',
     'likes': 'likes',
 }
+ITEMS_ON_PAGE = 5
 
 
 class ArticlesListView(ListView):
@@ -43,6 +44,7 @@ class ArticlesListView(ListView):
     model = Article
     template_name = 'mainapp/index.html'
     context_object_name = 'articles'
+    paginate_by = ITEMS_ON_PAGE
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
@@ -229,6 +231,7 @@ class CategoryListView(ListView):
     model = Article
     template_name = 'mainapp/list-articles.html'
     context_object_name = 'articles'
+    paginate_by = ITEMS_ON_PAGE
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CategoryListView, self).get_context_data()
@@ -248,6 +251,7 @@ class ArticleListAuthorView(ListView):
     model = Article
     template_name = 'mainapp/list-articles.html'
     context_object_name = 'articles'
+    paginate_by = ITEMS_ON_PAGE
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticleListAuthorView, self).get_context_data()
@@ -487,6 +491,7 @@ class TagListView(ListView):
     model = Article
     template_name = 'mainapp/list-articles.html'
     context_object_name = 'articles'
+    paginate_by = ITEMS_ON_PAGE
 
     def get_queryset(self):
         slug = self.kwargs['slug']
