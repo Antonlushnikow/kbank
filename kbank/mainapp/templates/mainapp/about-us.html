@@ -1,0 +1,28 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+{% load templatetags %}
+
+{% block head %}
+    <title>{{ article.title }}</title>
+{% endblock %}
+
+{% block content %}
+
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
+                {% if content.about_us %}
+                    {{ content.about_us|safe }}
+                {% endif %}
+                {% if request.user.is_privileged %}
+                <a href="{% url 'about-us-edit' %}" class="btn btn-primary">Изменить</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</article>
+
+{% endblock %}
+
+
