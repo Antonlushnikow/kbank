@@ -35,6 +35,7 @@ EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = 'info@fbchu.ru'
 
 ALLOWED_HOSTS = [
     '89.108.64.59',
