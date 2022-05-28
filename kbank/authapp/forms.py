@@ -1,3 +1,5 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 import hashlib
 from random import random
@@ -13,6 +15,8 @@ from .models import KbankUser
 
 
 class KbankUserLoginForm(AuthenticationForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label='Подтвердите что вы не робот!')
+
     class Meta:
         model = KbankUser
         fields = ('username', 'password')
@@ -26,6 +30,8 @@ class KbankUserLoginForm(AuthenticationForm):
 
 
 class KbankUserRegistrationForm(UserCreationForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label='Подтвердите что вы не робот!')
+
     class Meta:
         model = KbankUser
         fields = ('username', 'first_name', 'last_name', 'email', 'info', 'avatar', 'password1', 'password2')

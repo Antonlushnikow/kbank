@@ -43,6 +43,7 @@ class ModerationRequiredArticles(PrivilegedPermissionMixin, FilterView):
     """
     Контроллер вывода списка статей для модерации
     """
+    paginate_by = 10
     model = Article
     template_name = 'moderationapp/articles.html'
     context_object_name = 'articles'
@@ -80,6 +81,7 @@ class CommentFilter(FilterSet):
 
 
 class CommentsListView(PrivilegedPermissionMixin, FilterView):
+    paginate_by = 10
     model = Comment
     template_name = 'moderationapp/comments.html'
     context_object_name = 'comments'
@@ -118,6 +120,7 @@ class UserFilter(FilterSet):
 
 
 class UsersListView(PrivilegedPermissionMixin, FilterView):
+    paginate_by = 10
     model = KbankUser
     template_name = 'moderationapp/users.html'
     context_object_name = 'users'
