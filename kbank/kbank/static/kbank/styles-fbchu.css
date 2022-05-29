@@ -12178,3 +12178,21 @@ body.offcanvas-active{
 .search-icon{
     color:#fff;
 }
+
+/* Кнопка для ТГ */
+
+.telegram-button {
+    font-size:20px;
+    width:180px;
+    background:#fff;
+    border:2px rgba(var(--bs-primary-rgb)) solid;
+    box-shadow:1px 1px 5px rgba(var(--bs-primary-rgb));
+    color: rgba(var(--bs-primary-rgb));
+    border-radius:20px;
+}
+
+.telegram-button:hover {
+    background:rgba(var(--bs-primary-rgb));
+    color:#fff;
+    box-shadow: 1px 1px 15px rgba(0,0,0,0.5) !important;
+}
