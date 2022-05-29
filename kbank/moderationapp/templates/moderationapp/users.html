@@ -3,74 +3,98 @@
 
 
 {% block content %}
-    {% include 'moderationapp/includes/inc_moderation_menu.html' %}
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <h3>Пользователи для модерации</h3>
-                    <hr>
-                    <p>
-                        <a class="btn btn-primary nav-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Фильтр
-                        </a>
-                    </p>
+{% include 'moderationapp/includes/inc_moderation_menu.html' %}
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <h3>Пользователи для модерации</h3>
+        <hr>
+        <p>
+            <a class="btn btn-primary nav-link" data-bs-toggle="collapse" href="#collapseExample" role="button"
+               aria-expanded="false" aria-controls="collapseExample">
+                Фильтр
+            </a>
+        </p>
 
-                    <div class="collapse" id="collapseExample">
-                        <div class="card card-body">
-                                    <form action="" method="get">
-                                    {{ filter.form.as_p }}
-                                    <input type="submit"/>
-                                </form>
-                        </div>
-                    </div>
-                    {% if users %}
-                        <div class="row gx-4 gx-lg-5 justify-content-center">
-                            <div class="col-md-10 col-lg-8 col-xl-7">
-
-                                <table class="table table-hover">
-                                    <tr>
-                                        <th>Псевдоним</th>
-                                        <th>Имя</th>
-                                        <th>Фамилия</th>
-                                    </tr>
-                                    {% for user in users %}
-                                        <tr>
-                                            <td width="20%"><a
-                                                    href="{% url 'profile-view' user.pk %}"> {{ user.username }}</a>
-                                            </td>
-                                            <td width="40%"><a
-                                                    href="{% url 'profile-view' user.pk %}"> {{ user.first_name }}</a>
-                                            <td width="40%"><a
-                                                    href="{% url 'profile-view' user.pk %}"> {{ user.last_name }}</a>
-                                            </td>
-                                            <td>
-                                            <!-- Block User -->
-                                                <a href="{% url 'authapp:block-user' user.pk %}">
-                                                <i class="fa-solid fa-user-lock"></i>
-                                                </a>
-                                            </td>
-                                            {% if user.moderation_required %}
-                                            <td>
-                                            <!-- Set moderation passed -->
-                                                <a href="{% url 'moderation:user-checked' user.pk %}">
-                                                <i class="fa-solid fa-user-check"></i>
-                                                </a>
-                                            </td>
-                                        {% endif %}
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                        </div>
-
-                    {% else %}
-                        <div class=" container px-4 px-lg-5">
-                            <div class="row gx-4 gx-lg-5 justify-content-center">
-                                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
-                                    Нет пользователей для модерации.
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <form action="" method="get">
+                    {{ filter.form.as_p }}
+                    <input type="submit"/>
+                </form>
             </div>
         </div>
+        {% if users %}
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+
+                <table class="table table-hover">
+                    <tr>
+                        <th>Псевдоним</th>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                    </tr>
+                    {% for user in users %}
+                    <tr>
+                        <td width="20%"><a
+                                href="{% url 'profile-view' user.pk %}"> {{ user.username }}</a>
+                        </td>
+                        <td width="40%"><a
+                                href="{% url 'profile-view' user.pk %}"> {{ user.first_name }}</a>
+                        <td width="40%"><a
+                                href="{% url 'profile-view' user.pk %}"> {{ user.last_name }}</a>
+                        </td>
+                        <td>
+                            <!-- Block User -->
+                            <a href="{% url 'authapp:block-user' user.pk %}">
+                                <i class="fa-solid fa-user-lock"></i>
+                            </a>
+                        </td>
+                        {% if user.moderation_required %}
+                        <td>
+                            <!-- Set moderation passed -->
+                            <a href="{% url 'moderation:user-checked' user.pk %}">
+                                <i class="fa-solid fa-user-check"></i>
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="col-md-10 col-lg-10 col-xl-7 d-flex justify-content-center m-auto">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">&laquo;</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="true">{{ page_obj.previous_page_number }}</a>
+                </li>
+                {% endif %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">{{ page_obj.number }}</a>
+                </li>
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" tabindex="-1" aria-disabled="true"> {{ page_obj.next_page_number }} </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" tabindex="-1" aria-disabled="true">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% else %}
+        <div class=" container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
+                    Нет пользователей для модерации.
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock %}

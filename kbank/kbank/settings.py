@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'tagulous',
     'slugify',
     'robots',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -230,3 +231,6 @@ SERIALIZATION_MODULES = {
     'python': 'tagulous.serializers.python',
     'yaml':   'tagulous.serializers.pyyaml',
 }
+
+RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_KEY')
+RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_SECRET')
