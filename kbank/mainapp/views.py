@@ -511,8 +511,8 @@ class AboutUsView(DetailView):
         if SiteSettings.objects.exists():
             obj = SiteSettings.objects.all()[0]
         else:
-            pass
-
+            obj = SiteSettings.objects.create(about_us='О нас')
+            obj.save()
         return obj
 
 
@@ -524,6 +524,9 @@ class SiteSettingsEditView(UpdateView):
     template_name = 'mainapp/edit-about-us.html'
     form_class = SiteSettingsEditForm
     success_url = reverse_lazy('about-us')
+
+    def get_object(self):
+        return SiteSettings.objects.all()[0]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SiteSettingsEditView, self).get_context_data()

@@ -169,7 +169,6 @@ class SiteSettings(models.Model):
         upload_to='site_pics/',
         blank=True,
         default='site_pics/default_logo.png',
-        height_field=70,
         verbose_name='лого сайта',
     )
 

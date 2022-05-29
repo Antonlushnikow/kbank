@@ -15,6 +15,7 @@
                 {% if content.about_us %}
                     {{ content.about_us|safe }}
                 {% endif %}
+                <br><br>
                 {% if request.user.is_privileged %}
                 <a href="{% url 'about-us-edit' %}" class="btn btn-primary">Изменить</a>
                 {% endif %}
