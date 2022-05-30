@@ -463,7 +463,7 @@ class SearchResultsView(ListView):
     context_object_name = 'search_results'
 
     def get_queryset(self):
-        vector = SearchVector('text', 'tags', 'title', config='russian')
+        vector = SearchVector('text', 'tags', 'title', 'preview_text', config='russian')
 
         query = SearchQuery(self.request.GET.get('search_query'), config='russian', search_type='phrase')
 
