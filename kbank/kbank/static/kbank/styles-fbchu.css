@@ -12184,7 +12184,7 @@ body.offcanvas-active{
 
 .telegram-button {
     font-size:20px;
-    width:180px;
+    text-align: center;
     background:#fff;
     border:2px rgba(var(--bs-primary-rgb)) solid;
     box-shadow:1px 1px 5px rgba(var(--bs-primary-rgb));
