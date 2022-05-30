@@ -5,7 +5,15 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 
-from mainapp.views import ArticlesListView, CategoryListView, NotificationsListView, TagListView
+from mainapp.views import (
+    ArticlesListView,
+    CategoryListView,
+    NotificationsListView,
+    TagListView,
+    AboutUsView,
+    SiteSettingsEditView,
+)
+
 from authapp.views import ProfileView, KbankUserPasswordResetView
 
 from kbank.sitemaps import KbankSitemap
@@ -23,6 +31,8 @@ urlpatterns = [
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile-view'),
     path('accounts/', include('allauth.urls')),
+    path('about-us-edit/', SiteSettingsEditView.as_view(), name='about-us-edit'),
+    path('about-us/', AboutUsView.as_view(), name='about-us'),
     path('moderation/', include(('moderationapp.urls', 'moderationapp'), namespace='moderation')),
 
     path('forgotpassword/',

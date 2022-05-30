@@ -104,6 +104,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'kbank.context_processors.add_categories',
                 'kbank.context_processors.add_notifications',
+                'kbank.context_processors.get_site_logo',
             ],
             'libraries': {
                 'templatetags': 'kbank.templatetags.templatetags'

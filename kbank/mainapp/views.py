@@ -1,11 +1,8 @@
-import django.views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery, SearchHeadline, TrigramWordDistance, \
-    TrigramDistance
+from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery, SearchHeadline
 from django.http import HttpResponseNotFound
-from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
+from django.shortcuts import get_object_or_404,  HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.views import View
 from django.views.generic import (
     DetailView,
     CreateView,
@@ -18,15 +15,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
 
-from .models import Article, Category, Comment, Notification
+from .models import Article, Category, Comment, Notification, SiteSettings
 from authapp.models import KbankUser
-from .forms import ArticleCreateForm, ArticleEditForm, CommentForm
+from .forms import ArticleCreateForm, ArticleEditForm, CommentForm, SiteSettingsEditForm
 from .serializers import CommentSerializer
 from authapp.permissions import Privileged
 from .utils import PersonalNotification
 
-from django.db.models import Count, Value
-from django.utils.text import slugify
+from django.db.models import Count
 
 TOP_ARTICLE_COUNT = 5
 SORTING_METHODS = {
@@ -496,3 +492,49 @@ class TagListView(ListView):
     def get_queryset(self):
         slug = self.kwargs['slug']
         return Article.objects.filter(tags__slug=slug, is_visible=True).order_by('-publish_date')
+
+
+class AboutUsView(DetailView):
+    """
+    Контроллер вывода страницы О нас
+    """
+    model = SiteSettings
+    template_name = 'mainapp/about-us.html'
+    context_object_name = 'content'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(AboutUsView, self).get_context_data()
+        context['title'] = 'о нас'
+        return context
+
+    def get_object(self, queryset=None):
+        if SiteSettings.objects.exists():
+            obj = SiteSettings.objects.all()[0]
+        else:
+            obj = SiteSettings.objects.create(about_us='О нас')
+            obj.save()
+        return obj
+
+
+class SiteSettingsEditView(UpdateView):
+    """
+    Контроллер редактирования страницы О нас
+    """
+    model = SiteSettings
+    template_name = 'mainapp/edit-about-us.html'
+    form_class = SiteSettingsEditForm
+    success_url = reverse_lazy('about-us')
+
+    def get_object(self):
+        return SiteSettings.objects.all()[0]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(SiteSettingsEditView, self).get_context_data()
+        context['title'] = 'редактирование сайта'
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.is_superuser or request.user.is_moderator:
+                return super(SiteSettingsEditView, self).dispatch(request, *args, **kwargs)
+        return HttpResponseRedirect('/')
