@@ -1,0 +1,15 @@
+{% extends 'kbank/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container position-relative px-4 px-lg-5">
+     <div class="mb-3">
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">ИЗМЕНИТЬ</button>
+        </form>
+    </div>
+</div>
+{% include 'mainapp/includes/inc_tinymce.html' %}
+{% endblock %}

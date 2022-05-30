@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import HiddenInput
 
-from .models import Article, Comment
+from .models import Article, Comment, SiteSettings
 
 
 class ArticleCreateForm(forms.ModelForm):
@@ -73,3 +73,20 @@ class CommentForm(forms.ModelForm):
         labels = {
             'body': '',
         }
+
+
+class SiteSettingsEditForm(forms.ModelForm):
+    # Форма изменения статьи
+    class Meta:
+        model = SiteSettings
+        fields = [
+            'about_us',
+            'logo_pic',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(SiteSettingsEditForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
