@@ -16,6 +16,15 @@ function submitForm(){
 }
 
 function submitNewArticle(){
-    showPopup("Спасибо! Что поделились знанием! Ваша статья отправлена на модерацию");
-    submitForm();
+    const text = tinymce.get("id_text").getContent();
+    const title = document.getElementById("id_title").value;
+    const category = document.getElementById("id_category").value;
+
+    if(text!="" && title!="" && category!=""){
+        showPopup("Спасибо, что поделились информацией! Ваша статья отправлена на модерацию!");
+        submitForm();
+    }
+    else{
+        document.getElementById("create-article").submit();
+    }
 }

@@ -101,7 +101,6 @@ class ArticleCreateView(CreateView):
             request=self.request,
             url=url,
         ).create()
-
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -460,7 +459,7 @@ class SearchResultsView(ListView):
     context_object_name = 'search_results'
 
     def get_queryset(self):
-        vector = SearchVector('text', config='russian')
+        vector = SearchVector('text', 'tags', 'title', 'preview_text', config='russian')
 
         query = SearchQuery(self.request.GET.get('search_query'), config='russian', search_type='phrase')
 
@@ -477,7 +476,7 @@ class SearchResultsView(ListView):
             headline=search_headline).filter(
             rank__gte=0.001).order_by('-rank')
 
-        return qs
+        return qs.distinct()
 
 
 class TagListView(ListView):
