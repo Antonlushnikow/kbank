@@ -2,7 +2,6 @@ from datetime import datetime, timezone, timedelta
 
 from django.db import models
 from django.conf import settings
-from django.contrib.admin import ModelAdmin
 from django.urls import reverse
 from tinymce.models import HTMLField
 
@@ -175,8 +174,3 @@ class SiteSettings(models.Model):
     class Meta:
         verbose_name = 'настройки сайта'
         verbose_name_plural = 'настройки сайта'
-
-
-class SiteSettingsAdmin(ModelAdmin):
-    def has_add_permission(self, request):
-        return SiteSettings.objects.exists()
