@@ -1637,7 +1637,7 @@ progress {
 
     .col-xl-7 {
         flex: 0 0 auto;
-        width: 68.33333333%;
+        width: 58.33333333%;
     }
 
     .col-xl-8 {
@@ -7172,7 +7172,7 @@ textarea.form-control-lg {
 }
 
 .border-primary {
-    border-color: #0085A1 !important;
+    border-color: rgba(var(--bs-primary-rgb)) !important;
 }
 
 .border-secondary {
@@ -11881,12 +11881,15 @@ ul.post-meta {
     list-style: none;
 }
 
-.kbank-post {
+.top-articles {
     background-color: #fff;
     border-radius: 1rem;
     margin-bottom: 3rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    font-size: 1.1rem;
 }
 
 .errorlist {
@@ -11904,11 +11907,23 @@ ul.post-meta {
     cursor: pointer;
 }
 
-.kbank-post img {
+
+
+.fbchu-post {
+    padding-left: calc(var(--bs-gutter-x) * 0.9);
+    padding-right: calc(var(--bs-gutter-x)  * 0.9);
+    background-color: #fff;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.fbchu-post img {
     max-width: 100%;
 }
 
-.kbank-post iframe {
+.fbchu-post iframe {
     max-width: 100%;
 }
 
@@ -11918,8 +11933,6 @@ ul.post-meta {
 .hidden-comment {
     color: #ddd;
 }
-
-
 
 .profile-top {
     height: 200px;
@@ -11947,6 +11960,30 @@ body.offcanvas-active{
 	width:100%;
 	visibility:visible;
 }
+
+
+/* Кнопка для ТГ */
+
+.telegram-button {
+    display: block;
+    font-size:20px;
+    text-align: center;
+    background:#fff;
+    border:2px rgba(var(--bs-primary-rgb)) solid;
+    box-shadow:1px 1px 5px rgba(var(--bs-primary-rgb));
+    color: rgba(var(--bs-primary-rgb));
+    border-radius:20px;
+    padding-left: calc(var(--bs-gutter-x) * 0.3);
+    padding-right: calc(var(--bs-gutter-x) * 0.3);
+}
+
+.telegram-button:hover {
+    background:rgba(var(--bs-primary-rgb));
+    color:#fff;
+    box-shadow: 1px 1px 15px rgba(0,0,0,0.5) !important;
+}
+
+
 
 /* ============ mobile view ============ */
 @media all and (max-width: 992px) {
@@ -11994,7 +12031,13 @@ body.offcanvas-active{
         padding-bottom: 1rem;
     }
 
+    .top-articles {
+        display: none;
+    }
 
+    .telegram-button {
+        display: none;
+    }
 }
 
 @media all and (max-width: 859px) {
@@ -12178,22 +12221,4 @@ body.offcanvas-active{
 }
 .search-icon{
     color:#fff;
-}
-
-/* Кнопка для ТГ */
-
-.telegram-button {
-    font-size:20px;
-    text-align: center;
-    background:#fff;
-    border:2px rgba(var(--bs-primary-rgb)) solid;
-    box-shadow:1px 1px 5px rgba(var(--bs-primary-rgb));
-    color: rgba(var(--bs-primary-rgb));
-    border-radius:20px;
-}
-
-.telegram-button:hover {
-    background:rgba(var(--bs-primary-rgb));
-    color:#fff;
-    box-shadow: 1px 1px 15px rgba(0,0,0,0.5) !important;
 }

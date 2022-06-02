@@ -7,22 +7,11 @@
 
 
 {% block content %}
-    {% if articles %}
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 mt-1 mb-3 justify-content-center">
-                <a href="https://t.me/FBChu" target="_blank" class="telegramim_button telegram-button pt-2 pb-2 col-md-10 col-lg-8 col-xl-6" title=""><i class="fa-brands fa-telegram"></i> Фёдор, Бонд и Чук - наш канал в Telegram</a>
-            </div>
-            <div class="row gx-4 gx-lg-5 justify-content-center infinite-container">
-                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3 border  border-2 border-primary bg-light top-articles">
-                    <h6>Популярное за месяц</h6><hr>
-                    {% for top_article in top_articles %}
-                    <i class="fa-solid fa-fire me-2"></i>
-                    <a href="{% url 'articles:article' top_article.id %}">{{ top_article.title }}</a>
-                     <i class="like-icon-5 fa-regular fa-heart ms-2 me-1"></i><span>{{ top_article.likes.count }}</span><br>
-                    {% endfor %}
-                </div>
+    <div class="container px-4 px-lg-5 pt-4">
+        <div class="row gx-3 gx-lg-4 justify-content-center">
+            <div class="col-lg-7 col-xl-8 infinite-container">
             {% for article in articles %}
-                <div class="kbank-post col-md-10 col-lg-8 col-xl-7 infinite-item">
+                <div class="fbchu-post infinite-item">
                     <div class="post-preview">
                         <a href="{% url 'articles:article' article.id %}">
                             <h2 class="post-title">{{ article.title }}</h2>
@@ -82,21 +71,27 @@
                         {% endfor %}
                     </div>
                 </div>
+                    {% if page_obj.has_next %}
+                        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More</a>
+                    {% endif %}
             {% endfor %}
-        {% else %}
-            <div class="container px-4 px-lg-5">
-               <div class="row gx-4 gx-lg-5 justify-content-center">
-                 <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
-                     Статей пока нет
-                 </div>
-               </div>
             </div>
-        {% endif %}
+            <div class="col-md-3 col-lg-4 col-xl-3 align-self-start">
+                <!-- Кнопка телеграм -->
+                <div class="mt-1 mb-3">
+                    <a href="https://t.me/FBChu" target="_blank" class="telegram-button pt-2 pb-2 border-primary w-100" title=""><i class="fa-brands fa-telegram me-1"></i> Мы в Telegram</a>
+                </div>
+                <div  class="border border-2 border-primary bg-light py-3 top-articles">
+                    <h6>Популярное за месяц</h6><hr>
+                    {% for top_article in top_articles %}
+                    <i class="fa-solid fa-fire me-1"></i>
+                    <a href="{% url 'articles:article' top_article.id %}">{{ top_article.title }}</a>
+                    <i class="like-icon-5 fa-regular fa-heart ms-2 me-1"></i><span>{{ top_article.likes.count }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-    {% if page_obj.has_next %}
-        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More</a>
-    {% endif %}
 
 <!-- Скрипты для подключения лайков -->
 <script src="{% static 'kbank/jquery-3.6.0.min.js' %}" type="text/javascript"></script>
