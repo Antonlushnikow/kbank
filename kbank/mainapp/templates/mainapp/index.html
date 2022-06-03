@@ -71,10 +71,10 @@
                         {% endfor %}
                     </div>
                 </div>
-                    {% if page_obj.has_next %}
-                        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More</a>
-                    {% endif %}
             {% endfor %}
+            {% if page_obj.has_next %}
+                <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More</a>
+            {% endif %}
             </div>
             <div class="col-md-3 col-lg-4 col-xl-3 align-self-start">
                 <!-- Кнопка телеграм -->
