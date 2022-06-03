@@ -15,7 +15,7 @@ from .models import KbankUser
 
 
 class KbankUserLoginForm(AuthenticationForm):
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label='Подтвердите что вы не робот!')
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox, label='Подтвердите, что вы не робот!')
 
     class Meta:
         model = KbankUser
@@ -23,7 +23,6 @@ class KbankUserLoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(KbankUserLoginForm, self).__init__(*args, **kwargs)
-
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control mb-2'
             field.help_text = ''
