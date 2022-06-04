@@ -192,7 +192,7 @@ AUTH_USER_MODEL = 'authapp.KbankUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-SITE_ID = 4
+SITE_ID = 6
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

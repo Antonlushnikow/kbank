@@ -172,6 +172,13 @@ class SiteSettings(models.Model):
         verbose_name='лого сайта',
     )
 
+    pinned_article = models.OneToOneField(
+        Article,
+        null=True,
+        related_name="pinned_article",
+        on_delete=models.SET_NULL,
+    )
+
     class Meta:
         verbose_name = 'настройки сайта'
         verbose_name_plural = 'настройки сайта'

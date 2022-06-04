@@ -38,6 +38,9 @@
                             <li>
                                 <a href="{% url 'articles:delete-article' article.pk %} ">Удалить</a>
                             </li>
+                            <li>
+                                <a href="{% url 'articles:pin-article' article.pk %} ">Закрепить</a>
+                            </li>
                         {% endif %}
                         {% if request.user.is_authenticated and not article.moderation_required%}
                             <li>
