@@ -147,7 +147,7 @@
     </nav>
     <div class="search-input-form offset-2 col-8 container px-4 px-lg-5" style="position:fixed; z-index: 999;">
         <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3 border  border-2 border-primary bg-light collapse search-box"
+            <div class="fbchu-post col-md-10 col-lg-8 col-xl-7 py-3 border  border-2 border-primary bg-light collapse search-box"
                  id="searchForm">
                 <div class="form-outline">
                     <form action="{% url 'mainapp:search' %}" class="search-form" method="GET">
@@ -168,7 +168,7 @@
         </div>
         <ul class="navbar-nav">
             {% for category in categories %}
-            <li class="nav-item">
+            <li class="nav-item py-1">
                 <a class="nav-link" href="{% url 'category' category.slug %}">
                     {{ category.title|upper }}
                 </a>
@@ -183,20 +183,20 @@
             <div class="dropdown-divider"></div>
             {% if not user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
+                <a class="nav-link px-lg-3 py-2 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
             </li>
             {% else %}
-            <li class="nav-item py-3">
+            <li class="nav-item py-2">
                 <a class="nav-link" href="{% url 'articles:create-article' %}">НОВАЯ СТАТЬЯ</a>
             </li>
-            <li class="nav-item py-3">
+            <li class="nav-item py-2">
                 <a class="nav-link" href="{% url 'articles:list-author-articles' user.pk %}">МОИ СТАТЬИ</a>
             </li>
-            <li class="nav-item py-3">
+            <li class="nav-item py-2">
                 <a class="nav-link" href="{% url 'profile-view' user.pk %}">ПРОФИЛЬ</a>
             </li>
             {% if user.is_moderator or user.is_superuser or user.is_staff%}
-            <li class="nav-item py-3">
+            <li class="nav-item py-2">
                 <a class="nav-link" href="{% url 'moderation:moderate-articles' %}">МОДЕРАЦИЯ</a>
             </li>
             {% endif %}
@@ -207,6 +207,9 @@
             {% endif %}
         </ul>
     </div>
+    <a href="https://t.me/FBChu">
+        <i class="fa-brands fa-telegram me-1 display-3" style="position:absolute;bottom:1rem; color: #fff;"></i>
+    </a>
 </nav>
 
 <script>

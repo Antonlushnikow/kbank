@@ -5,10 +5,10 @@
 {% block content %}
 
 {% if search_results %}
-<div class="container px-4 px-lg-5">
+<div class="container px-4 px-lg-5  pt-4">
     <div class="row gx-4 gx-lg-5 justify-content-center">
         {% for article in search_results %}
-            <div class="kbank-post col-md-10 col-lg-8 col-xl-7">
+            <div class="fbchu-post col-md-10 col-lg-8 col-xl-7">
                 <div class="post-preview">
                     <a href="{% url 'articles:article' article.id %}">
                         <h2 class="post-title">{{ article.title }}</h2>
@@ -62,7 +62,7 @@
 {% else %}
                 <div class="container px-4 px-lg-5">
                     <div class="row gx-4 gx-lg-5 justify-content-center">
-                        <div class="kbank-post col-md-10 col-lg-8 col-xl-7 py-3">
+                        <div class="fbchu-post col-md-10 col-lg-8 col-xl-7 py-3">
                             По вашему запросу ничего не найдено. Попробуйте изменить запрос и поискать снова.
                         </div>
                     </div>
