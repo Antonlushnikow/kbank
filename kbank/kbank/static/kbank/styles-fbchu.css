@@ -7933,6 +7933,7 @@ textarea.form-control-lg {
     font-weight: bolder !important;
 }
 
+
 .lh-1 {
     line-height: 1 !important;
 }
@@ -12221,4 +12222,8 @@ body.offcanvas-active{
 }
 .search-icon{
     color:#fff;
+}
+
+.pinned-post {
+    min-height: 400px;
 }

@@ -31,6 +31,7 @@ SORTING_METHODS = {
     'likes': 'likes',
 }
 ITEMS_ON_PAGE = 5
+LAST_COMMENTS_COUNT = 5
 
 
 class ArticlesListView(ListView):
@@ -44,12 +45,20 @@ class ArticlesListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ArticlesListView, self).get_context_data()
+        if SiteSettings.objects.exists():
+            settings = SiteSettings.objects.all()[0]
+        else:
+            settings = SiteSettings.objects.create(about_us='О нас')
+            settings.save()
         top_articles = [
                            item for item in
                            Article.objects.filter(is_visible=True).annotate(count=Count('likes')).order_by('-count') if
                            item.is_last_month
                        ][:TOP_ARTICLE_COUNT]
+        last_comments = Comment.objects.all().order_by('-publish_date')[:LAST_COMMENTS_COUNT]
+        context['pinned_article'] = settings.pinned_article
         context['top_articles'] = top_articles
+        context['last_comments'] = last_comments
         return context
 
     def get_queryset(self):
@@ -537,3 +546,18 @@ class SiteSettingsEditView(UpdateView):
             if request.user.is_superuser or request.user.is_moderator:
                 return super(SiteSettingsEditView, self).dispatch(request, *args, **kwargs)
         return HttpResponseRedirect('/')
+
+
+class ArticlePinView(UpdateView):
+    """
+    Контроллер редактирования страницы О нас
+    """
+    model = SiteSettings
+    permission_classes = [Privileged]
+
+    def get(self, request, pk=None):
+        article = get_object_or_404(Article, pk=pk)
+        settings = get_object_or_404(self.model, pk=1)
+        settings.pinned_article = article
+        settings.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
