@@ -10,7 +10,8 @@
     <div class="container px-4 px-lg-5 pt-4">
         <div class="row gx-3 gx-lg-4 justify-content-center">
             {% if pinned_article %}
-            <div class="fbchu-post pinned-post col-lg-11 col-xl-11 " style="background:
+            <a href="{% url 'articles:article' pinned_article.id %}" class="col-lg-11 col-xl-11">
+            <div class="fbchu-post pinned-post" style="background:
                 {% if pinned_article.pic %}
                 url('/media/{{ pinned_article.pic }}')
                 {% else %}
@@ -18,11 +19,10 @@
                 {% endif %}
                 ;background-size:cover; position: relative; background-position: center center;">
                 <div class="post-preview"  style="position:absolute;bottom:30px;left:30px;padding-right:30px">
-                    <a href="{% url 'articles:article' pinned_article.id %}">
                         <h2 class="post-title text-light">{{ pinned_article.title }}</h2>
-                    </a>
                 </div>
             </div>
+            </a>
             {% endif %}
 
             <div class="col-lg-7 col-xl-8 infinite-container">
