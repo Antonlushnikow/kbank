@@ -12039,6 +12039,11 @@ body.offcanvas-active{
     .telegram-button {
         display: none;
     }
+
+    .fbchu-post {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
 }
 
 @media all and (max-width: 859px) {
