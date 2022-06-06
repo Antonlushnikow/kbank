@@ -442,9 +442,26 @@ class NotificationsListView(LoginRequiredMixin, ListView):
         return Notification.objects.filter(user=user).order_by('-created_date')
 
 
+class NotificationsMarkRead(LoginRequiredMixin, ListView):
+    """
+    Контроллер отмечает все уведомления прочитанными
+    """
+    model = Notification
+    template_name = 'mainapp/notifications.html'
+    context_object_name = 'notifications'
+    login_url = reverse_lazy('auth:login')
+
+    def get(self, request):
+        notifications = self.model.objects.filter(user=request.user)
+        for notification in notifications:
+            notification.is_read = True
+            notification.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
 class NotificationReadToggleAPI(APIView):
     """
-    Показ/скрытие комментариев
+    Показ/скрытие уведомлений
     """
     model = Notification
     permission_classes = [Privileged]

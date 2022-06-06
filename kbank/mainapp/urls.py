@@ -13,6 +13,7 @@ from .views import (
     ReportCommentAPI,
     SearchResultsView,
     ArticlePinView,
+    NotificationsMarkRead,
 )
 
 urlpatterns = [
@@ -31,4 +32,5 @@ urlpatterns = [
     path('api/comment/<int:pk>/report/', ReportCommentAPI.as_view(), name='report-comment'),
     path('api/notification/<int:pk>/read/', NotificationReadToggleAPI.as_view(), name='notification-read-toggle'),
     path('search-results/', SearchResultsView.as_view(), name='search'),
+    path('notifications-mark-read/', NotificationsMarkRead.as_view(), name='notifications-mark-as-read'),
 ]
