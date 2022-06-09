@@ -1,10 +1,8 @@
 import django_filters
-from django import forms
 from django.db import models
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views import View
-from django.views.generic import ListView
 from django_filters import FilterSet
 from django_filters.views import FilterView
 
