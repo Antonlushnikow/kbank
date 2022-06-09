@@ -1,5 +1,4 @@
 import requests
-
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
@@ -7,7 +6,6 @@ from allauth.socialaccount.providers.oauth2.views import (
 )
 
 from .provider import VKProvider
-
 
 USER_FIELDS = [
     "first_name",
@@ -57,7 +55,7 @@ class VKOAuth2Adapter(OAuth2Adapter):
         if email:
             extra_data["email"] = email
         else:
-            extra_data["email"] = f'{uid}@kbank.fake'
+            extra_data["email"] = f"{uid}@kbank.fake"
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
 
