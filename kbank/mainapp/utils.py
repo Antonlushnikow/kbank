@@ -2,6 +2,10 @@ from authapp.models import KbankUser
 
 
 class PersonalNotification:
+    """
+    Класс для создания персональных уведомлений
+    """
+
     def __init__(self, request, body, title, url, scope=None, users_group=None):
         self.request = request
         self.body = body
@@ -12,6 +16,7 @@ class PersonalNotification:
 
     def create(self):
         from mainapp.models import Notification
+
         if self.scope == "all":
             users = KbankUser.objects.all()
         elif self.scope == "moderators":
@@ -19,14 +24,17 @@ class PersonalNotification:
         else:
             users = self.users_group if self.users_group else [self.request.user]
         for user in users:
-            obj = Notification.objects.create(user=user, body=self.body, title=self.title, url=self.url)
+            obj = Notification.objects.create(
+                user=user, body=self.body, title=self.title, url=self.url
+            )
             obj.save()
 
 
+# Формы времени в разных числах/падежах
 TIME_VARIANTS = {
-    'days': ['день', 'дня', 'дней'],
-    'hours': ['час', 'часа', 'часов'],
-    'minutes': ['минута', 'минуты', 'минут'],
+    "days": ["день", "дня", "дней"],
+    "hours": ["час", "часа", "часов"],
+    "minutes": ["минута", "минуты", "минут"],
 }
 
 

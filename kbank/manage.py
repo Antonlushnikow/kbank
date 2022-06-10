@@ -6,10 +6,10 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    if os.path.exists('kbank//settings_dev.py'):
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kbank.settings_dev')
+    if os.path.exists("kbank//settings_dev.py"):
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kbank.settings_dev")
     else:
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kbank.settings')
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kbank.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -21,5 +21,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
