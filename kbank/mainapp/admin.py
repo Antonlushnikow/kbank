@@ -1,10 +1,11 @@
 from django.contrib import admin
+
 from .models import Article, Category, Comment, SiteSettings
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ('title',)
-    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ("title",)
+    prepopulated_fields = {"slug": ("title",)}
 
 
 admin.site.register(Article)

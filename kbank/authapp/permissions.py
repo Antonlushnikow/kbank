@@ -3,9 +3,15 @@ from rest_framework import permissions
 
 
 class Privileged(permissions.BasePermission):
-    """ Привилегированные пользователи для API"""
+    """Привилегированные пользователи для API"""
 
-    edit_methods = ("GET", "DELETE", "POST", "PUT", "PATCH", )
+    edit_methods = (
+        "GET",
+        "DELETE",
+        "POST",
+        "PUT",
+        "PATCH",
+    )
 
     def has_permission(self, request, view):
         if request.user.is_privileged:
@@ -13,7 +19,8 @@ class Privileged(permissions.BasePermission):
 
 
 class PrivilegedPermissionMixin:
-    """ Привилегированные пользователи"""
+    """Привилегированные пользователи"""
+
     def has_permissions(self):
         if self.request.user.is_authenticated:
             return self.request.user.is_privileged
@@ -21,5 +28,5 @@ class PrivilegedPermissionMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if not self.has_permissions():
-            return redirect('/')
+            return redirect("/")
         return super().dispatch(request, *args, **kwargs)
