@@ -65,7 +65,7 @@
 
 {% if comment.childs.all %}
 {% for comment in comment.childs.all %}
-    {% with marginleft=marginleft|add:30 %}
+    {% with marginleft=marginleft|add:10 %}
         {% include 'mainapp/includes/inc_comment.html' %}
     {% endwith %}
 {% endfor %}

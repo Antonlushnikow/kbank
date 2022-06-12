@@ -103,27 +103,34 @@ class ArticleCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        if self.request.user.is_privileged:
+            form.instance.moderation_required = False
+            form.instance.is_visible = True
         item = form.save()
         self.pk = item.pk
 
-        body = f"Необходима проверка статьи {self.request.POST['title']} пользователя {self.request.user}"
-        url = reverse("articles:article", kwargs={"pk": self.pk})
-        notification = PersonalNotification(
-            body=body,
-            title="модерация",
-            request=self.request,
-            url=url,
-            scope="moderators",
-        )
-        notification.create()
+        if not self.request.user.is_privileged:
+            # notification for moderator
+            body = f"Необходима проверка статьи {self.request.POST['title']} пользователя {self.request.user}"
+            url = reverse("articles:article", kwargs={"pk": self.pk})
+            notification = PersonalNotification(
+                body=body,
+                title="модерация",
+                request=self.request,
+                url=url,
+                scope="moderators",
+            )
+            notification.create()
 
-        # notification for user
-        PersonalNotification(
-            body="Ваша статья отправлена на модерацию. После того, как статья пройдет проверку и будет опубликована, Вы получите уведомление.",
-            title="модерация",
-            request=self.request,
-            url=url,
-        ).create()
+            # notification for user
+            PersonalNotification(
+                body="Ваша статья отправлена на модерацию. После того, как статья пройдет проверку и будет "
+                     "опубликована, Вы получите уведомление.",
+                title="модерация",
+                request=self.request,
+                url=url,
+            ).create()
+
         return super().form_valid(form)
 
     def get_success_url(self):

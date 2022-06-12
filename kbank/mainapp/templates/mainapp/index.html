@@ -7,7 +7,7 @@
 
 
 {% block content %}
-    <div class="container px-4 px-lg-5 pt-4">
+    <div class="container pxc-4 px-lg-5 ptc-3">
         <div class="row gx-3 gx-lg-4 justify-content-center">
             {% if pinned_article %}
             <a href="{% url 'articles:article' pinned_article.id %}" class="col-lg-11 col-xl-11">
@@ -36,7 +36,7 @@
                         <h6><a href="{% url 'category' article.category.slug %}">{{ pinned_article.category.title|title }}</a></h6>
                         <div class="post-subtitle">
                             {% if article.pic %}
-                            <img src="/media/{{ article.pic }}" alt="Превью статьи" style="max-width:100%">
+                            <img src="/media/{{ article.pic }}" alt="Превью статьи">
                             {% endif %}
                             {% if article.preview_text %}
                                 {{ article.preview_text|safe }}
@@ -49,7 +49,7 @@
                             <div class="d-flex flex-row align-items-center">
                                 <p>
                                 Автор:
-                                <a style="text-decoration: none;" href="{% url 'profile-view' article.author.id %}">{{ article.author }}</a>
+                                <a style="text-decoration: none;" href="{% url 'profile-view' article.author.id %}">{{ article.author }}</a><br>
                                 {{ article.publish_date }}
                                 </p>
                             </div>
@@ -96,7 +96,7 @@
             </div>
             <div class="col-md-3 col-lg-4 col-xl-3 align-self-start lh-sm">
                 <!-- Кнопка телеграм -->
-                <div class="mt-1 mb-3">
+                <div class="mt-0 mb-3">
                     <a href="https://t.me/FBChu" target="_blank" class="telegram-button pt-2 pb-2 border-primary w-100" title=""><i class="fa-brands fa-telegram me-1"></i> Мы в Telegram</a>
                 </div>
                 <div  class="border border-2 border-primary bg-light py-3 top-articles">
