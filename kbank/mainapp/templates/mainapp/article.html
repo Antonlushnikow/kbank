@@ -11,7 +11,7 @@
 <!-- Popup -->
 {% include 'mainapp/includes/inc_popup.html' %}
 
-<div class="container position-relative px-4 px-lg-5">
+<div class="container position-relative pxc-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="fbchu-post col-md-10 col-lg-8 col-xl-7">
             <div class="post-heading">
@@ -60,7 +60,7 @@
 </div>
 <hr>
 <article class="mb-4">
-    <div class="container px-4 px-lg-5">
+    <div class="container pxc-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="fbchu-post col-md-10 col-lg-8 col-xl-7">
                 {% if article.preview_text %}
@@ -89,7 +89,7 @@
                 </div>
             </div>
             <!-- Теги -->
-            <div class="chips col-md-10 col-lg-8 col-xl-7">
+            <div class="chips px-4 col-md-10 col-lg-8 col-xl-7">
                 {% for tag in article.tags.all %}
                 <a href="{% url 'tag-list' tag.slug %}">
                  <div class="chip">
@@ -104,7 +104,7 @@
 
 
 <!-- Комментарии -->
-<div class="container position-relative px-2 px-lg-5">
+<div class="container position-relative pxc-4 px-lg-5">
   <div class="row d-flex justify-content-center" id="comments">
     <div class="col-md-8 col-lg-8">
       <div class="card shadow-0 border" style="background-color: #f0f2f5;">
@@ -131,7 +131,7 @@
             </div>
             {% for comment in article.comments.all|sort_by:sorting_method %}
               {% if not comment.parent %}
-                  {% with child=True marginleft=10 %}
+                  {% with child=True marginleft=0 %}
                    {% include 'mainapp/includes/inc_comment.html' %}
                   {% endwith %}
               {% endif %}
