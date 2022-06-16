@@ -145,7 +145,7 @@
 </nav>
 <!--Search input box-->
 <div class="row col-12 justify-content-center" style="position:fixed; z-index: 999;">
-    <div class="fbchu-post col-xl-8 col-12 col-lg-8 col-sm-11 col-md-8 py-3 border  border-2 border-primary bg-light collapse search-box"
+    <div class="search-box col-xl-8 col-12 col-lg-8 col-sm-11 col-md-8 py-3 border  border-2 border-primary bg-light collapse search-box"
          id="searchForm">
         <div class="form-outline">
             <form action="{% url 'mainapp:search' %}" class="search-form" method="GET">
@@ -162,7 +162,7 @@
         </div>
         <ul class="navbar-nav">
             {% for category in categories %}
-            <li class="nav-item py-1">
+            <li class="nav-item py-1 lh-1">
                 <a class="nav-link" href="{% url 'category' category.slug %}">
                     {{ category.title|upper }}
                 </a>
@@ -170,32 +170,32 @@
             {% endfor %}
             <div class="dropdown-divider"></div>
             <li>
-                <a class="nav-link px-lg-3 py-3 py-lg-3" href="{% url 'about-us' %}">
+                <a class="nav-link px-lg-3 py-2 py-lg-3 lh-1" href="{% url 'about-us' %}">
                     О НАС
                 </a>
             </li>
             <div class="dropdown-divider"></div>
             {% if not user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link px-lg-3 py-2 py-lg-4" href="{% url 'auth:login' %}">ВОЙТИ</a>
+                <a class="nav-link px-lg-3 py-1 py-lg-4 lh-1" href="{% url 'auth:login' %}">ВОЙТИ</a>
             </li>
             {% else %}
-            <li class="nav-item py-2">
+            <li class="nav-item py-1 lh-1">
                 <a class="nav-link" href="{% url 'articles:create-article' %}">НОВАЯ СТАТЬЯ</a>
             </li>
-            <li class="nav-item py-2">
+            <li class="nav-item py-1 lh-1">
                 <a class="nav-link" href="{% url 'articles:list-author-articles' user.pk %}">МОИ СТАТЬИ</a>
             </li>
-            <li class="nav-item py-2">
+            <li class="nav-item py-1 lh-1">
                 <a class="nav-link" href="{% url 'profile-view' user.pk %}">ПРОФИЛЬ</a>
             </li>
             {% if user.is_moderator or user.is_superuser or user.is_staff%}
-            <li class="nav-item py-2">
+            <li class="nav-item py-1 lh-1">
                 <a class="nav-link" href="{% url 'moderation:moderate-articles' %}">МОДЕРАЦИЯ</a>
             </li>
             {% endif %}
             <div class="dropdown-divider"></div>
-            <li class="nav-item py-3">
+            <li class="nav-item py-1 lh-1">
                 <a class="nav-link" href="{% url 'auth:logout' %}?next={{ request.path }}">ВЫЙТИ</a>
             </li>
             {% endif %}
