@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="container pxc-4 px-lg-5 ptc-3">
-        <div class="row gx-3 gx-lg-4 justify-content-center">
+        <div class="row gx-lg-4 justify-content-center">
             {% if pinned_article %}
             <a href="{% url 'articles:article' pinned_article.id %}" class="col-lg-11 col-xl-11">
             <div class="fbchu-post pinned-post" style="background:
@@ -33,7 +33,7 @@
                         <a href="{% url 'articles:article' article.id %}">
                             <h2 class="post-title">{{ article.title }}</h2>
                         </a>
-                        <h6><a href="{% url 'category' article.category.slug %}">{{ pinned_article.category.title|title }}</a></h6>
+                        <h6><a href="{% url 'category' article.category.slug %}">{{ article.category.title|title }}</a></h6>
                         <div class="post-subtitle">
                             {% if article.pic %}
                             <img src="/media/{{ article.pic }}" alt="Превью статьи">
