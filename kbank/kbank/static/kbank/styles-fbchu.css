@@ -692,7 +692,6 @@ progress {
 }
 
 .row {
-    --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
     display: flex;
     flex-wrap: wrap;
@@ -11885,7 +11884,7 @@ ul.post-meta {
 .top-articles {
     background-color: #fff;
     border-radius: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
     padding-left: calc(var(--bs-gutter-x) * 0.5);
@@ -12010,7 +12009,7 @@ body.offcanvas-active{
 		border-radius:0; 
 		display:block;
 		position: fixed;  top: 0; left:0;
-		height: 100%; width:70%;
+		height: 100vh; width:70%;
 		z-index: 1200; 
 		overflow-y: scroll;
 		overflow-x: hidden;
@@ -12056,8 +12055,8 @@ body.offcanvas-active{
     .fbchu-post {
         padding-top: 0.8rem;
         padding-bottom: 0.5rem;
-        padding-left: 0.5 !important;
-        padding-right: 0.5 !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
         border-radius: 0 !important;
         border: none !important;
         margin-bottom: 1rem;
@@ -12079,7 +12078,7 @@ body.offcanvas-active{
     }
 
     h2 {
-        font-size: calc(0.925rem + 0.9vw);
+        font-size: calc(1.5rem + 0.9vw);
     }
 
     .post-preview > a > .post-title {
@@ -12097,15 +12096,15 @@ body.offcanvas-active{
     .fbchu-post img, .post-subtitle img {
         min-width: 100vw !important;
         position: relative;
-        left: calc(var(--bs-gutter-x) * -0.9);
-        right: calc(var(--bs-gutter-x) * -0.9);
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
     }
 
     .fbchu-post iframe, .post-subtitle iframe {
         min-width: 100vw !important;
         position: relative;
-        left: calc(var(--bs-gutter-x) * -0.9);
-        right: calc(var(--bs-gutter-x) * -0.9);
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
     }
 
 }
@@ -12264,6 +12263,16 @@ body.offcanvas-active{
   font-size: 0.8rem;
   -webkit-transform: translateY(-140%);
           transform: translateY(-140%);
+}
+
+/*  Поле поиска */
+
+.search-box {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: #fff;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .search-box-input {
